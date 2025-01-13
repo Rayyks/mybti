@@ -1,10 +1,9 @@
-// /controllers/AUTHCONTROLLER/deleteAccount.js
 import User from "../../models/User.js";
 import { sendResponse } from "../../utils/responseUtils.js";
 
 export const deleteAccount = async (req, res) => {
   const userId = req.user.id;
-  const { immediate } = req.body;
+  const { immediate, reason } = req.body;
 
   try {
     // Find the user
@@ -21,6 +20,7 @@ export const deleteAccount = async (req, res) => {
     const deletionDate = new Date();
     deletionDate.setDate(deletionDate.getDate() + 1);
     user.deletionScheduledAt = deletionDate;
+    user.deletionReason = reason; // Set the deletion reason
     await user.save();
 
     sendResponse(res, 200, "Account deletion scheduled for 1 days from now");

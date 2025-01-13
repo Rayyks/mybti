@@ -66,6 +66,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     deletionScheduledAt: { type: Date, default: null },
+    deletionReason: { type: String, default: "" },
   },
   { timestamps: true }
 );

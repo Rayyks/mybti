@@ -51,14 +51,15 @@ export const EditProfileForm = ({ myProfile, isLoading }) => {
         register={register}
         errors={errors}
       />
-
-      <Button
-        type="submit"
-        className="w-full py-2 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
-        disabled={isUpdatingProfile}
-      >
-        {isUpdatingProfile ? "Updating..." : "Update Profile"}
-      </Button>
+      <div className="flex">
+        <Button
+          type="submit"
+          className="w-[90%] mb-5 mx-auto py-2 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+          disabled={isUpdatingProfile}
+        >
+          {isUpdatingProfile ? "Updating..." : "Update Profile"}
+        </Button>
+      </div>
       {errorUpdateProfile && (
         <span className="text-red-500">{errorUpdateProfile.message}</span>
       )}

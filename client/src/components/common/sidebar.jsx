@@ -104,7 +104,7 @@ const Dashboard = () => {
           <StoryBalls />
         </div>
         {/* CONTENT */}
-        <div className="flex gap-2 flex-1 sm:w-full lg:w-[50%] ">
+        <div className="flex gap-2 flex-1 sm:w-full lg:w-[70%] ">
           <Outlet />
         </div>
       </div>

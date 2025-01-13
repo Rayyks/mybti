@@ -6,3 +6,5 @@ export * from "@/components/profile/LogoutModal";
 export * from "@/components/profile/EditProfileForm";
 export * from "@/components/profile/EditProfilePictureSection";
 export * from "@/components/profile/EditProfileFormFields";
+export * from "@/components/profile/YourReportListStatus";
+export * from "@/components/profile/AccountDeletionSection";

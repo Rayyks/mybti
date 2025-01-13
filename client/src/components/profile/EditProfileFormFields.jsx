@@ -137,7 +137,7 @@ export const EditProfileFormFields = ({
               {...register("profession")}
             />
             <p className="mt-2 text-sm text-gray-500">
-              Add your interests, separated by commas
+              What do you do for a living?
             </p>
           </div>
 

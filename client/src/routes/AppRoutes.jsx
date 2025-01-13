@@ -15,6 +15,7 @@ import NotificationPage from "@/pages/NotificationPage";
 import ProfilePage from "@/pages/ProfilePage";
 import SinglePostPage from "@/pages/SinglePostPage";
 import EditProfilePage from "@/pages/EditProfilePage";
+import ProfileSettingsPage from "@/pages/ProfileSettingsPage";
 
 const AppRoutes = () => {
   return (
@@ -30,7 +31,7 @@ const AppRoutes = () => {
           <Route path="notifications" element={<NotificationPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="profile/edit" element={<EditProfilePage />} />
-          <Route path="profile/settings" element={<ProfilePage />} />
+          <Route path="profile/settings" element={<ProfileSettingsPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
