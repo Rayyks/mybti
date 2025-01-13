@@ -1,0 +1,37 @@
+{
+  "hash": "3c454018",
+  "configHash": "bb6280cb",
+  "lockfileHash": "6b3ee509",
+  "browserHash": "3e4e23ef",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "f84e2e62",
+      "needsInterop": true
+    },
+    "react-hook-form": {
+      "src": "../../node_modules/.pnpm/react-hook-form@7.54.2_react@18.3.1/node_modules/react-hook-form/dist/index.esm.mjs",
+      "file": "react-hook-form.js",
+      "fileHash": "2e4db3e1",
+      "needsInterop": false
+    },
+    "react-router": {
+      "src": "../../node_modules/.pnpm/react-router@7.1.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-router/dist/development/index.mjs",
+      "file": "react-router.js",
+      "fileHash": "09713042",
+      "needsInterop": false
+    },
+    "react-hot-toast": {
+      "src": "../../node_modules/.pnpm/react-hot-toast@2.5.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-hot-toast/dist/index.mjs",
+      "file": "react-hot-toast.js",
+      "fileHash": "65ad5bfd",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-GF54CYHL": {
+      "file": "chunk-GF54CYHL.js"
+    }
+  }
+}
