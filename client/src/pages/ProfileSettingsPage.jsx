@@ -2,6 +2,7 @@ import {
   AccountDeletionSection,
   YourReportListStatus,
 } from "@/components/profile";
+import useReport from "@/hooks/useReport";
 import React, { useState } from "react";
 
 const ProfileSettingsPage = () => {
@@ -10,57 +11,7 @@ const ProfileSettingsPage = () => {
   const [isDeletionRequested, setIsDeletionRequested] = useState(false);
   const [activeTab, setActiveTab] = useState("accounts");
 
-  // Sample data - in a real app, this would come from an API
-  const reports = {
-    accounts: [
-      {
-        id: 1,
-        reportedUser: "user123",
-        reason: "Spam",
-        status: "pending",
-        date: "2025-01-10",
-      },
-      {
-        id: 2,
-        reportedUser: "user456",
-        reason: "Harassment",
-        status: "resolved",
-        date: "2025-01-08",
-      },
-    ],
-    comments: [
-      {
-        id: 1,
-        content: "Inappropriate comment",
-        reason: "Offensive content",
-        status: "pending",
-        date: "2025-01-12",
-      },
-      {
-        id: 2,
-        content: "Spam comment",
-        reason: "Spam",
-        status: "rejected",
-        date: "2025-01-07",
-      },
-    ],
-    posts: [
-      {
-        id: 1,
-        title: "Misleading post",
-        reason: "Misinformation",
-        status: "resolved",
-        date: "2025-01-11",
-      },
-      {
-        id: 2,
-        title: "Promotional content",
-        reason: "Spam",
-        status: "pending",
-        date: "2025-01-09",
-      },
-    ],
-  };
+  const { getReportedData: reports, getReportedLoading } = useReport();
 
   const handleDeleteAccount = () => {
     const finalReason =
@@ -107,6 +58,7 @@ const ProfileSettingsPage = () => {
           setActiveTab={setActiveTab}
           activeTab={activeTab}
           reports={reports}
+          getReportedLoading={getReportedLoading}
           getStatusColor={getStatusColor}
         />
       </div>

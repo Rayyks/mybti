@@ -1,3 +1,5 @@
+import formatDate from "@/lib/FormatDate";
+import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
 import React from "react";
 
 export const YourReportListStatus = ({
@@ -6,6 +8,15 @@ export const YourReportListStatus = ({
   reports,
   getStatusColor,
 }) => {
+  const filteredReports =
+    reports?.data?.filter((report) => {
+      if (activeTab === "accounts") return report.targetType === "user";
+      if (activeTab === "comments")
+        return report.targetType === "comment" || report.targetType === "reply";
+      if (activeTab === "posts") return report.targetType === "post";
+      return false;
+    }) || [];
+
   return (
     <div className="bg-white border border-neutral-200 rounded-lg p-6 shadow-sm">
       <h2 className="text-3xl font-semibold mb-6 text-black">Your Reports</h2>
@@ -54,17 +65,34 @@ export const YourReportListStatus = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
-              {reports[activeTab].map((report) => (
+              {filteredReports.map((report) => (
                 <tr
                   key={report.id}
                   className="hover:bg-neutral-50 transition-colors duration-150"
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
-                    {report.date}
+                    {formatDate(report.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
-                    {report.reportedUser || report.content || report.title}
+                    {report.targetType === "user" ? (
+                      `${report.target.username || "Unknown User"} (${
+                        report.target.email || "No Email"
+                      })`
+                    ) : report.targetType === "post" ? (
+                      report.target.image ? (
+                        <img
+                          src={getSafeImageUrl(report.target.image)}
+                          alt="Post"
+                          className="h-12 w-12 object-cover rounded-md"
+                        />
+                      ) : (
+                        "No Image"
+                      )
+                    ) : (
+                      report.target.content || "No Content"
+                    )}
                   </td>
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
                     {report.reason}
                   </td>

@@ -1,5 +1,8 @@
 import express from "express";
-import { reportUser } from "../controllers/USERCONTROLLER/userController.js";
+import {
+  reportUser,
+  getReported,
+} from "../controllers/USERCONTROLLER/userController.js";
 import { reportPost } from "../controllers/POSTCONTROLLER/postController.js";
 import {
   reportComment,
@@ -14,5 +17,8 @@ router.post("/user", authMiddleware, checkBlacklist, reportUser);
 router.post("/post", authMiddleware, checkBlacklist, reportPost);
 router.post("/comment", authMiddleware, checkBlacklist, reportComment);
 router.post("/reply", authMiddleware, checkBlacklist, reportReply);
+
+// Route to get reports
+router.get("/reports", authMiddleware, checkBlacklist, getReported);
 
 export default router;
