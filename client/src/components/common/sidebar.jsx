@@ -12,14 +12,11 @@ import useAuth from "@/hooks/useAuth";
 import { LogIn } from "lucide-react";
 import useProfile from "@/hooks/useProfile";
 import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
-import { useEffect } from "react";
 
 export function Sidebar() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { myProfile } = useProfile();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <Fragment>
@@ -34,7 +31,7 @@ export function Sidebar() {
             </div>
           </div>
           <div>
-            {!loading && isAuthenticated ? (
+            {isAuthenticated ? (
               <SidebarLink
                 link={{
                   label: "Profile",

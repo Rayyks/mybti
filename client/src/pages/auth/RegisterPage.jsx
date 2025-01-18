@@ -3,26 +3,47 @@ import React from "react";
 
 const RegisterPage = () => {
   return (
-    <div className="font-[sans-serif] max-w-5xl flex items-center mx-auto md:h-screen p-4">
-      <div className="grid md:grid-cols-3 items-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-xl overflow-hidden">
-        <div className="max-md:order-1 flex flex-col justify-center space-y-16 max-md:mt-16 min-h-full bg-gradient-to-r from-gray-900 to-gray-700 lg:px-8 px-4 py-4">
-          <div>
-            <h4 className="text-white text-lg">Create Your Account</h4>
-            <p className="text-[13px] text-gray-300 mt-3 leading-relaxed">
-              Welcome to our registration page! Get started by creating your
-              account.
-            </p>
-          </div>
-          <div>
-            <h4 className="text-white text-lg">Simple & Secure Registration</h4>
-            <p className="text-[13px] text-gray-300 mt-3 leading-relaxed">
-              Our registration process is designed to be straightforward and
-              secure. We prioritize your privacy and data security.
-            </p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans">
+      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+        <div className="grid md:grid-cols-3 gap-8 bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="md:col-span-1 bg-gray-900 p-8 md:p-12 flex flex-col justify-between">
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white">Welcome</h2>
+                <div className="mt-4 h-1 w-10 bg-white rounded-full"></div>
+              </div>
 
-        <RegisterForm />
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Join our community and unlock a world of possibilities. Create
+                your account to begin your journey with us.
+              </p>
+            </div>
+
+            <div className="hidden md:block space-y-6">
+              <div className="bg-gray-800/50 p-6 rounded-xl">
+                <h3 className="text-lg font-semibold text-white">
+                  Secure & Simple
+                </h3>
+                <p className="mt-2 text-sm text-gray-300">
+                  Your security is our priority. We ensure a safe and
+                  straightforward registration process.
+                </p>
+              </div>
+
+              <div className="bg-gray-800/50 p-6 rounded-xl">
+                <h3 className="text-lg font-semibold text-white">
+                  Personalized Experience
+                </h3>
+                <p className="mt-2 text-sm text-gray-300">
+                  Tell us your MBTI type and we'll tailor your experience to
+                  match your personality.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <RegisterForm />
+        </div>
       </div>
     </div>
   );

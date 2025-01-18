@@ -31,6 +31,7 @@ export const getProfile = async (req, res) => {
         ...post.toObject(),
         createdAt: formatDate(post.createdAt),
       })),
+      deletionScheduledAt: formatDate(user.deletionScheduledAt),
       createdAt: formatDate(user.createdAt),
       updatedAt: formatDate(user.updatedAt),
     };

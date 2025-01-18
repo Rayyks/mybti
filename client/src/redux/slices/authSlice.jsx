@@ -13,7 +13,16 @@ const initialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAuthState: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.token = null;
+      state.loading = false;
+      state.error = false;
+      Cookies.remove("_user_access_token_");
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(Login.pending, (state) => {
@@ -28,6 +37,7 @@ const authSlice = createSlice({
         Cookies.set("_user_access_token_", action.payload.data.token, {
           expires: 7,
         });
+        state.isAuthenticated = true;
       })
       .addCase(Login.rejected, (state, action) => {
         state.loading = false;
@@ -48,9 +58,10 @@ const authSlice = createSlice({
       })
       .addCase(Logout.fulfilled, (state, action) => {
         state.loading = false;
-        // state.isAuthenticated = false;
+        state.error = false;
         state.user = null;
         state.token = null;
+        state.isAuthenticated = false;
         Cookies.remove("_user_access_token_");
       })
       .addCase(Logout.rejected, (state, action) => {
@@ -61,4 +72,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const {} = authSlice.actions;
+export const { resetAuthState } = authSlice.actions;

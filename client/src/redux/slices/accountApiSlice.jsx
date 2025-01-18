@@ -1,4 +1,4 @@
-import { createApi } from "@reduxjs/toolkit/query";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/services/axiosBaseQuery";
 
 export const accountApi = createApi({
@@ -9,17 +9,19 @@ export const accountApi = createApi({
   tagTypes: ["Account"],
   endpoints: (builder) => ({
     deleteAccount: builder.mutation({
-      query: (immediate, reason) => ({
+      query: ({ immediate, reason }) => ({
         url: "/delete-account",
         method: "DELETE",
         data: { immediate, reason },
       }),
+      invalidatesTags: ["Account"],
     }),
     cancelAccountDeletion: builder.mutation({
       query: () => ({
         url: "/cancel-deletion",
         method: "POST",
       }),
+      invalidatesTags: ["Account"],
     }),
   }),
 });

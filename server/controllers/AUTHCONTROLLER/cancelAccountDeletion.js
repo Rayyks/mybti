@@ -12,6 +12,7 @@ export const cancelAccountDeletion = async (req, res) => {
 
     // Cancel deletion by removing the scheduled deletion date
     user.deletionScheduledAt = null;
+    user.deletionReason = null;
     await user.save();
 
     sendResponse(res, 200, "Account deletion cancelled");

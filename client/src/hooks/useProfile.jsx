@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {
-  useGetProfileQuery,
+  useLazyGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/redux/slices/profileApiSlice";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,8 @@ import toast from "react-hot-toast";
 import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
 
 const useProfile = () => {
-  const { data: myProfile, error, isLoading } = useGetProfileQuery();
+  const [fetchProfile, { data: myProfile, error, isLoading }] =
+    useLazyGetProfileQuery();
   const [
     updateProfile,
     { isLoading: isUpdatingProfile, error: errorUpdateProfile },
@@ -25,7 +26,12 @@ const useProfile = () => {
 
   const navigate = useNavigate();
 
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [preview, setPreview] = useState("");
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   useEffect(() => {
     if (myProfile?.data?.profilePicture) {
@@ -36,13 +42,12 @@ const useProfile = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("File selected:", file);
       setPreview(URL.createObjectURL(file));
       setValue("profilePicture", file);
     }
   };
+
   const onSubmit = async (data) => {
-    console.log("Form Data:", data);
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
       if (key !== "profilePicture") {
@@ -55,6 +60,7 @@ const useProfile = () => {
     try {
       await updateProfile(formData).unwrap();
       toast.success("Profile updated successfully");
+      fetchProfile();
       navigate("/profile");
     } catch (error) {
       toast.error(error.message);
@@ -65,15 +71,21 @@ const useProfile = () => {
     myProfile,
     error,
     isLoading,
+    refetchProfile: fetchProfile,
+
+    // UPDATE PROFILE
     isUpdatingProfile,
     errorUpdateProfile,
+    // HOOK FORM
     register,
     handleSubmit,
     errors,
-    onSubmit,
     reset,
+    onSubmit,
     navigate,
     preview,
+    showLogoutModal,
+    setShowLogoutModal,
     handleFileChange,
   };
 };

@@ -1,13 +1,9 @@
-import { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import { Routes, Route } from "react-router";
-
-// IMPORT LAYOUT
-const AppLayout = lazy(() => import("@/layouts/AppLayout"));
-
-// IMPORT PAGES
-import LoginPage from "@/pages/auth/LoginPage";
-import Dashboard from "@/pages/HomePage";
 import Loader from "@/components/common/Loader";
+import AppLayout from "@/layouts/AppLayout";
+import HomePage from "@/pages/HomePage";
+import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ExplorePage from "@/pages/ExplorePage";
 import MessagesPage from "@/pages/MessagesPage";
@@ -16,25 +12,111 @@ import ProfilePage from "@/pages/ProfilePage";
 import SinglePostPage from "@/pages/SinglePostPage";
 import EditProfilePage from "@/pages/EditProfilePage";
 import ProfileSettingsPage from "@/pages/ProfileSettingsPage";
+import PublicRoutes from "@/routes/PublicRoutes";
+import PrivateRoutes from "@/routes/PrivateRoutes";
 
 const AppRoutes = () => {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="search" element={<>SEARCH</>} />
-          <Route path="explore" element={<ExplorePage />} />
-          <Route path="explore/:postId" element={<ExplorePage />} />
-          <Route path="p/:postId" element={<SinglePostPage />} />
-          <Route path="inbox" element={<MessagesPage />} />
-          <Route path="notifications" element={<NotificationPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="profile/edit" element={<EditProfilePage />} />
-          <Route path="profile/settings" element={<ProfileSettingsPage />} />
+          <Route
+            index
+            element={
+              <PrivateRoutes>
+                <HomePage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="search"
+            element={
+              <PrivateRoutes>
+                <>SEARCH</>
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="explore"
+            element={
+              <PrivateRoutes>
+                <ExplorePage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="explore/:postId"
+            element={
+              <PrivateRoutes>
+                <ExplorePage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="p/:postId"
+            element={
+              <PrivateRoutes>
+                <SinglePostPage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="inbox"
+            element={
+              <PrivateRoutes>
+                <MessagesPage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="notifications"
+            element={
+              <PrivateRoutes>
+                <NotificationPage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoutes>
+                <ProfilePage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="profile/edit"
+            element={
+              <PrivateRoutes>
+                <EditProfilePage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="profile/settings"
+            element={
+              <PrivateRoutes>
+                <ProfileSettingsPage />
+              </PrivateRoutes>
+            }
+          />
         </Route>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoutes>
+              <LoginPage />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoutes>
+              <RegisterPage />
+            </PublicRoutes>
+          }
+        />
       </Routes>
     </Suspense>
   );

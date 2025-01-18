@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { Login, Logout, Register } from "@/redux/thunks/auth";
+import { profileApi } from "@/redux/slices/profileApiSlice";
 
 const useAuth = () => {
   const { loading, error, isAuthenticated } = useSelector(
@@ -29,9 +30,11 @@ const useAuth = () => {
     try {
       await dispatch(Login(data)).unwrap();
       reset();
+      dispatch(profileApi.util.resetApiState());
       navigate("/");
       toast.success("Login successful");
     } catch (error) {
+      console.log("Error:", error);
       toast.error(error.message);
     }
   };
@@ -47,9 +50,12 @@ const useAuth = () => {
     }
   };
 
-  const handleLogout = () => {
-    dispatch(Logout());
-    window.location.href = "/login";
+  const handleLogout = async () => {
+    try {
+      await dispatch(Logout()).unwrap();
+      dispatch(profileApi.util.resetApiState());
+      navigate("/login");
+    } catch (error) {}
   };
 
   return {
