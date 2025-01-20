@@ -12,6 +12,7 @@ import { toast } from "react-hot-toast";
 const useReport = () => {
   const [reason, setReason] = useState("");
   const [customReason, setCustomReason] = useState("");
+  const [openReportModal, setOpenReportModal] = useState(false);
 
   // USE FORM HOOK
   const {
@@ -32,38 +33,19 @@ const useReport = () => {
   const [reportReply, { isLoading: reportReplyLoading }] =
     useReportReplyMutation();
 
-  // REPORT USER
-  const handleReportUser = async (userId, reason) => {
+  // HANDLE REPORT
+  const handleReport = async (type, id, reason) => {
+    const mutationMap = {
+      user: reportUser,
+      post: reportPost,
+      comment: reportComment,
+      reply: reportReply,
+    };
     try {
-      await reportUser({ userIdToReport: userId, reason });
-      toast.success("User reported successfully");
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-  // REPORT POST
-  const handleReportPost = async (postId, reason) => {
-    try {
-      await reportPost({ postId, reason });
-      toast.success("Post reported successfully");
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-  // REPORT COMMENT
-  const hanldeReportComment = async (commentId, reason) => {
-    try {
-      await reportComment({ commentId, reason });
-      toast.success("Comment reported successfully");
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-  // REPORT REPLY
-  const handleReportReply = async (replyId, reason) => {
-    try {
-      await reportReply({ replyId, reason });
-      toast.success("Reply reported successfully");
+      await mutationMap[type]({ [`${type}Id`]: id, reason });
+      toast.success(
+        `${type.charAt(0).toUpperCase() + type.slice(1)} reported successfully`
+      );
     } catch (error) {
       toast.error(error.message);
     }
@@ -74,6 +56,8 @@ const useReport = () => {
     setReason,
     customReason,
     setCustomReason,
+    openReportModal,
+    setOpenReportModal,
     // USE FORM HOOK
     register,
     handleSubmit,
@@ -83,17 +67,15 @@ const useReport = () => {
     getReportedData,
     getReportedLoading,
     // REPORT USER
-    handleReportUser,
     reportUserLoading,
     // REPORT POST
-    handleReportPost,
     reportPostLoading,
     // REPORT COMMENT
-    hanldeReportComment,
     reportCommentLoading,
     // REPORT REPLY
-    handleReportReply,
     reportReplyLoading,
+    // HANDLE SUBMIT REPORT
+    handleReport,
   };
 };
 

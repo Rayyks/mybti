@@ -1,4 +1,5 @@
 import React from "react";
+import { ErrorInput } from "@/components/ui";
 
 export const EditProfileFormFields = ({
   myProfile,
@@ -35,6 +36,7 @@ export const EditProfileFormFields = ({
                 },
               })}
             />
+            <ErrorInput error={errors.username} />
             <p className="mt-2 text-sm text-gray-500">
               Your unique identifier on the platform
             </p>
@@ -58,6 +60,7 @@ export const EditProfileFormFields = ({
                 },
               })}
             />
+            <ErrorInput error={errors.email} />
           </div>
         </div>
 
@@ -81,6 +84,7 @@ export const EditProfileFormFields = ({
                 },
               })}
             />
+            <ErrorInput error={errors.bio} />
             <p className="mt-2 text-sm text-gray-500">
               Share a brief description about yourself
             </p>
@@ -121,6 +125,7 @@ export const EditProfileFormFields = ({
               <option value="ESTP">ESTP</option>
               <option value="ESFP">ESFP</option>
             </select>
+            <ErrorInput error={errors.mbti} />
           </div>
 
           {/* PROFESSION */}
@@ -136,6 +141,7 @@ export const EditProfileFormFields = ({
               placeholder="Enter your profession"
               {...register("profession")}
             />
+            <ErrorInput error={errors.profession} />
             <p className="mt-2 text-sm text-gray-500">
               What do you do for a living?
             </p>
@@ -156,6 +162,7 @@ export const EditProfileFormFields = ({
               placeholder="coding, reading, traveling..."
               {...register("interests")}
             />
+            <ErrorInput error={errors.interests} />
             <p className="mt-2 text-sm text-gray-500">
               Add your interests, separated by commas
             </p>

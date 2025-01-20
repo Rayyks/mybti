@@ -14,6 +14,7 @@ export const getAllPost = async (req, res) => {
 
     // Get posts from followed users
     const followedPosts = await Post.find({ author: { $in: followedUserIds } })
+      .populate("author", "username profilePicture mbti")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(parseInt(limit));
@@ -21,6 +22,7 @@ export const getAllPost = async (req, res) => {
     // Get remaining posts
     const remainingLimit = limit - followedPosts.length;
     const otherPosts = await Post.find({ author: { $nin: followedUserIds } })
+      .populate("author", "username profilePicture mbti")
       .sort({ createdAt: -1 })
       .skip((page - 1) * remainingLimit)
       .limit(parseInt(remainingLimit));
@@ -31,6 +33,11 @@ export const getAllPost = async (req, res) => {
       ...post.toObject(),
       createdAt: formatDate(post.createdAt),
       updatedAt: formatDate(post.updatedAt),
+      author: {
+        username: post.author.username,
+        profilePicture: post.author.profilePicture,
+        mbti: post.author.mbti,
+      },
     }));
 
     sendResponse(res, 200, "Posts fetched successfully", formattedPosts);

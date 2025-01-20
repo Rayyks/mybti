@@ -1,17 +1,21 @@
-import React, { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router";
 import Loader from "@/components/common/Loader";
-import AppLayout from "@/layouts/AppLayout";
-import HomePage from "@/pages/HomePage";
-import LoginPage from "@/pages/auth/LoginPage";
-import RegisterPage from "@/pages/auth/RegisterPage";
-import ExplorePage from "@/pages/ExplorePage";
-import MessagesPage from "@/pages/MessagesPage";
-import NotificationPage from "@/pages/NotificationPage";
-import ProfilePage from "@/pages/ProfilePage";
-import SinglePostPage from "@/pages/SinglePostPage";
-import EditProfilePage from "@/pages/EditProfilePage";
-import ProfileSettingsPage from "@/pages/ProfileSettingsPage";
+// LAZY MF
+const AppLayout = lazy(() => import("@/layouts/AppLayout"));
+const HomePage = lazy(() => import("@/pages/HomePage"));
+const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
+const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
+const ExplorePage = lazy(() => import("@/pages/ExplorePage"));
+const MessagesPage = lazy(() => import("@/pages/MessagesPage"));
+const NotificationPage = lazy(() => import("@/pages/NotificationPage"));
+const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
+const SinglePostPage = lazy(() => import("@/pages/SinglePostPage"));
+const EditProfilePage = lazy(() => import("@/pages/EditProfilePage"));
+const EditPostPage = lazy(() => import("@/pages/EditPostPage"));
+const ProfileSettingsPage = lazy(() => import("@/pages/ProfileSettingsPage"));
+import { CreatePostModal } from "@/components/post";
+// ROUTES
 import PublicRoutes from "@/routes/PublicRoutes";
 import PrivateRoutes from "@/routes/PrivateRoutes";
 
@@ -53,10 +57,26 @@ const AppRoutes = () => {
             }
           />
           <Route
+            path="create-post"
+            element={
+              <PrivateRoutes>
+                <CreatePostModal />
+              </PrivateRoutes>
+            }
+          />
+          <Route
             path="p/:postId"
             element={
               <PrivateRoutes>
                 <SinglePostPage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="p/:postId/edit"
+            element={
+              <PrivateRoutes>
+                <EditPostPage />
               </PrivateRoutes>
             }
           />

@@ -38,9 +38,7 @@ const LoginForm = () => {
               pattern: { value: /^\S+@\S+$/i, message: "Invalid email" },
             })}
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>
-          )}
+          <ErrorInput error={errors.email} />
         </div>
 
         <div>
@@ -64,11 +62,7 @@ const LoginForm = () => {
               customClass="right-4 top-1/2 transform -translate-y-1/2"
             />
           </div>
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-2">
-              {errors.password.message}
-            </p>
-          )}
+          <ErrorInput error={errors.password} />
         </div>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
