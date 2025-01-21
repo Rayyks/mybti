@@ -21,16 +21,14 @@ export const PostListHeader = ({ post, safeUrl, index }) => {
             />
           </Link>
         </div>
-        <span className="flex shrink-0 space-x-1">
+        <span className="flex items-center gap-2">
           <Link
             to={`/profile/${post.author.username}`}
-            className="font-medium text-sm text-gray-900 dark:text-gray-100"
+            className="font-medium text-sm text-gray-900 dark:text-gray-100 hover:underline"
           >
             {post.author.username}
           </Link>
-          <p className="text-sm font-medium text-white ">
-            ( {post.author.mbti} )
-          </p>
+          <span className="text-gray-300">· {post.author.mbti}</span>
         </span>
       </div>
       <Button

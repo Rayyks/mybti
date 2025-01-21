@@ -3,19 +3,34 @@ import {
   useLazyGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/redux/slices/profileApiSlice";
+import { useGetUserProfileQuery } from "@/redux/slices/userApiSlice";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 import toast from "react-hot-toast";
-import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
 
 const useProfile = () => {
+  const { username } = useParams();
+  const navigate = useNavigate();
+
+  // State
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [preview, setPreview] = useState("");
+
+  // API Hooks
   const [fetchProfile, { data: myProfile, error, isLoading }] =
     useLazyGetProfileQuery();
+  const {
+    data: userProfile,
+    isLoading: userProfileLoading,
+    error: userProfileError,
+  } = useGetUserProfileQuery({ username });
   const [
     updateProfile,
     { isLoading: isUpdatingProfile, error: errorUpdateProfile },
   ] = useUpdateProfileMutation();
 
+  // Form Hooks
   const {
     register,
     handleSubmit,
@@ -24,21 +39,19 @@ const useProfile = () => {
     reset,
   } = useForm();
 
-  const navigate = useNavigate();
-
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [preview, setPreview] = useState("");
-
+  // Fetch profile on mount
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
 
+  // Set profile picture preview
   useEffect(() => {
     if (myProfile?.data?.profilePicture) {
-      setPreview(getSafeImageUrl(myProfile.data.profilePicture));
+      setPreview(getSafeMediaUrl(myProfile.data.profilePicture));
     }
   }, [myProfile]);
 
+  // Handle file change for profile picture
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -47,6 +60,7 @@ const useProfile = () => {
     }
   };
 
+  // Handle profile update form submission
   const onSubmit = async (data) => {
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
@@ -68,21 +82,30 @@ const useProfile = () => {
   };
 
   return {
+    // Profile Data
     myProfile,
+    userProfile,
     error,
     isLoading,
+    userProfileLoading,
+    userProfileError,
     refetchProfile: fetchProfile,
 
-    // UPDATE PROFILE
+    // Profile Update
     isUpdatingProfile,
     errorUpdateProfile,
-    // HOOK FORM
+    onSubmit,
+
+    // Form Hooks
     register,
     handleSubmit,
     errors,
     reset,
-    onSubmit,
+
+    // Navigation
     navigate,
+
+    // State
     preview,
     showLogoutModal,
     setShowLogoutModal,

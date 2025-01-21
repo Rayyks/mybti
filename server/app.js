@@ -3,13 +3,14 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import xml2js from "xml2js";
 import { authMiddleware } from "./middlewares/authMiddleware.js";
 import "./jobs/deleteScheduledAccounts.js";
-import authRoutes from "./routes/authRoutes.js";
-import postRoutes from "./routes/postRoutes.js";
-import postActionRoutes from "./routes/postActionRoutes.js";
-import reportRoutes from "./routes/reportRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.routes.js";
+import postRoutes from "./routes/postRoutes.routes.js";
+import postActionRoutes from "./routes/postActionRoutes.routes.js";
+import reportRoutes from "./routes/reportRoutes.routes.js";
+import userRoutes from "./routes/userRoutes.routes.js";
 
 // Initialize the app
 const app = express();
@@ -45,15 +46,34 @@ app.use(
   express.static("uploads")
 );
 
-// Routes
+// XML parsing middleware
+app.use(express.text({ type: "application/xml" }));
+
+app.use((req, res, next) => {
+  if (req.is("application/xml")) {
+    xml2js.parseString(req.body, { explicitArray: false }, (err, result) => {
+      if (err) {
+        return res
+          .status(400)
+          .json({ message: "Error parsing XML", error: err });
+      }
+      req.body = result;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
+// Routes that do not require authentication
 app.use("/api/auth", authRoutes);
+app.use(authMiddleware);
+// Routes that require authentication
 app.use("/api/posts", postRoutes);
 app.use("/api/action", postActionRoutes);
 app.use("/api/report", reportRoutes);
 app.use("/api/user", userRoutes);
-
 // Authentication middleware
-app.use(authMiddleware);
 
 // TEST THE API
 app.get("/", (req, res) => {

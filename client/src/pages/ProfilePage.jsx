@@ -1,8 +1,10 @@
 import React from "react";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 import {
-  ProfileAction,
-  ProfileBody,
   ProfileHeader,
+  ProfileBody,
+  ProfilePosts,
+  ProfileAction,
   ProfileActivity,
 } from "@/components/profile";
 import useProfile from "@/hooks/useProfile";
@@ -28,11 +30,20 @@ const ProfilePage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10">
         {/* Profile Info Card */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <ProfileHeader myProfile={myProfile} isLoading={isLoading} />
+          <ProfileHeader
+            myProfile={myProfile}
+            isLoading={isLoading}
+            safeUrl={getSafeMediaUrl}
+          />
           <ProfileBody myProfile={myProfile} isLoading={isLoading} />
           <ProfileAction />
         </div>
 
+        <ProfilePosts
+          myProfile={myProfile}
+          isLoading={isLoading}
+          safeUrl={getSafeMediaUrl}
+        />
         {/* Profile Activity Card */}
         <ProfileActivity myProfile={myProfile} isLoading={isLoading} />
       </div>

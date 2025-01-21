@@ -10,6 +10,7 @@ const ExplorePage = lazy(() => import("@/pages/ExplorePage"));
 const MessagesPage = lazy(() => import("@/pages/MessagesPage"));
 const NotificationPage = lazy(() => import("@/pages/NotificationPage"));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
+const UsersProfilePage = lazy(() => import("@/pages/UsersProfilePage"));
 const SinglePostPage = lazy(() => import("@/pages/SinglePostPage"));
 const EditProfilePage = lazy(() => import("@/pages/EditProfilePage"));
 const EditPostPage = lazy(() => import("@/pages/EditPostPage"));
@@ -18,6 +19,7 @@ import { CreatePostModal } from "@/components/post";
 // ROUTES
 import PublicRoutes from "@/routes/PublicRoutes";
 import PrivateRoutes from "@/routes/PrivateRoutes";
+import TermsAndConditions from "@/pages/terms/Terms&Conditions";
 
 const AppRoutes = () => {
   return (
@@ -97,6 +99,14 @@ const AppRoutes = () => {
             }
           />
           <Route
+            path="profile/:username"
+            element={
+              <PrivateRoutes>
+                <UsersProfilePage />
+              </PrivateRoutes>
+            }
+          />
+          <Route
             path="profile"
             element={
               <PrivateRoutes>
@@ -121,6 +131,9 @@ const AppRoutes = () => {
             }
           />
         </Route>
+        {/* TERMS */}
+        <Route path="terms&conditions" element={<TermsAndConditions />} />
+        {/* AUTH */}
         <Route
           path="/login"
           element={

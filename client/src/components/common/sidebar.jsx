@@ -11,7 +11,7 @@ import { links } from "@/assets/data/links";
 import useAuth from "@/hooks/useAuth";
 import { LogIn } from "lucide-react";
 import useProfile from "@/hooks/useProfile";
-import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 
 export function Sidebar() {
   const { isAuthenticated } = useAuth();
@@ -38,7 +38,7 @@ export function Sidebar() {
                   href: "/profile",
                   icon: (
                     <img
-                      src={getSafeImageUrl(myProfile?.data?.profilePicture)}
+                      src={getSafeMediaUrl(myProfile?.data?.profilePicture)}
                       className="h-7 w-7 flex-shrink-0 rounded-full"
                       width={50}
                       height={50}

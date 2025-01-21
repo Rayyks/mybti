@@ -1,5 +1,5 @@
 import formatDate from "@/lib/FormatDate";
-import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 import React from "react";
 
 export const YourReportListStatus = ({
@@ -81,7 +81,7 @@ export const YourReportListStatus = ({
                     ) : report.targetType === "post" ? (
                       report.target.image ? (
                         <img
-                          src={getSafeImageUrl(report.target.image)}
+                          src={getSafeMediaUrl(report.target.image)}
                           alt="Post"
                           className="h-12 w-12 object-cover rounded-md"
                         />

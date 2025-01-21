@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { Button } from "@/components/common";
+
 import { Heart, MessageCircle, Bookmark, Repeat2 } from "lucide-react";
 import { Link } from "react-router";
+import usePost from "@/hooks/usePost";
 
 export const PostListActions = ({ post }) => {
+  const { showMore, contentPreview, maxContentPreview, handleShowMore } =
+    usePost();
   return (
     <div className="px-3 sm:px-4 pt-2">
       <div className="flex items-center justify-between">
@@ -36,7 +41,17 @@ export const PostListActions = ({ post }) => {
             {post.author.username}
           </span>
           <span className="text-gray-800 dark:text-gray-200">
-            {post.content}
+            {showMore
+              ? maxContentPreview(post.content)
+              : contentPreview(post.content)}{" "}
+            {post.content.length > 100 && (
+              <Button
+                className="text-gray-400 hover:underline"
+                onClick={handleShowMore}
+              >
+                {showMore ? "show less" : "show more"}
+              </Button>
+            )}
           </span>
         </p>
       </div>

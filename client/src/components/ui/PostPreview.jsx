@@ -1,4 +1,4 @@
-import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 import formatDate from "@/lib/formatDate";
 import { Link } from "react-router";
 
@@ -9,7 +9,7 @@ export const PostPreview = ({ post }) => (
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
             <img
-              src={getSafeImageUrl(post?.image)}
+              src={getSafeMediaUrl(post?.image)}
               className="w-full h-full object-cover"
             />
           </div>

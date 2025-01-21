@@ -1,9 +1,8 @@
 import React from "react";
 import { Mail, Users, UserPlus } from "lucide-react";
-import { getSafeImageUrl } from "@/lib/getSafeImageUrl";
 import { ProfileHeader_SkeletonLoading } from "@/components/profile/SkeletonLoading";
 
-export const ProfileHeader = ({ myProfile, isLoading }) => {
+export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
   if (isLoading) return <ProfileHeader_SkeletonLoading />;
 
   return (
@@ -11,7 +10,7 @@ export const ProfileHeader = ({ myProfile, isLoading }) => {
       <div className="flex-shrink-0">
         <div className="w-40 h-40 rounded-full border-4 border-white shadow-lg overflow-hidden">
           <img
-            src={getSafeImageUrl(myProfile?.data?.profilePicture)}
+            src={safeUrl(myProfile?.data?.profilePicture)}
             alt={myProfile?.data?.username}
             className="w-full h-full object-cover"
           />

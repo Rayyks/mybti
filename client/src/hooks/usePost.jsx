@@ -9,7 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useNavigate } from "react-router";
-import { useEffect } from "react";
+import { truncateContent } from "@/pages/auth/contentPreview";
 
 const usePost = () => {
   const { postId } = useParams();
@@ -22,6 +22,14 @@ const usePost = () => {
     reset,
     setValue,
   } = useForm();
+
+  // =========================== ||TRUNCATE CONTENT|| ===========================
+  const [showMore, setShowMore] = useState(false);
+  const contentPreview = (postContent) => truncateContent(postContent, 100);
+  const maxContentPreview = (postContent) => truncateContent(postContent);
+  const handleShowMore = () => {
+    setShowMore(!showMore);
+  };
 
   //  =========================== ||STATE QUERY HOOKS|| ===========================
   const { data: post, isLoading, isError, refetch } = useGetAllPostsQuery();
@@ -41,7 +49,9 @@ const usePost = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setPreview(URL.createObjectURL(file));
+      const fileURL = URL.createObjectURL(file);
+      const isVideo = file.type.match(/^video\//);
+      setPreview({ url: fileURL, isVideo });
       setValue("image", file);
     }
   };
@@ -76,6 +86,12 @@ const usePost = () => {
     preview,
     setPreview,
     handleFileChange,
+    // TRUNCATE CONTENT
+    showMore,
+    setShowMore,
+    contentPreview,
+    maxContentPreview,
+    handleShowMore,
     // GET ALL POST
     post,
     isLoading,

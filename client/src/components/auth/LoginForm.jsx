@@ -1,5 +1,5 @@
 import React from "react";
-import { Input } from "@/components/ui";
+import { ErrorInput, Input } from "@/components/ui";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useAuth from "@/hooks/useAuth";

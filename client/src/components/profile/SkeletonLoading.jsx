@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { Grid, ListFilter } from 'lucide-react';
 
 export const ProfileHeader_SkeletonLoading = () => {
   return (
@@ -150,5 +151,75 @@ export const ProfileActivity_SkeletonLoading = ({
         </div>
       </div>
     </div>
+  );
+};
+
+export const ProfilePosts_SkeletonLoading = () => {
+  return (
+    <section>
+      {/* Tabs Navigation Skeleton */}
+      <div className="bg-white mt-10 p-2 rounded-t-lg border-t border-gray-200">
+        <div className="flex gap-8">
+          <div className="flex items-center gap-2 py-3">
+            <Grid size={20} className="text-gray-300" />
+            <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+
+          <div className="flex items-center gap-2 py-3">
+            <ListFilter size={20} className="text-gray-300" />
+            <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Posts Grid Skeleton */}
+      <div className="bg-white mt-6 rounded-lg p-1">
+        <div className="grid grid-cols-3 gap-1">
+          {/* Generate 9 skeleton post items */}
+          {[...Array(9)].map((_, index) => (
+            <div
+              key={index}
+              className="aspect-square relative border-[1px] rounded-md border-neutral-200 bg-gray-200 animate-pulse"
+            />
+          ))}
+        </div>
+
+        {/* Tweets Skeleton (hidden by default) */}
+        <div className="hidden space-y-6">
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-start gap-3 mb-4">
+                {/* Avatar skeleton */}
+                <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+
+                <div className="flex-1">
+                  {/* Username and date skeleton */}
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
+                    <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
+                  </div>
+
+                  {/* Content skeleton */}
+                  <div className="mt-2 space-y-2">
+                    <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+                    <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Interaction buttons skeleton */}
+              <div className="flex items-center gap-6 mt-4">
+                {[...Array(3)].map((_, btnIndex) => (
+                  <div key={btnIndex} className="flex items-center gap-1">
+                    <div className="w-5 h-5 bg-gray-200 rounded animate-pulse" />
+                    <div className="w-8 h-4 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };

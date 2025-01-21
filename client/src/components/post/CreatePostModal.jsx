@@ -1,11 +1,9 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { ErrorInput, Input, Label } from "@/components/ui";
 import { Button } from "@/components/common";
-import { useEffect } from "react";
-import { X } from "lucide-react";
+import { X, CloudUpload } from "lucide-react";
 import { useNavigate } from "react-router";
 import usePost from "@/hooks/usePost";
-import { CloudUpload } from "lucide-react";
 
 export const CreatePostModal = () => {
   const modalRef = useRef(null);
@@ -37,12 +35,10 @@ export const CreatePostModal = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [modalRef, onClose]);
+  }, [modalRef]);
 
   return (
-    <div
-      className={`fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif] `}
-    >
+    <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
       <div
         ref={modalRef}
         className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative"
@@ -79,12 +75,25 @@ export const CreatePostModal = () => {
                   className="w-6 h-6 text-gray-800 cursor-pointer"
                   onClick={() => setPreview("")}
                 />
-                <img src={preview} alt="image post" />
+                {preview.isVideo ? (
+                  <video
+                    className="w-full rounded-lg"
+                    src={preview.url}
+                    controls
+                    loop
+                  />
+                ) : (
+                  <img
+                    className="w-full rounded-lg"
+                    src={preview.url}
+                    alt="Post preview"
+                  />
+                )}
               </>
             ) : (
               <Label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center py-9 w-full border border-gray-300 border-dashed rounded-2xl cursor-pointer bg-gray-50 "
+                className="flex flex-col items-center justify-center py-9 w-full border border-gray-300 border-dashed rounded-2xl cursor-pointer bg-gray-50"
               >
                 <div className="mb-3 flex items-center justify-center">
                   <CloudUpload className="w-8 h-8 text-gray-400" />
@@ -106,6 +115,7 @@ export const CreatePostModal = () => {
             )}
             <ErrorInput error={errors.image} />
           </div>
+
           {createPostError && (
             <p>
               {createPostError.message ||

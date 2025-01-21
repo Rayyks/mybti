@@ -5,4 +5,3 @@ export * from "@/components/ui/errorInput";
 export * from "@/components/ui/CustomTab";
 export * from "@/components/ui/ActivityTab";
 export * from "@/components/ui/PostPreview";
-export * from "@/components/ui/ReportModal";
