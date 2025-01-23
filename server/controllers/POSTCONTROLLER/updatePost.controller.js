@@ -1,26 +1,41 @@
 import Post from "../../models/Post.js";
 import { sendResponse } from "../../utils/responseUtils.js";
 import { formatDate } from "../../utils/dateUtils.js";
+import { deleteImageFromStorage } from "../../utils/storageUtils.js";
 
 export const updatePost = async (req, res) => {
   try {
-    const { postId, content } = req.body;
+    const { postId, content, removeImage } = req.body;
     const userId = req.user.id;
 
-    if (!content) return sendResponse(res, 400, "Content is required");
+    console.log("Received update request for post:", postId);
 
-    let image;
-    if (req.file) {
+    const existingPost = await Post.findOne({ _id: postId, author: userId });
+    if (!existingPost)
+      return sendResponse(res, 404, "Post not found or unauthorized");
+
+    const updatedContent = content || existingPost.content;
+
+    let image = existingPost.image;
+
+    if (removeImage) {
+      if (existingPost.image) {
+        await deleteImageFromStorage(existingPost.image);
+      }
+      image = null;
+    } else if (req.file) {
+      if (existingPost.image) {
+        await deleteImageFromStorage(existingPost.image);
+      }
       image = `/uploads/${req.file.filename}`;
     }
 
+    // Update the post with new content and image (if provided)
     const post = await Post.findOneAndUpdate(
       { _id: postId, author: userId },
-      { content, image, updatedAt: new Date() },
+      { content: updatedContent, image, updatedAt: new Date() },
       { new: true }
     );
-
-    if (!post) return sendResponse(res, 404, "Post not found or unauthorized");
 
     const formattedPost = {
       ...post.toObject(),

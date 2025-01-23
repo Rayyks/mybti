@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/services/axiosBaseQuery";
 
 export const postApi = createApi({
-  reducerpath: "postApi",
+  reducerPath: "postApi",
   baseQuery: axiosBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL + "/posts",
   }),

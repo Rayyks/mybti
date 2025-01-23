@@ -1,4 +1,3 @@
-// /routes/postRoutes.js
 import express from "express";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { checkBlacklist } from "../middlewares/blacklistMiddleware.js";
@@ -15,7 +14,6 @@ import {
 const router = express.Router();
 
 // Create a new post
-
 router.post(
   "/",
   authMiddleware,

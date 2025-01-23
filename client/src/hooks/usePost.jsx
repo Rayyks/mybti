@@ -14,6 +14,7 @@ import { truncateContent } from "@/pages/auth/contentPreview";
 const usePost = () => {
   const { postId } = useParams();
   const [preview, setPreview] = useState("");
+  const [removeImage, setRemoveImage] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -56,16 +57,21 @@ const usePost = () => {
     }
   };
 
+  const handleRemoveImage = () => {
+    setPreview("");
+    setValue("image", null);
+    setRemoveImage(true);
+  };
+
   // =========================== ||CREATE POST|| ===========================
   const handleCreatePost = async (data) => {
+    const { image, ...rest } = data;
     const formData = new FormData();
-    Object.keys(data).forEach((key) => {
-      if (key !== "image") {
-        formData.append(key, data[key]);
-      }
+    Object.keys(rest).forEach((key) => {
+      formData.append(key, rest[key]);
     });
-    if (data.image) {
-      formData.append("image", data.image);
+    if (image) {
+      formData.append("image", image);
     }
     try {
       await createPost(formData).unwrap();
@@ -78,6 +84,33 @@ const usePost = () => {
     }
   };
 
+  // =========================== ||UPDATE POST|| ===========================
+  const handleUpdatePost = async (data) => {
+    const { image, ...rest } = data;
+    const formData = new FormData();
+    Object.keys(rest).forEach((key) => {
+      formData.append(key, rest[key]);
+    });
+
+    if (image) {
+      formData.append("image", image);
+    }
+
+    if (removeImage) {
+      formData.append("removeImage", true);
+    }
+
+    try {
+      await updatePost(formData).unwrap();
+      toast.success("Post updated successfully");
+      refetch();
+      reset();
+      navigate("/");
+    } catch (error) {
+      toast.error("Failed to update post: " + error.message);
+    }
+  };
+
   return {
     // FORM STATE && HANDLERS
     register,
@@ -86,6 +119,7 @@ const usePost = () => {
     preview,
     setPreview,
     handleFileChange,
+    handleRemoveImage,
     // TRUNCATE CONTENT
     showMore,
     setShowMore,
@@ -105,6 +139,11 @@ const usePost = () => {
     isCreatingPost,
     createPostError,
     handleCreatePost,
+    // UPDATE POST
+    updatePost,
+    isUpdatingPost,
+    updatePostError,
+    handleUpdatePost,
   };
 };
 

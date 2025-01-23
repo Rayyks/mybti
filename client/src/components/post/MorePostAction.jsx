@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
+import useProfile from "@/hooks/useProfile";
 
 export const MorePostAction = ({
   setOpenReportModal,
@@ -8,6 +9,8 @@ export const MorePostAction = ({
   post,
   index,
 }) => {
+  const { myProfile } = useProfile();
+  const isMyPost = myProfile?.data?.username === post?.author?.username;
   const handleReportClick = () => {
     setOpenReportModal(true);
     setMoreAction(null);
@@ -38,21 +41,25 @@ export const MorePostAction = ({
               View Post
             </Link>
 
-            <Link
-              to={`/p/${post._id}/edit`}
-              className="flex w-full items-center justify-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
-            >
-              Edit Post
-            </Link>
+            {isMyPost && (
+              <Link
+                to={`/p/${post._id}/edit`}
+                className="flex w-full items-center justify-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
+              >
+                Edit Post
+              </Link>
+            )}
 
-            <Button
-              onClick={() => {
-                /* Add follow handler */
-              }}
-              className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
-            >
-              Follow User
-            </Button>
+            {!isMyPost && (
+              <Button
+                onClick={() => {
+                  /* Add follow handler */
+                }}
+                className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
+              >
+                Follow User
+              </Button>
+            )}
 
             <Button
               onClick={handleReportClick}
@@ -60,15 +67,16 @@ export const MorePostAction = ({
             >
               Report
             </Button>
-
-            <Button
-              onClick={() => {
-                /* Add delete handler */
-              }}
-              className="w-full px-4 py-3 text-sm text-red-600 font-semibold hover:bg-gray-50 active:bg-gray-100 transition-colors"
-            >
-              Delete
-            </Button>
+            {isMyPost && (
+              <Button
+                onClick={() => {
+                  /* Add delete handler */
+                }}
+                className="w-full px-4 py-3 text-sm text-red-600 font-semibold hover:bg-gray-50 active:bg-gray-100 transition-colors"
+              >
+                Delete
+              </Button>
+            )}
           </div>
 
           {/* Cancel button */}
