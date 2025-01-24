@@ -91,14 +91,17 @@ const usePost = () => {
     Object.keys(rest).forEach((key) => {
       formData.append(key, rest[key]);
     });
-
-    if (image) {
-      formData.append("image", image);
-    }
+    formData.append("postId", postId);
+    formData.append("image", image);
 
     if (removeImage) {
       formData.append("removeImage", true);
     }
+
+    console.log(data.postId);
+
+    console.log(formData.get("postId"));
+    console.log(formData.get("image"));
 
     try {
       await updatePost(formData).unwrap();
@@ -108,6 +111,18 @@ const usePost = () => {
       navigate("/");
     } catch (error) {
       toast.error("Failed to update post: " + error.message);
+    }
+  };
+
+  // =========================== ||DELETE POST|| ===========================
+  const handleDeletePost = async (id) => {
+    try {
+      await deletePost(id).unwrap();
+      toast.success("Post deleted successfully");
+
+      // navigate("/");
+    } catch (error) {
+      toast.error("Failed to delete post: " + error.message);
     }
   };
 
@@ -144,6 +159,11 @@ const usePost = () => {
     isUpdatingPost,
     updatePostError,
     handleUpdatePost,
+    // DELETE POST
+    deletePost,
+    isDeletingPost,
+    deletePostError,
+    handleDeletePost,
   };
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
+import usePost from "@/hooks/usePost";
 
 export const MorePostAction = ({
   setOpenReportModal,
@@ -10,9 +11,15 @@ export const MorePostAction = ({
   index,
 }) => {
   const { myProfile } = useProfile();
+  const { isDeletingPost, deletePostError, handleDeletePost } = usePost();
   const isMyPost = myProfile?.data?.username === post?.author?.username;
   const handleReportClick = () => {
     setOpenReportModal(true);
+    setMoreAction(null);
+  };
+
+  const handleDeleteClick = () => {
+    handleDeletePost(post._id);
     setMoreAction(null);
   };
 
@@ -69,9 +76,8 @@ export const MorePostAction = ({
             </Button>
             {isMyPost && (
               <Button
-                onClick={() => {
-                  /* Add delete handler */
-                }}
+                onClick={handleDeleteClick}
+                disabled={isDeletingPost}
                 className="w-full px-4 py-3 text-sm text-red-600 font-semibold hover:bg-gray-50 active:bg-gray-100 transition-colors"
               >
                 Delete

@@ -3,6 +3,12 @@ import axiosConfig from "@/services/axiosConfig";
 export const axiosBaseQuery =
   ({ baseUrl } = { baseUrl: "" }) =>
   async ({ url, method, data, params }) => {
+    // Ignore requests where the URL contains "undefined"
+    if (url.includes("undefined")) {
+      // console.warn(`Skipping request to: ${url}`);
+      return { error: { status: 400, data: "Invalid request" } };
+    }
+
     try {
       const result = await axiosConfig({
         url: baseUrl + url,
