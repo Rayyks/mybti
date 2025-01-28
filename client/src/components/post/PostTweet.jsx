@@ -64,7 +64,7 @@ export const PostTweet = ({ post, safeUrl, index }) => {
         >
           <Button className="flex items-center gap-1 hover:text-blue-500">
             <MessageCircle size={20} />
-            <span>{post.comments.length}</span>
+            <span>{post.commentCount}</span>
           </Button>
         </Link>
         <Button className="flex items-center gap-1 hover:text-yellow-500">

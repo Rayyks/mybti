@@ -20,8 +20,11 @@ import { CreatePostModal } from "@/components/post";
 import PublicRoutes from "@/routes/PublicRoutes";
 import PrivateRoutes from "@/routes/PrivateRoutes";
 import TermsAndConditions from "@/pages/terms/Terms&Conditions";
+import usePost from "@/hooks/usePost";
+import TweetPage from "@/pages/TweetPage";
 
 const AppRoutes = () => {
+  const { singlePost } = usePost();
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
@@ -70,7 +73,7 @@ const AppRoutes = () => {
             path="p/:postId"
             element={
               <PrivateRoutes>
-                <SinglePostPage />
+                {singlePost?.data?.image ? <SinglePostPage /> : <TweetPage />}
               </PrivateRoutes>
             }
           />

@@ -2,6 +2,7 @@ import Post from "../../models/Post.js";
 import User from "../../models/User.js";
 import { sendResponse } from "../../utils/responseUtils.js";
 import { formatDate } from "../../utils/dateUtils.js";
+import Comment from "../../models/Comment.js";
 
 export const getAllPost = async (req, res) => {
   try {
@@ -29,20 +30,41 @@ export const getAllPost = async (req, res) => {
 
     const posts = [...followedPosts, ...otherPosts];
 
-    const formattedPosts = posts.map((post) => ({
-      ...post.toObject(),
-      createdAt: formatDate(post.createdAt),
-      updatedAt: formatDate(post.updatedAt),
-      author: {
-        username: post.author.username,
-        profilePicture: post.author.profilePicture,
-        mbti: post.author.mbti,
-      },
-    }));
+    // Fetch comments dynamically for each post
+    const formattedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const commentCount = await Comment.countDocuments({ post: post._id });
 
-    sendResponse(res, 200, "Posts fetched successfully", formattedPosts);
+        return {
+          ...post.toObject(),
+          createdAt: formatDate(post.createdAt),
+          updatedAt: formatDate(post.updatedAt),
+          author: {
+            username: post.author.username,
+            profilePicture: post.author.profilePicture,
+            mbti: post.author.mbti,
+          },
+          commentCount,
+        };
+      })
+    );
+
+    sendResponse(
+      res,
+      200,
+      true,
+      formattedPosts,
+      null,
+      "Posts retrieved successfully"
+    );
   } catch (error) {
-    console.error(error);
-    sendResponse(res, 500, "Server error");
+    sendResponse(
+      res,
+      500,
+      false,
+      null,
+      error.message,
+      "Error retrieving posts"
+    );
   }
 };

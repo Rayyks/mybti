@@ -6,33 +6,18 @@ import {
   Share2,
   Bookmark,
   MoreHorizontal,
-  Smile,
 } from "lucide-react";
-import { useNavigate } from "react-router";
-
-const CommentItem = ({ comment }) => (
-  <div className="flex gap-3 mb-4">
-    <img
-      src={comment.userAvatar}
-      alt={comment.username}
-      className="w-8 h-8 rounded-full object-cover"
-    />
-    <div className="flex-1">
-      <div className="flex gap-2 items-baseline">
-        <span className="font-medium text-white">{comment.username}</span>
-        <span className="text-gray-400 text-sm">{comment.text}</span>
-      </div>
-      <div className="flex gap-4 mt-2 text-xs text-gray-400">
-        <span>2h</span>
-        <button className="hover:text-gray-300">Like</button>
-        <button className="hover:text-gray-300">Reply</button>
-      </div>
-    </div>
-  </div>
-);
+import { CommentItem } from "@/components/post";
+import { CommentInput } from "@/components/ui";
+import { Button } from "@/components/common";
+import usePost from "@/hooks/usePost";
+import { SinglePost_SkeletonLoader } from "@/components/post/SkeletonLoading";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
+import { formatTimeAgo } from "@/lib/FormatDate";
 
 const SinglePostPage = () => {
-  const navigate = useNavigate();
+  const { singlePost, singlePostLoading, singlePostError, navigate } =
+    usePost();
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -40,132 +25,147 @@ const SinglePostPage = () => {
     navigate(-1);
   };
 
-  // Sample comments data
-  const comments = [
-    {
-      id: 1,
-      username: "johndoe",
-      userAvatar: "/api/placeholder/32/32",
-      text: "This is amazing! 🔥",
-    },
-    {
-      id: 2,
-      username: "janedoe",
-      userAvatar: "/api/placeholder/32/32",
-      text: "Love the composition",
-    },
-  ];
+  if (singlePostLoading) {
+    return <SinglePost_SkeletonLoader />;
+  }
+
+  if (singlePostError) {
+    return (
+      <div className="fixed inset-0 bg-black/90 flex items-center justify-center">
+        <div className="bg-neutral-900 p-6 rounded-xl text-center">
+          <p className="text-red-400 text-lg">Something went wrong...</p>
+          <Button
+            onClick={goBack}
+            className="mt-4 text-white hover:text-gray-300"
+          >
+            Go Back
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
-      <div className="bg-neutral-900 max-w-5xl w-full rounded-lg overflow-hidden flex max-md:flex-col">
+    <div className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4">
+      <div className="bg-neutral-900 max-w-6xl w-full rounded-xl overflow-hidden flex max-md:flex-col shadow-2xl">
         {/* Left side - Image */}
-        <div className="w-full md:w-7/12 bg-neutral-950">
+        <div className="w-full md:w-7/12 bg-neutral-950 relative">
           <img
-            src="/api/placeholder/600/600"
+            src={getSafeMediaUrl(singlePost?.data?.image)}
             alt="Post content"
             className="w-full h-full object-cover"
+            loading="lazy"
           />
+
+          <Button
+            onClick={goBack}
+            className="absolute top-4 left-4 text-white hover:text-gray-300 bg-black/50 rounded-full p-2 backdrop-blur-sm"
+          >
+            <X size={20} />
+          </Button>
         </div>
 
         {/* Right side - Content */}
-        <div className="w-full md:w-5/12 flex flex-col">
+        <div className="w-full md:w-5/12 flex flex-col bg-neutral-900">
           {/* Header */}
-          <div className="p-4 border-b border-neutral-800 flex items-center justify-between">
+          <div className="p-5 border-b border-neutral-800 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img
-                src="/api/placeholder/40/40"
-                alt="User avatar"
-                className="w-8 h-8 rounded-full"
-              />
-              <span className="font-medium text-white">username</span>
+              <div className="relative">
+                <img
+                  src={getSafeMediaUrl(
+                    singlePost?.data?.author?.profilePicture
+                  )}
+                  alt={singlePost?.data?.username}
+                  className="w-10 h-10 rounded-full"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-semibold text-white hover:underline cursor-pointer">
+                  {singlePost?.data?.author?.username}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-4">
-              <button className="text-white hover:text-gray-300">
-                <MoreHorizontal size={20} />
-              </button>
-              <button
-                onClick={goBack}
-                className="text-white hover:text-gray-300"
-              >
-                <X size={20} />
-              </button>
-            </div>
+            <Button
+              className="text-white hover:text-gray-300 hover:bg-neutral-800 rounded-full p-2"
+              onClick
+            >
+              <MoreHorizontal size={20} />
+            </Button>
           </div>
 
           {/* Comments Section */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-5 space-y-6 scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-900">
             {/* Original post content */}
-            <div className="flex gap-3 mb-6">
+            <div className="flex gap-4">
               <img
-                src="/api/placeholder/40/40"
+                src={getSafeMediaUrl(singlePost?.data?.author?.profilePicture)}
                 alt="User avatar"
                 className="w-8 h-8 rounded-full object-cover"
+                loading="lazy"
               />
               <div className="flex-1">
-                <div className="flex gap-2 items-baseline">
-                  <span className="font-medium text-white">username</span>
-                  <span className="text-gray-300">
-                    Original post caption goes here... #hashtag
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-white hover:underline cursor-pointer">
+                      {singlePost?.data?.author?.username}
+                    </span>
+                    <span className="text-xs text-neutral-400">• Author</span>
+                  </div>
+                  <span className="text-white leading-relaxed">
+                    {singlePost?.data?.content}
                   </span>
                 </div>
-                <span className="text-xs text-gray-400 mt-2 block">
-                  2 HOURS AGO
-                </span>
               </div>
             </div>
 
             {/* Comments list */}
-            {comments.map((comment) => (
-              <CommentItem key={comment.id} comment={comment} />
-            ))}
+            <div className="space-y-6">
+              {singlePost?.data?.comments.map((comment) => (
+                <CommentItem key={comment._id} comment={comment} />
+              ))}
+            </div>
           </div>
 
           {/* Action buttons */}
-          <div className="p-4 border-t border-neutral-800">
+          <div className="p-5 border-t border-neutral-800 bg-neutral-900/90 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
-                <button
+                <Button
                   onClick={() => setIsLiked(!isLiked)}
-                  className={`hover:text-gray-300 ${
+                  className={`hover:scale-110 transition-transform ${
                     isLiked ? "text-red-500" : "text-white"
                   }`}
                 >
-                  <Heart size={24} fill={isLiked ? "currentColor" : "none"} />
-                </button>
-                <button className="text-white hover:text-gray-300">
-                  <MessageCircle size={24} />
-                </button>
-                <button className="text-white hover:text-gray-300">
-                  <Share2 size={24} />
-                </button>
+                  <Heart size={26} fill={isLiked ? "currentColor" : "none"} />
+                </Button>
+                <Button className="text-white hover:scale-110 transition-transform">
+                  <MessageCircle size={26} />
+                </Button>
+                <Button className="text-white hover:scale-110 transition-transform">
+                  <Share2 size={26} />
+                </Button>
               </div>
-              <button
+              <Button
                 onClick={() => setIsSaved(!isSaved)}
-                className={`hover:text-gray-300 ${
+                className={`hover:scale-110 transition-transform ${
                   isSaved ? "text-white" : "text-white"
                 }`}
               >
-                <Bookmark size={24} fill={isSaved ? "currentColor" : "none"} />
-              </button>
+                <Bookmark size={26} fill={isSaved ? "currentColor" : "none"} />
+              </Button>
             </div>
 
-            <div className="text-white mb-4">
-              <span className="font-medium">100,532 likes</span>
+            <div className="text-white mb-4 border-b border-neutral-700/50 pb-4">
+              <span className="font-semibold text-lg">
+                {singlePost?.data?.likes.length.toLocaleString()} likes
+              </span>
+              <span className="text-xs text-neutral-400 mt-2 block">
+                {formatTimeAgo(singlePost?.data?.createdAt)}
+              </span>
             </div>
 
             {/* Comment input */}
-            <div className="flex items-center gap-3 mt-2">
-              <Smile size={24} className="text-white" />
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none"
-              />
-              <button className="text-blue-400 font-medium hover:text-blue-300">
-                Post
-              </button>
-            </div>
+            <CommentInput />
           </div>
         </div>
       </div>

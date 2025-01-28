@@ -3,10 +3,13 @@ import usePost from "@/hooks/usePost";
 import { Label, Input, ErrorInput } from "@/components/ui";
 import { Button } from "@/components/common";
 import { CloudUpload } from "lucide-react";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 
 const EditPostPage = () => {
   const {
     preview,
+    setPreview,
+    setValue,
     singlePost,
     singlePostLoading,
     singlePostError,
@@ -14,7 +17,6 @@ const EditPostPage = () => {
     handleSubmit,
     errors,
     handleFileChange,
-    handleRemoveImage,
     handleUpdatePost,
     isUpdatingPost,
     updatePostError,
@@ -28,6 +30,14 @@ const EditPostPage = () => {
   if (singlePostError) {
     return <div className="text-red-500 p-4">Error loading post</div>;
   }
+
+  const handleRemoveImage = () => {
+    setValue("image", "");
+    setPreview(null);
+    register("image", {
+      value: "",
+    });
+  };
 
   const onSubmit = async (data) => {
     await handleUpdatePost(data);
@@ -54,7 +64,7 @@ const EditPostPage = () => {
         </div>
 
         <div className="w-full flex-col justify-start items-start gap-2.5 flex">
-          {preview ? (
+          {preview || singlePost?.data?.image ? (
             <>
               <div className="flex justify-between w-full">
                 <span className="text-gray-800">Preview:</span>
@@ -70,14 +80,14 @@ const EditPostPage = () => {
               singlePost?.data?.image?.match(/\.mp4|\.mov/) ? (
                 <video
                   className="w-full rounded-lg"
-                  src={preview?.url}
+                  src={preview?.url || getSafeMediaUrl(singlePost?.data?.image)}
                   controls
                   loop
                 />
               ) : (
                 <img
                   className="w-full rounded-lg"
-                  src={preview?.url}
+                  src={preview?.url || getSafeMediaUrl(singlePost?.data?.image)}
                   alt="Post preview"
                 />
               )}

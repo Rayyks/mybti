@@ -10,42 +10,50 @@ export const updatePost = async (req, res) => {
 
     console.log("Received update request for post:", postId);
 
+    // Find the existing post by ID and author
     const existingPost = await Post.findOne({ _id: postId, author: userId });
-    if (!existingPost)
+    if (!existingPost) {
       return sendResponse(res, 404, "Post not found or unauthorized");
+    }
 
+    // Prepare content and image values
     const updatedContent = content || existingPost.content;
+    let updatedImage = existingPost.image;
 
-    let image = existingPost.image;
-
+    // Handle image removal
     if (removeImage) {
       if (existingPost.image) {
         await deleteImageFromStorage(existingPost.image);
       }
-      image = null;
-    } else if (req.file) {
+      updatedImage = "";
+    }
+
+    // Handle image replacement
+    if (req.file) {
       if (existingPost.image) {
         await deleteImageFromStorage(existingPost.image);
       }
-      image = `/uploads/${req.file.filename}`;
+      updatedImage = `/uploads/${req.file.filename}`;
     }
 
-    // Update the post with new content and image (if provided)
-    const post = await Post.findOneAndUpdate(
+    // Update the post in the database
+    const updatedPost = await Post.findOneAndUpdate(
       { _id: postId, author: userId },
-      { content: updatedContent, image, updatedAt: new Date() },
+      { content: updatedContent, image: updatedImage, updatedAt: new Date() },
       { new: true }
     );
 
+    // Format the updated post for response
     const formattedPost = {
-      ...post.toObject(),
-      createdAt: formatDate(post.createdAt),
-      updatedAt: formatDate(post.updatedAt),
+      ...updatedPost.toObject(),
+      createdAt: formatDate(updatedPost.createdAt),
+      updatedAt: formatDate(updatedPost.updatedAt),
     };
 
+    // Send the response
     sendResponse(res, 200, "Post updated successfully", formattedPost);
   } catch (error) {
-    console.error(error);
+    console.error("Error updating post:", error);
     sendResponse(res, 500, "Server error");
   }
 };

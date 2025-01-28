@@ -1,5 +1,5 @@
 import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
-import formatDate from "@/lib/formatDate";
+import { formatTimeAgo } from "@/lib/FormatDate";
 import { Link } from "react-router";
 
 export const PostPreview = ({ post }) => (
@@ -19,7 +19,7 @@ export const PostPreview = ({ post }) => (
               Post From : {post.author.username}
             </p>
             <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-              <span>{formatDate(post.createdAt)}</span>
+              <span>{formatTimeAgo(post.createdAt)}</span>
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ import { truncateContent } from "@/pages/auth/contentPreview";
 const usePost = () => {
   const { postId } = useParams();
   const [preview, setPreview] = useState("");
-  const [removeImage, setRemoveImage] = useState(false);
+
   const navigate = useNavigate();
   const {
     register,
@@ -57,12 +57,6 @@ const usePost = () => {
     }
   };
 
-  const handleRemoveImage = () => {
-    setPreview("");
-    setValue("image", null);
-    setRemoveImage(true);
-  };
-
   // =========================== ||CREATE POST|| ===========================
   const handleCreatePost = async (data) => {
     const { image, ...rest } = data;
@@ -94,10 +88,6 @@ const usePost = () => {
     formData.append("postId", postId);
     formData.append("image", image);
 
-    if (removeImage) {
-      formData.append("removeImage", true);
-    }
-
     console.log(data.postId);
 
     console.log(formData.get("postId"));
@@ -127,14 +117,16 @@ const usePost = () => {
   };
 
   return {
+    navigate,
     // FORM STATE && HANDLERS
     register,
     handleSubmit,
     errors,
     preview,
     setPreview,
+    setValue,
+    setPreview,
     handleFileChange,
-    handleRemoveImage,
     // TRUNCATE CONTENT
     showMore,
     setShowMore,

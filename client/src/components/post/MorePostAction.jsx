@@ -4,14 +4,9 @@ import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePost from "@/hooks/usePost";
 
-export const MorePostAction = ({
-  setOpenReportModal,
-  setMoreAction,
-  post,
-  index,
-}) => {
+export const MorePostAction = ({ setOpenReportModal, setMoreAction, post }) => {
   const { myProfile } = useProfile();
-  const { isDeletingPost, deletePostError, handleDeletePost } = usePost();
+  const { isDeletingPost, handleDeletePost } = usePost();
   const isMyPost = myProfile?.data?.username === post?.author?.username;
   const handleReportClick = () => {
     setOpenReportModal(true);

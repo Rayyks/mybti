@@ -66,3 +66,81 @@ export const HomePage_SkeletonLoader = () => {
     </div>
   );
 };
+
+export const SinglePost_SkeletonLoader = () => {
+  return (
+    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+      <div className="bg-neutral-900 max-w-5xl w-full rounded-lg overflow-hidden flex max-md:flex-col">
+        {/* Left side - Image skeleton */}
+        <div className="w-full md:w-7/12 bg-neutral-950">
+          <div className="w-full h-full aspect-square animate-pulse bg-neutral-800" />
+        </div>
+
+        {/* Right side - Content skeleton */}
+        <div className="w-full md:w-5/12 flex flex-col">
+          {/* Header skeleton */}
+          <div className="p-4 border-b border-neutral-800 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full animate-pulse bg-neutral-800" />
+              <div className="h-4 w-24 rounded animate-pulse bg-neutral-800" />
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-5 h-5 rounded animate-pulse bg-neutral-800" />
+              <div className="w-5 h-5 rounded animate-pulse bg-neutral-800" />
+            </div>
+          </div>
+
+          {/* Comments Section skeleton */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {/* Original post content skeleton */}
+            <div className="flex gap-3 mb-6">
+              <div className="w-8 h-8 rounded-full animate-pulse bg-neutral-800" />
+              <div className="flex-1">
+                <div className="flex flex-col gap-2">
+                  <div className="h-4 w-24 rounded animate-pulse bg-neutral-800" />
+                  <div className="h-4 w-3/4 rounded animate-pulse bg-neutral-800" />
+                </div>
+              </div>
+            </div>
+
+            {/* Comments list skeleton */}
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="flex gap-3">
+                <div className="w-8 h-8 rounded-full animate-pulse bg-neutral-800" />
+                <div className="flex-1">
+                  <div className="flex flex-col gap-2">
+                    <div className="h-4 w-24 rounded animate-pulse bg-neutral-800" />
+                    <div className="h-4 w-2/3 rounded animate-pulse bg-neutral-800" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Action buttons skeleton */}
+          <div className="p-4 border-t border-neutral-800">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-4">
+                {[1, 2, 3].map((item) => (
+                  <div
+                    key={item}
+                    className="w-6 h-6 rounded animate-pulse bg-neutral-800"
+                  />
+                ))}
+              </div>
+              <div className="w-6 h-6 rounded animate-pulse bg-neutral-800" />
+            </div>
+
+            <div className="mb-4 border-b border-neutral-700 pb-4">
+              <div className="h-4 w-32 rounded animate-pulse bg-neutral-800 mb-2" />
+              <div className="h-3 w-20 rounded animate-pulse bg-neutral-800" />
+            </div>
+
+            {/* Comment input skeleton */}
+            <div className="h-10 rounded-full animate-pulse bg-neutral-800" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
