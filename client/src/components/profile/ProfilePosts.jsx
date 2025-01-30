@@ -77,7 +77,7 @@ export const ProfilePosts = ({ myProfile, isLoading, safeUrl }) => {
                     </div>
                     <div className="flex items-center gap-1">
                       <MessageCircle size={20} />
-                      <span>{post.comments.length}</span>
+                      <span>{post.comment}</span>
                     </div>
                   </div>
                 </Link>

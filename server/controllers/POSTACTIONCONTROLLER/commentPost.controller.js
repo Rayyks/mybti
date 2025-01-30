@@ -7,37 +7,49 @@ import { formatDate } from "../../utils/dateUtils.js";
 
 export const createComment = async (req, res) => {
   try {
-    const { postId, content, parentCommentId, parentReplyId } = req.body;
+    const { postId, content, parentCommentId } = req.body;
     const userId = req.user.id;
+
     if (!content) return sendResponse(res, 400, "Content is required");
-    const post = await Post.findById(postId);
-    if (!post) return sendResponse(res, 404, "Post not found");
+
+    // **🔥 Check if it's a new comment or a reply**
+    let parentComment = null;
+    if (parentCommentId) {
+      parentComment = await Comment.findById(parentCommentId);
+      if (!parentComment)
+        return sendResponse(res, 404, "Parent comment not found");
+    }
+
+    // **🔥 Create the comment (or reply)**
     const newComment = await Comment.create({
       content,
       author: userId,
       post: postId,
-      parentCommentId,
-      parentReplyId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      parentComment: parentCommentId || null,
     });
-    await User.findByIdAndUpdate(userId, {
-      $addToSet: { commentedPosts: postId },
-    });
-    const formattedComment = {
+
+    // **🔥 If it's a reply, notify the parent comment author**
+    if (parentComment) {
+      await Notification.create({
+        user: parentComment.author,
+        type: "reply",
+        message: `You have a new reply from ${req.user.username}.`,
+      });
+    } else {
+      // **🔥 If it's a new comment, notify the post author**
+      const post = await Post.findById(postId);
+      await Notification.create({
+        user: post.author,
+        type: "comment",
+        message: `Your post received a new comment from ${req.user.username}.`,
+      });
+    }
+
+    sendResponse(res, 201, "Comment posted successfully", {
       ...newComment.toObject(),
       createdAt: formatDate(newComment.createdAt),
       updatedAt: formatDate(newComment.updatedAt),
-    };
-
-    // Create notification
-    await Notification.create({
-      user: post.author,
-      type: "comment",
-      message: `Your post received a new comment from ${req.user.username}.`,
     });
-
-    sendResponse(res, 201, "Comment created successfully", formattedComment);
   } catch (error) {
     console.error(error);
     sendResponse(res, 500, "Server error");

@@ -1,5 +1,6 @@
 import User from "../../models/User.js";
 import Post from "../../models/Post.js";
+import Comment from "../../models/Comment.js";
 import { sendResponse } from "../../utils/responseUtils.js";
 import { formatDate } from "../../utils/dateUtils.js";
 
@@ -25,11 +26,23 @@ export const getProfile = async (req, res) => {
 
     // Fetch user's own posts
     const userPosts = await Post.find({ author: userId })
-      .select("content createdAt likes comments image")
-      .populate({ path: "comments", select: "content author createdAt" })
-      .populate({ path: "author", select: "username" });
+      .select("content createdAt likes image")
+      .populate({ path: "author", select: "username" })
+      .lean();
 
-    // Format the user and post data
+    // Count comments for each post
+    const postsWithCommentCount = await Promise.all(
+      userPosts.map(async (post) => {
+        const commentCount = await Comment.countDocuments({ post: post._id });
+        return {
+          ...post,
+          commentCount,
+          createdAt: formatDate(post.createdAt),
+        };
+      })
+    );
+
+    // Format the user data
     const formattedUser = {
       ...user.toObject(),
       commentedPosts: user.commentedPosts.map((post) => ({
@@ -40,10 +53,7 @@ export const getProfile = async (req, res) => {
         ...post.toObject(),
         createdAt: formatDate(post.createdAt),
       })),
-      authoredPosts: userPosts.map((post) => ({
-        ...post.toObject(),
-        createdAt: formatDate(post.createdAt),
-      })),
+      authoredPosts: postsWithCommentCount,
       deletionScheduledAt: formatDate(user.deletionScheduledAt),
       createdAt: formatDate(user.createdAt),
       updatedAt: formatDate(user.updatedAt),

@@ -1,6 +1,5 @@
 import Post from "../../models/Post.js";
 import Comment from "../../models/Comment.js";
-import Reply from "../../models/Reply.js";
 import { sendResponse } from "../../utils/responseUtils.js";
 import { formatDate } from "../../utils/dateUtils.js";
 
@@ -8,67 +7,45 @@ export const getSinglePost = async (req, res) => {
   try {
     const { postId } = req.params;
 
-    // Fetch the main post
-    const post = await Post.findById(postId).populate(
-      "author",
-      "username profilePicture"
-    );
+    // Fetch the post along with the author
+    const post = await Post.findById(postId)
+      .populate("author", "username profilePicture")
+      .lean();
     if (!post) return sendResponse(res, 404, "Post not found");
 
-    // Fetch all comments belonging to the post
+    // Fetch all comments (including replies)
     const comments = await Comment.find({ post: postId })
       .populate("author", "username profilePicture")
       .lean();
 
-    // Get comment IDs to scope replies
-    const commentIds = comments.map((comment) => comment._id);
-
-    // Fetch first-level replies (directly to comments)
-    const firstLevelReplies = await Reply.find({
-      parentCommentId: { $in: commentIds },
-    })
-      .populate("author", "username profilePicture")
-      .lean();
-
-    // Fetch second-level replies (replies to first-level replies, scoped to the current post)
-    const secondLevelReplies = await Reply.find({
-      parentReplyId: { $in: firstLevelReplies.map((reply) => reply._id) },
-    })
-      .populate("author", "username profilePicture")
-      .lean();
-
-    // Combine all replies, scoped to the current post
-    const allReplies = [...firstLevelReplies, ...secondLevelReplies];
-
-    // Attach replies to their respective comments
+    // **🔥 Nest replies under their parent comments**
+    const commentMap = {}; // Store comments by ID for quick access
     comments.forEach((comment) => {
-      comment.replies = allReplies
-        .filter(
-          (reply) =>
-            reply.parentCommentId?.toString() === comment._id.toString() &&
-            !reply.parentReplyId
-        )
-        .map((reply) => ({
-          ...reply,
-          createdAt: formatDate(reply.createdAt),
-          updatedAt: formatDate(reply.updatedAt),
-        }));
-
+      comment.replies = []; // Initialize replies array
       comment.createdAt = formatDate(comment.createdAt);
       comment.updatedAt = formatDate(comment.updatedAt);
+      commentMap[comment._id.toString()] = comment;
     });
 
-    // Format the post with comments and replies
+    // **🔥 Attach replies to their parent comments**
+    comments.forEach((comment) => {
+      if (comment.parentComment) {
+        const parent = commentMap[comment.parentComment.toString()];
+        if (parent) parent.replies.push(comment);
+      }
+    });
+
+    // **🔥 Get only top-level comments (parentComment: null)**
+    const topLevelComments = comments.filter(
+      (comment) => !comment.parentComment
+    );
+
+    // Format the post with structured comments
     const formattedPost = {
-      ...post.toObject(),
+      ...post,
       createdAt: formatDate(post.createdAt),
       updatedAt: formatDate(post.updatedAt),
-      comments,
-      replies: allReplies.map((reply) => ({
-        ...reply,
-        createdAt: formatDate(reply.createdAt),
-        updatedAt: formatDate(reply.updatedAt),
-      })),
+      comments: topLevelComments, // Replies are already nested inside
     };
 
     sendResponse(res, 200, "Post fetched successfully", formattedPost);

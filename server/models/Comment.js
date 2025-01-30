@@ -17,18 +17,13 @@ const commentSchema = new mongoose.Schema(
       ref: "Post",
       required: true,
     },
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    reports: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Report",
-      },
-    ],
+    parentComment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+      default: null, // If null, it's a top-level comment
+    },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    reports: [{ type: mongoose.Schema.Types.ObjectId, ref: "Report" }],
   },
   { timestamps: true }
 );

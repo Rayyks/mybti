@@ -38,6 +38,7 @@ const usePost = () => {
     data: singlePost,
     isLoading: singlePostLoading,
     isError: singlePostError,
+    refetch: refetchSinglePost,
   } = useGetSinglePostQuery(postId);
   const [createPost, { isLoading: isCreatingPost, isError: createPostError }] =
     useCreatePostMutation();
@@ -138,9 +139,10 @@ const usePost = () => {
     isLoading,
     isError,
     //  GET SINGLE POST
-    singlePost,
+    singlePost: singlePost?.data,
     singlePostLoading,
     singlePostError,
+    refetchSinglePost,
     // CREATE POST
     createPost,
     isCreatingPost,

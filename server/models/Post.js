@@ -1,4 +1,3 @@
-// /models/Post.js
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
@@ -18,10 +17,7 @@ const postSchema = new mongoose.Schema(
     },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     reports: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    isEdited: {
-      type: Boolean,
-      default: false,
-    },
+    isEdited: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

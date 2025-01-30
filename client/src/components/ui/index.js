@@ -6,3 +6,4 @@ export * from "@/components/ui/CustomTab";
 export * from "@/components/ui/ActivityTab";
 export * from "@/components/ui/PostPreview";
 export * from "@/components/ui/CommentInput";
+export * from "@/components/ui/MenuComment";

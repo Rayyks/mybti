@@ -1,6 +1,6 @@
 import Report from "../../models/Report.js";
 import Comment from "../../models/Comment.js";
-import Reply from "../../models/Reply.js";
+
 import { sendResponse } from "../../utils/responseUtils.js";
 
 export const reportComment = async (req, res) => {

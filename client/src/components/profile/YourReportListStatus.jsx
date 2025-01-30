@@ -1,4 +1,4 @@
-import formatDate from "@/lib/FormatDate";
+import { formatTimeAgo } from "@/lib/FormatDate";
 import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 import React from "react";
 
@@ -71,7 +71,7 @@ export const YourReportListStatus = ({
                   className="hover:bg-neutral-50 transition-colors duration-150"
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
-                    {formatDate(report.createdAt)}
+                    {formatTimeAgo(report.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
                     {report.targetType === "user" ? (
@@ -84,6 +84,7 @@ export const YourReportListStatus = ({
                           src={getSafeMediaUrl(report.target.image)}
                           alt="Post"
                           className="h-12 w-12 object-cover rounded-md"
+                          loading="lazy"
                         />
                       ) : (
                         "No Image"
