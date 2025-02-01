@@ -1,14 +1,19 @@
-import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 import { MorePostAction } from "@/components/post";
-import useReport from "@/hooks/useReport";
 import ReportModal from "@/components/report/ReportModal";
+import { useModal } from "@/context/modalContext";
 
 export const PostListHeader = ({ post, safeUrl, index }) => {
-  const [moreAction, setMoreAction] = useState(null);
-  const { openReportModal, setOpenReportModal } = useReport();
+  const {
+    openMoreAction,
+    openReportModal,
+    openReportMenu,
+    closeReportMenu,
+    openMoreActionMenu,
+    closeMoreActionMenu,
+  } = useModal();
   return (
     <div className="flex items-center justify-between px-3 sm:px-4 h-14 border-b border-gray-200 dark:border-neutral-700">
       <div className="flex items-center space-x-3">
@@ -33,16 +38,18 @@ export const PostListHeader = ({ post, safeUrl, index }) => {
       </div>
       <Button
         className={`text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 ${
-          moreAction === index ? "hidden" : ""
+          openMoreAction === index ? "hidden" : ""
         }`}
-        onClick={() => setMoreAction(moreAction === index ? null : index)}
+        onClick={() =>
+          openMoreActionMenu(openMoreAction === index ? null : index)
+        }
       >
         <MoreHorizontal className="w-5 h-5" />
       </Button>
-      {moreAction === index && (
+      {openMoreAction === index && (
         <MorePostAction
-          setOpenReportModal={setOpenReportModal}
-          setMoreAction={setMoreAction}
+          openReportMenu={openReportMenu}
+          closeMoreActionMenu={closeMoreActionMenu}
           post={post}
           index={index}
         />
@@ -52,7 +59,7 @@ export const PostListHeader = ({ post, safeUrl, index }) => {
           reportType={"post"}
           id={post._id}
           openReportModal={openReportModal}
-          setOpenReportModal={setOpenReportModal}
+          closeReportMenu={closeReportMenu}
         />
       )}
     </div>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   useCommentPostMutation,
   useReplyCommentMutation,
@@ -25,34 +24,45 @@ const usePostActions = () => {
   const [deleteComment, { isLoading: deleteCommentLoading }] =
     useDeleteCommentMutation();
 
+  // ======================================== || COMMENT POST || ========================================
   const handleCommentPost = async (postId, content) => {
     try {
-      await commentPost({ postId, content }).unwrap();
-      await refetchSinglePost();
+      toast.promise(commentPost({ postId, content }).unwrap(), {
+        loading: "Posting comment...",
+        success: "Comment posted successfully",
+        error: "Failed to post comment",
+      });
+      refetchSinglePost();
       reset();
-      toast.success("Comment posted successfully");
     } catch (error) {
       toast.error(error.message);
     }
   };
 
+  // ======================================== || REPLY COMMENT || ========================================
   const handleReplyComment = async (postId, parentCommentId, content) => {
     try {
-      await replyComment({
-        postId,
-        parentCommentId,
-        content,
-      }).unwrap();
-      await refetchSinglePost();
+      await toast.promise(
+        replyComment({
+          postId,
+          parentCommentId,
+          content,
+        }).unwrap(),
+        {
+          loading: "Posting reply...",
+          success: "Reply posted successfully",
+          error: "Failed to post reply",
+        }
+      );
+      refetchSinglePost();
       reset();
-      toast.success("Reply posted successfully");
     } catch (error) {
       console.log(error);
-
       toast.error(error.message);
     }
   };
 
+  // ======================================== || DELETE COMMENT || ========================================
   const handleDeleteComment = async (commentId) => {
     try {
       await toast.promise(deleteComment({ commentId }).unwrap(), {

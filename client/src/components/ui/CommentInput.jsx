@@ -23,9 +23,13 @@ export const CommentInput = ({
 
   const onSubmit = (data) => {
     if (selectedParentCommentId) {
-      handleReplyComment(singlePost._id, selectedParentCommentId, data.content);
+      handleReplyComment(
+        singlePost?._id,
+        selectedParentCommentId,
+        data.content
+      );
     } else {
-      handleCommentPost(singlePost._id, data.content);
+      handleCommentPost(singlePost?._id, data.content);
     }
   };
 

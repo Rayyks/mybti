@@ -12,31 +12,37 @@ export const createComment = async (req, res) => {
 
     if (!content) return sendResponse(res, 400, "Content is required");
 
-    // **🔥 Check if it's a new comment or a reply**
+    // Check if it's a new comment or a reply
     let parentComment = null;
+    let replyTo = null;
     if (parentCommentId) {
-      parentComment = await Comment.findById(parentCommentId);
+      parentComment = await Comment.findById(parentCommentId).populate(
+        "author",
+        "username"
+      );
       if (!parentComment)
         return sendResponse(res, 404, "Parent comment not found");
+      replyTo = parentComment.author.username;
     }
 
-    // **🔥 Create the comment (or reply)**
+    // Create the comment (or reply)
     const newComment = await Comment.create({
       content,
       author: userId,
       post: postId,
       parentComment: parentCommentId || null,
+      replyTo: replyTo || null,
     });
 
-    // **🔥 If it's a reply, notify the parent comment author**
+    // If it's a reply, notify the parent comment author
     if (parentComment) {
       await Notification.create({
-        user: parentComment.author,
+        user: parentComment.author._id,
         type: "reply",
         message: `You have a new reply from ${req.user.username}.`,
       });
     } else {
-      // **🔥 If it's a new comment, notify the post author**
+      // If it's a new comment, notify the post author
       const post = await Post.findById(postId);
       await Notification.create({
         user: post.author,

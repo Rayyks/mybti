@@ -7,8 +7,17 @@ import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 
 import { CommentItem } from "@/components/post";
 import MainTweet from "@/components/post/MainTweet";
+import { useModal } from "@/context/modalContext";
 
 const SinglePostPage = () => {
+  const {
+    showMenuComment,
+    openMenuComment,
+    closeMenuComment,
+    openReportModal,
+    openReportMenu,
+    closeReportMenu,
+  } = useModal();
   const { singlePost, singlePostLoading, singlePostError, navigate } =
     usePost();
   const [isLiked, setIsLiked] = useState(false);
@@ -32,7 +41,7 @@ const SinglePostPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="w-full min-h-screen bg-black text-white mb-10 rounded-lg">
       {/* Header */}
       <div className="flex items-center gap-6 px-4 py-3 border-b border-neutral-800 sticky top-0 bg-black/80 backdrop-blur-sm">
         <Button
@@ -56,13 +65,19 @@ const SinglePostPage = () => {
       />
 
       {/* Show replies here */}
-      {singlePost.comments.map((comment) => (
+      {singlePost?.comments.map((comment) => (
         <CommentItem
           key={comment._id}
           comment={comment}
           singlePost={singlePost}
           getSafeMediaUrl={getSafeMediaUrl}
           selectedComment={selectedComment}
+          showMenuComment={showMenuComment}
+          openMenuComment={openMenuComment}
+          closeMenuComment={closeMenuComment}
+          openReportModal={openReportModal}
+          openReportMenu={openReportMenu}
+          closeReportMenu={closeReportMenu}
         />
       ))}
     </div>

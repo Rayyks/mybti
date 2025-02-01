@@ -14,7 +14,7 @@ const DashboardPage = () => {
       {/* Main Content Container */}
       <div className="lg:max-w-[70%] mx-auto px-0 sm:px-2">
         {/* Posts Feed */}
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-3 sm:space-y-4 pb-10">
           {post?.data.length > 0 ? (
             post.data.map((post, index) => (
               <article

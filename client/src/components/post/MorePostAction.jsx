@@ -4,18 +4,22 @@ import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePost from "@/hooks/usePost";
 
-export const MorePostAction = ({ setOpenReportModal, setMoreAction, post }) => {
+export const MorePostAction = ({
+  openReportMenu,
+  closeMoreActionMenu,
+  post,
+}) => {
   const { myProfile } = useProfile();
   const { isDeletingPost, handleDeletePost } = usePost();
   const isMyPost = myProfile?.data?.username === post?.author?.username;
   const handleReportClick = () => {
-    setOpenReportModal(true);
-    setMoreAction(null);
+    openReportMenu();
+    closeMoreActionMenu();
   };
 
   const handleDeleteClick = () => {
     handleDeletePost(post._id);
-    setMoreAction(null);
+    closeMoreActionMenu();
   };
 
   return (
@@ -23,7 +27,7 @@ export const MorePostAction = ({ setOpenReportModal, setMoreAction, post }) => {
       {/* Backdrop overlay */}
       <div
         className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-        onClick={() => setMoreAction(null)}
+        onClick={closeMoreActionMenu}
       />
 
       {/* Modal */}
@@ -83,7 +87,7 @@ export const MorePostAction = ({ setOpenReportModal, setMoreAction, post }) => {
           {/* Cancel button */}
           <div className="border-t border-gray-200">
             <Button
-              onClick={() => setMoreAction(null)}
+              onClick={closeMoreActionMenu}
               className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
             >
               Cancel

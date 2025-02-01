@@ -62,7 +62,7 @@ export const PostListActions = ({ post }) => {
           to={`/p/${post._id}`}
           className="text-sm text-gray-500 dark:text-gray-400"
         >
-          View all {post.comments} comments
+          View all {post.commentCount} comments
         </Link>
       </div>
 

@@ -9,25 +9,25 @@ export const getSinglePost = async (req, res) => {
 
     // Fetch the post along with the author
     const post = await Post.findById(postId)
-      .populate("author", "username profilePicture")
+      .populate("author", "username profilePicture mbti")
       .lean();
     if (!post) return sendResponse(res, 404, "Post not found");
 
     // Fetch all comments (including replies)
     const comments = await Comment.find({ post: postId })
-      .populate("author", "username profilePicture")
+      .populate("author", "username profilePicture mbti")
       .lean();
 
-    // **🔥 Nest replies under their parent comments**
-    const commentMap = {}; // Store comments by ID for quick access
+    // Nest replies under their parent comments
+    const commentMap = {};
     comments.forEach((comment) => {
-      comment.replies = []; // Initialize replies array
+      comment.replies = [];
       comment.createdAt = formatDate(comment.createdAt);
       comment.updatedAt = formatDate(comment.updatedAt);
       commentMap[comment._id.toString()] = comment;
     });
 
-    // **🔥 Attach replies to their parent comments**
+    // Attach replies to their parent comments
     comments.forEach((comment) => {
       if (comment.parentComment) {
         const parent = commentMap[comment.parentComment.toString()];
@@ -35,7 +35,7 @@ export const getSinglePost = async (req, res) => {
       }
     });
 
-    // **🔥 Get only top-level comments (parentComment: null)**
+    // Get only top-level comments (parentComment: null)
     const topLevelComments = comments.filter(
       (comment) => !comment.parentComment
     );
@@ -45,7 +45,7 @@ export const getSinglePost = async (req, res) => {
       ...post,
       createdAt: formatDate(post.createdAt),
       updatedAt: formatDate(post.updatedAt),
-      comments: topLevelComments, // Replies are already nested inside
+      comments: topLevelComments,
     };
 
     sendResponse(res, 200, "Post fetched successfully", formattedPost);

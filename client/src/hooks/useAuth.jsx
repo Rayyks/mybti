@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import toast from "react-hot-toast";
 import { Login, Logout, Register } from "@/redux/thunks/auth";
 import { profileApi } from "@/redux/slices/profileApiSlice";
@@ -24,14 +24,17 @@ const useAuth = () => {
   };
 
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
 
+  // =========================== || HANDLE LOGIN  || ===========================
+  const from = location.state?.from || "/";
   const handleSubmitLogin = async (data) => {
     try {
       await dispatch(Login(data)).unwrap();
       reset();
       dispatch(profileApi.util.resetApiState());
-      navigate("/");
+      navigate(from);
       toast.success("Login successful");
     } catch (error) {
       console.log("Error:", error);
@@ -39,6 +42,7 @@ const useAuth = () => {
     }
   };
 
+  // =========================== || HANDLE REGISTER  || ===========================
   const handleSubmitRegister = async (data) => {
     try {
       await dispatch(Register(data)).unwrap();
@@ -50,6 +54,7 @@ const useAuth = () => {
     }
   };
 
+  // =========================== || HANDLE LOGOUT  || ===========================
   const handleLogout = async () => {
     try {
       await dispatch(Logout()).unwrap();

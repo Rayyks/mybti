@@ -20,7 +20,11 @@ const commentSchema = new mongoose.Schema(
     parentComment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment",
-      default: null, // If null, it's a top-level comment
+      default: null,
+    },
+    replyTo: {
+      type: String,
+      default: null,
     },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     reports: [{ type: mongoose.Schema.Types.ObjectId, ref: "Report" }],

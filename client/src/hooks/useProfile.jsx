@@ -72,8 +72,11 @@ const useProfile = () => {
       formData.append("profilePicture", data.profilePicture);
     }
     try {
-      await updateProfile(formData).unwrap();
-      toast.success("Profile updated successfully");
+      await toast.promise(updateProfile(formData).unwrap(), {
+        loading: "Updating Profile...",
+        success: "Profile Updated!",
+        error: "Failed to Update Profile!",
+      });
       fetchProfile();
       navigate("/profile");
     } catch (error) {

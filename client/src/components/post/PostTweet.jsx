@@ -1,18 +1,22 @@
-import { useState } from "react";
 import { Button } from "@/components/common";
 import { Heart, MessageCircle, Bookmark, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router";
-import useReport from "@/hooks/useReport";
 import { MorePostAction } from "@/components/post";
 import { ReportModal } from "@/components/report";
 import usePost from "@/hooks/usePost";
+import { useModal } from "@/context/modalContext";
 
 export const PostTweet = ({ post, safeUrl, index }) => {
   const { showMore, contentPreview, maxContentPreview, handleShowMore } =
     usePost();
-
-  const [moreAction, setMoreAction] = useState(null);
-  const { openReportModal, setOpenReportModal } = useReport();
+  const {
+    openMoreAction,
+    openReportModal,
+    openReportMenu,
+    closeReportMenu,
+    openMoreActionMenu,
+    closeMoreActionMenu,
+  } = useModal();
 
   return (
     <div key={post._id} className="border border-gray-200 rounded-lg p-4">
@@ -72,16 +76,18 @@ export const PostTweet = ({ post, safeUrl, index }) => {
         </Button>
         <Button
           className={`ml-auto text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 ${
-            moreAction === index ? "hidden" : ""
+            openMoreAction === index ? "hidden" : ""
           }`}
-          onClick={() => setMoreAction(moreAction === index ? null : index)}
+          onClick={() =>
+            openMoreActionMenu(openMoreAction === index ? null : index)
+          }
         >
           <MoreHorizontal className="w-5 h-5" />
         </Button>
-        {moreAction === index && (
+        {openMoreAction === index && (
           <MorePostAction
-            setOpenReportModal={setOpenReportModal}
-            setMoreAction={setMoreAction}
+            openReportMenu={openReportMenu}
+            closeMoreActionMenu={closeMoreActionMenu}
             post={post}
             index={index}
           />
@@ -91,7 +97,7 @@ export const PostTweet = ({ post, safeUrl, index }) => {
             reportType={"post"}
             id={post._id}
             openReportModal={openReportModal}
-            setOpenReportModal={setOpenReportModal}
+            closeReportMenu={closeReportMenu}
           />
         )}
       </div>
@@ -100,7 +106,7 @@ export const PostTweet = ({ post, safeUrl, index }) => {
           to={`/p/${post._id}`}
           className="text-sm text-gray-500 dark:text-gray-400"
         >
-          View all {post.comments} comments
+          View all {post.commentCount} comments
         </Link>
       </div>
     </div>

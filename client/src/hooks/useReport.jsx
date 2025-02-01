@@ -12,7 +12,6 @@ import { toast } from "react-hot-toast";
 const useReport = () => {
   const [reason, setReason] = useState("");
   const [customReason, setCustomReason] = useState("");
-  const [openReportModal, setOpenReportModal] = useState(false);
 
   // USE FORM HOOK
   const {
@@ -56,8 +55,6 @@ const useReport = () => {
     setReason,
     customReason,
     setCustomReason,
-    openReportModal,
-    setOpenReportModal,
     // USE FORM HOOK
     register,
     handleSubmit,

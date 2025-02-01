@@ -7,7 +7,7 @@ import { MenuComment } from "@/components/ui";
 export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const { author, content, createdAt, likes, replies } = reply;
+  const { author, content, createdAt, likes, replies, replyTo } = reply;
 
   return (
     <div className="mt-2 first:mt-0">
@@ -18,15 +18,17 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
           <div className="flex items-center justify-between gap-2 relative">
             {/* Avatar */}
             <img
-              src={getSafeMediaUrl(author.profilePicture)}
-              alt={author.username}
+              src={getSafeMediaUrl(author?.profilePicture)}
+              alt={author?.username}
               className="w-8 h-8 rounded-full object-cover flex-shrink-0"
               loading="lazy"
             />
             <div className="absolute left-10 flex gap-2 min-w-0">
               <span className="font-bold hover:underline truncate">
-                {author.username}
+                {author?.username}
               </span>
+              <span className="text-neutral-500">replied to</span>
+              <span>{replyTo}</span>
               <span className="text-neutral-500">·</span>
               <time className="text-neutral-500">
                 {formatTimeAgo(createdAt)}
@@ -45,7 +47,11 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
                 <MoreHorizontal size={16} />
               </Button>
               {showMenu && (
-                <MenuComment author={author} commentId={reply._id} />
+                <MenuComment
+                  author={author}
+                  commentId={reply?._id}
+                  setShowMenu={setShowMenu}
+                />
               )}
             </div>
           </div>
@@ -61,7 +67,7 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
               variant="ghost"
               size="sm"
               className="group flex items-center gap-2 text-neutral-500 hover:text-blue-500"
-              onClick={() => selectedComment(reply._id)}
+              onClick={() => selectedComment(reply?._id)}
             >
               <MessageCircle size={16} />
               <span className="text-xs">Reply</span>
@@ -89,9 +95,10 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
             <div className="mt-2 border-neutral-800">
               {replies.map((nestedReply) => (
                 <ReplyItem
-                  key={nestedReply._id}
+                  key={nestedReply?._id}
                   reply={nestedReply}
                   getSafeMediaUrl={getSafeMediaUrl}
+                  selectedComment={selectedComment}
                 />
               ))}
             </div>
