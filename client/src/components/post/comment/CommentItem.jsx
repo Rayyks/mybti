@@ -28,7 +28,7 @@ export const CommentItem = ({
   const handleToggleReplies = () => setShowReplies(!showReplies);
 
   return (
-    <div className="py-2 mb-10">
+    <div className="py-2">
       <article className="px-4 py-3 flex gap-3 hover:bg-neutral-900/40 transition-colors">
         <img
           src={getSafeMediaUrl(author?.profilePicture)}

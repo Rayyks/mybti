@@ -60,13 +60,20 @@ export const MainTweet = ({
       {/* Tweet Content */}
       <div className="px-4 pb-3">
         <p className="text-xl whitespace-pre-wrap">{singlePost?.content}</p>
-        {singlePost?.image && (
-          <img
-            src={getSafeMediaUrl(singlePost?.image)}
-            alt="Tweet image"
-            className="mt-3 rounded-2xl border border-neutral-800"
-          />
-        )}
+        {singlePost?.image &&
+          (singlePost.image.match(/\.(mp4|webm|ogg)$/i) ? (
+            <video
+              src={getSafeMediaUrl(singlePost?.image)}
+              controls
+              className="mt-3 rounded-2xl border border-neutral-800"
+            />
+          ) : (
+            <img
+              src={getSafeMediaUrl(singlePost?.image)}
+              alt="Tweet image"
+              className="mt-3 rounded-2xl border border-neutral-800"
+            />
+          ))}
         <time className="block mt-3 text-neutral-500">
           {singlePost?.createdAt}
         </time>

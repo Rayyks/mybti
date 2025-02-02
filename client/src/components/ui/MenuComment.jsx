@@ -3,30 +3,30 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePostActions from "@/hooks/usePostActions";
-import useReport from "@/hooks/useReport";
 import { ReportModal } from "@/components/report";
 
 export const MenuComment = ({
   author,
   commentId,
-  closeMenuComent,
+  showReplyMenu,
+  showMenuComment,
+  closeMenuComment,
   openReportModal,
   openReportMenu,
   closeReportMenu,
+  setShowReplyMenu,
 }) => {
   const { myProfile, isLoading } = useProfile();
-
   const { handleDeleteComment } = usePostActions();
   const [isOwnComment, setIsOwnComment] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && myProfile?.data) {
+    if (!isLoading && myProfile?.data && author?.username) {
       setIsOwnComment(myProfile?.data?.username === author.username);
       setIsReady(true);
     }
-  }, [isLoading, myProfile, author.profile]);
-
+  }, [isLoading, myProfile, author?.username]);
   if (!isReady) return null;
 
   const handleReportModal = () => {
@@ -38,11 +38,18 @@ export const MenuComment = ({
       {/* Menu Modal */}
       <AnimatePresence>
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0, backgroundColor: "rgba(0,0,0,0.5)" }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-          onClick={closeMenuComent}
+          onClick={() => {
+            if (showMenuComment === true) {
+              closeMenuComment();
+            }
+            if (showReplyMenu === true) {
+              setShowReplyMenu(false);
+            }
+          }}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -77,6 +84,19 @@ export const MenuComment = ({
                 </Button>
               </>
             )}
+            <Button
+              onClick={() => {
+                if (showMenuComment === true) {
+                  closeMenuComment();
+                }
+                if (showReplyMenu === true) {
+                  setShowReplyMenu(false);
+                }
+              }}
+              className="w-full px-4 py-2 text-left hover:bg-neutral-900 border-t-[1px] border-neutral-800"
+            >
+              Close
+            </Button>
           </motion.div>
         </motion.div>
       </AnimatePresence>

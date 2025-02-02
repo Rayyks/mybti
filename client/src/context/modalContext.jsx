@@ -7,7 +7,9 @@ const ModalContextProvider = ({ children }) => {
   const [showMenuComment, setShowMenuComment] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
 
-  const toggleState = (setter, value) => () => setter(value);
+  const toggleState = (setter, value) => () => {
+    setter(value);
+  };
 
   const value = useMemo(
     () => ({

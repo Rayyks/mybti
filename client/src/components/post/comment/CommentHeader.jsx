@@ -38,6 +38,7 @@ export const CommentHeader = ({
         <MenuComment
           author={author}
           commentId={comment?._id}
+          showMenuComment={showMenuComment}
           closeMenuComment={closeMenuComment}
           openReportModal={openReportModal}
           openReportMenu={openReportMenu}

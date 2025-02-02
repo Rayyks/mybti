@@ -12,6 +12,7 @@ export const MorePostAction = ({
   const { myProfile } = useProfile();
   const { isDeletingPost, handleDeletePost } = usePost();
   const isMyPost = myProfile?.data?.username === post?.author?.username;
+
   const handleReportClick = () => {
     openReportMenu();
     closeMoreActionMenu();

@@ -6,7 +6,7 @@ import { MenuComment } from "@/components/ui";
 
 export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+  const [showReplyMenu, setShowReplyMenu] = useState(false);
   const { author, content, createdAt, likes, replies, replyTo } = reply;
 
   return (
@@ -40,17 +40,18 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
                 size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowMenu(!showMenu);
+                  setShowReplyMenu(!showReplyMenu);
                 }}
                 className="rounded-full p-1.5 hover:bg-blue-500/10 hover:text-blue-500"
               >
                 <MoreHorizontal size={16} />
               </Button>
-              {showMenu && (
+              {showReplyMenu && (
                 <MenuComment
                   author={author}
                   commentId={reply?._id}
-                  setShowMenu={setShowMenu}
+                  showReplyMenu={showReplyMenu}
+                  setShowReplyMenu={setShowReplyMenu}
                 />
               )}
             </div>

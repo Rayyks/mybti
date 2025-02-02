@@ -41,7 +41,7 @@ const SinglePostPage = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-black text-white mb-10 rounded-lg">
+    <div className="w-full min-h-screen bg-black text-white mb-10 rounded-lg pb-10">
       {/* Header */}
       <div className="flex items-center gap-6 px-4 py-3 border-b border-neutral-800 sticky top-0 bg-black/80 backdrop-blur-sm">
         <Button
