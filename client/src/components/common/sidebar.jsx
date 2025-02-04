@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { motion } from "framer-motion";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useLocation } from "react-router";
 
 // UI
 import { SidebarUI, SidebarBody, SidebarLink } from "@/components/ui/sidebarUI";
@@ -17,6 +17,12 @@ export function Sidebar() {
   const { isAuthenticated } = useAuth();
   const { myProfile } = useProfile();
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  // Close sidebar when route changes (for better UX)
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   return (
     <Fragment>
@@ -80,6 +86,7 @@ export const Logo = () => {
     </Link>
   );
 };
+
 export const LogoIcon = () => {
   return (
     <Link

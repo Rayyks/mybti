@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Heart, MessageSquare, Bookmark, Activity } from "lucide-react";
 import { CustomTab, ActivityTab, PostPreview } from "@/components/ui";
-import { ProfileActivity_SkeletonLoading } from "./SkeletonLoading";
+import { ProfileActivity_SkeletonLoading } from "../SkeletonLoading";
 
 export const ProfileActivity = ({ myProfile, isLoading }) => {
   const [activeTab, setActiveTab] = useState("liked");

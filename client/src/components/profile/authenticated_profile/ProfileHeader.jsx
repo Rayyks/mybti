@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, Users, UserPlus } from "lucide-react";
+import { Mail, Drama, Users, UserPlus } from "lucide-react";
 import { ProfileHeader_SkeletonLoading } from "@/components/profile/SkeletonLoading";
 
 export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
@@ -27,7 +27,7 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
               <span>{myProfile?.data?.email}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600 mt-1">
-              <span className="font-semibold">MBTI:</span>
+              <Drama className="w-4 h-4" />
               <span>{myProfile?.data?.mbti}</span>
             </div>
           </div>

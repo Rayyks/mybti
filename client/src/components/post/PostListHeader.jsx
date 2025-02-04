@@ -1,9 +1,9 @@
 import { MoreHorizontal } from "lucide-react";
-import { Link } from "react-router";
 import { Button } from "@/components/common";
 import { MorePostAction } from "@/components/post";
 import ReportModal from "@/components/report/ReportModal";
 import { useModal } from "@/context/modalContext";
+import { useCheckProfile } from "@/lib/checkProfile";
 
 export const PostListHeader = ({ post, safeUrl, index }) => {
   const {
@@ -14,27 +14,28 @@ export const PostListHeader = ({ post, safeUrl, index }) => {
     openMoreActionMenu,
     closeMoreActionMenu,
   } = useModal();
+  const { checkProfile } = useCheckProfile();
   return (
     <div className="flex items-center justify-between px-3 sm:px-4 h-14 border-b border-gray-200 dark:border-neutral-700">
       <div className="flex items-center space-x-3">
         <div className="w-8 h-8 rounded-full ring-2 ring-gray-200 dark:ring-neutral-700">
-          <Link to={`/profile/${post.author.username}`}>
-            <img
-              src={safeUrl(post.author.profilePicture)}
-              alt={post.username}
-              className="w-full h-full rounded-full object-cover"
-            />
-          </Link>
+          <img
+            src={safeUrl(post.author.profilePicture)}
+            alt={post.username}
+            className="w-full h-full rounded-full object-cover cursor-pointer"
+            loading="lazy"
+            onClick={() => checkProfile(post.author.username)}
+          />
         </div>
-        <span className="flex items-center gap-2">
-          <Link
-            to={`/profile/${post.author.username}`}
-            className="font-medium text-sm text-gray-900 dark:text-gray-100 hover:underline"
+        <div className="flex items-center gap-2">
+          <span
+            onClick={() => checkProfile(post.author.username)}
+            className="font-medium text-sm text-gray-900 dark:text-gray-100 hover:underline cursor-pointer"
           >
             {post.author.username}
-          </Link>
+          </span>
           <span className="text-gray-300">· {post.author.mbti}</span>
-        </span>
+        </div>
       </div>
       <Button
         className={`text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 ${

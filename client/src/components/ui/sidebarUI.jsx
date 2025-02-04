@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, AlignJustify } from "lucide-react";
+import { useRefreshPage } from "@/lib/refreshPage";
 
 const SidebarContext = createContext(undefined);
 
@@ -119,9 +120,19 @@ export const MobileSidebar = ({ className, children, ...props }) => {
 
 export const SidebarLink = ({ link, className, ...props }) => {
   const { open, animate } = useSidebar();
+  const { refreshPage } = useRefreshPage();
+
+  const handleClickRefresh = (e) => {
+    if (link.href === location.pathname) {
+      e.preventDefault();
+      refreshPage(link.href);
+    }
+  };
+
   return (
     <Link
       to={link.href}
+      onClick={handleClickRefresh}
       className={cn(
         "flex items-center justify-start gap-2 group/sidebar py-2",
         className

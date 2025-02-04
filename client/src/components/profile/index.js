@@ -1,12 +1,18 @@
-export * from "@/components/profile/ProfileHeader";
-export * from "@/components/profile/ProfileBody";
-export * from "@/components/profile/ProfilePosts";
-export * from "@/components/profile/ProfileAction";
-export * from "@/components/profile/ProfileActivity";
+// OWN PROFILE
+export * from "@/components/profile/authenticated_profile/ProfileHeader";
+export * from "@/components/profile/authenticated_profile/ProfileBody";
+export * from "@/components/profile/authenticated_profile/ProfilePosts";
+export * from "@/components/profile/authenticated_profile/ProfileAction";
+export * from "@/components/profile/authenticated_profile/ProfileActivity";
 export * from "@/components/profile/LogoutModal";
-export * from "@/components/profile/EditProfileForm";
-export * from "@/components/profile/EditProfilePictureSection";
-export * from "@/components/profile/EditProfileFormFields";
-export * from "@/components/profile/YourReportListStatus";
-export * from "@/components/profile/AccountDeletionSection";
-export * from "@/components/profile/AccountDeletionModal";
+export * from "@/components/profile/authenticated_profile/EditProfileForm";
+export * from "@/components/profile/authenticated_profile/EditProfilePictureSection";
+export * from "@/components/profile/authenticated_profile/EditProfileFormFields";
+export * from "@/components/profile/authenticated_profile/YourReportListStatus";
+export * from "@/components/profile/authenticated_profile/AccountDeletionSection";
+export * from "@/components/profile/authenticated_profile/AccountDeletionModal";
+
+// USER PROFILE
+export * from "@/components/profile/user_profile/UserProfileHeader";
+export * from "@/components/profile/user_profile/UserTabNavigation";
+export * from "@/components/profile/user_profile/UserPostSection";

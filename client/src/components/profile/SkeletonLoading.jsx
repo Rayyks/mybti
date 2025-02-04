@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Grid, ListFilter } from 'lucide-react';
+import { Grid, ListFilter } from "lucide-react";
 
 export const ProfileHeader_SkeletonLoading = () => {
   return (
@@ -221,5 +221,82 @@ export const ProfilePosts_SkeletonLoading = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+export const UserProfile_SkeletonLoading = () => {
+  return (
+    <div className="w-full rounded-xl min-h-screen bg-black text-white">
+      <div className="max-w-4xl mx-auto p-6">
+        {/* Profile Header Skeleton */}
+        <div className="flex flex-col md:flex-row items-start gap-8 mb-12">
+          {/* Profile Picture Skeleton */}
+          <div className="w-32 h-32 rounded-full overflow-hidden ring-2 ring-neutral-700 p-1">
+            <div className="w-full h-full rounded-full bg-neutral-800 animate-pulse" />
+          </div>
+
+          <div className="flex-1 space-y-6">
+            {/* Username and Buttons Skeleton */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="h-8 w-48 bg-neutral-800 rounded-lg animate-pulse" />
+              <div className="flex gap-3">
+                <div className="w-24 h-10 bg-neutral-800 rounded-full animate-pulse" />
+                <div className="w-24 h-10 bg-neutral-800 rounded-full animate-pulse" />
+              </div>
+            </div>
+
+            {/* Stats Skeleton */}
+            <div className="flex gap-8 text-sm">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div className="h-6 w-12 bg-neutral-800 rounded animate-pulse" />
+                  <div className="h-4 w-16 bg-neutral-800 rounded animate-pulse" />
+                </div>
+              ))}
+            </div>
+
+            {/* Bio and Details Skeleton */}
+            <div className="space-y-4">
+              <div className="h-4 w-3/4 bg-neutral-800 rounded animate-pulse" />
+              <div className="h-4 w-1/2 bg-neutral-800 rounded animate-pulse" />
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 bg-neutral-800 rounded animate-pulse" />
+                <div className="h-4 w-24 bg-neutral-800 rounded animate-pulse" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 bg-neutral-800 rounded animate-pulse" />
+                <div className="h-4 w-32 bg-neutral-800 rounded animate-pulse" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs Navigation Skeleton */}
+        <div className="border-t border-neutral-800">
+          <div className="flex gap-8">
+            <div className="flex items-center gap-2 py-4">
+              <Grid size={20} className="text-neutral-500" />
+              <div className="h-5 w-16 bg-neutral-800 rounded animate-pulse" />
+            </div>
+            <div className="flex items-center gap-2 py-4">
+              <ListFilter size={20} className="text-neutral-500" />
+              <div className="h-5 w-16 bg-neutral-800 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+
+        {/* Posts Grid Skeleton */}
+        <div className="mt-8">
+          <div className="grid grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                className="aspect-square bg-neutral-800 rounded-lg animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

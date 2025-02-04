@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useProfile from "@/hooks/useProfile";
-import EditProfilePictureSection from "@/components/profile/EditProfilePictureSection";
-import EditProfileFormFields from "@/components/profile/EditProfileFormFields";
+import EditProfilePictureSection from "@/components/profile/authenticated_profile/EditProfilePictureSection";
+import EditProfileFormFields from "@/components/profile/authenticated_profile/EditProfileFormFields";
 import { Input, Label } from "@/components/ui";
 import { Button } from "@/components/common";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
-import { LogoutModal } from ".";
+import { LogoutModal } from "@/components/profile";
 import { Settings, Edit, LogOut } from "lucide-react";
 
 export const ProfileAction = () => {

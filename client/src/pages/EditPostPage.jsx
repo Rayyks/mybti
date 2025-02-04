@@ -23,7 +23,7 @@ const EditPostPage = () => {
   } = usePost();
 
   if (singlePostLoading)
-    return <div className="text-blue-500 p-4">Loading post...</div>;
+    return <div className="text-white p-4">Loading post...</div>;
   if (singlePostError)
     return <div className="text-red-500 p-4">Error loading post</div>;
 
@@ -32,22 +32,25 @@ const EditPostPage = () => {
   };
 
   return (
-    <div className="w-full mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold mb-6">Edit Post</h1>
+    <div className="w-full mx-auto mt-8 p-6 bg-black text-white shadow-lg rounded-lg border border-gray-800">
+      <h1 className="text-2xl font-bold mb-6 text-white">Edit Post</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Content Input */}
         <div>
-          <Label htmlFor="content" className="block mb-2 font-medium">
+          <Label
+            htmlFor="content"
+            className="block mb-2 font-medium text-gray-300"
+          >
             Tweet
           </Label>
-          <Input
+          <textarea
             id="content"
             type="text"
             defaultValue={singlePost?.content || ""}
-            placeholder="Tweet"
+            placeholder="What's on your mind?"
             disabled={isUpdatingPost}
             {...register("content", { required: "Content is required" })}
-            className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-700 rounded-md bg-black text-white focus:ring-2 focus:ring-white focus:border-white"
           />
           <ErrorInput error={errors.content} />
         </div>
@@ -57,15 +60,15 @@ const EditPostPage = () => {
           {preview || currentImage ? (
             <div className="relative w-full">
               <div className="flex justify-between w-full">
-                <span className="text-gray-800">Preview:</span>
-                <Button
-                  type="button"
-                  className="text-red-500 underline text-sm"
-                  onClick={handleRemoveImage}
-                >
-                  Remove
-                </Button>
+                <span className="text-gray-300">Preview:</span>
               </div>
+              <Button
+                type="button"
+                className="w-full text-red-500 text-lg font-bold bg-white rounded-full p-2  mb-2 hover:underline hover:text-red-400"
+                onClick={handleRemoveImage}
+              >
+                Remove Image
+              </Button>
 
               {preview?.isVideo || currentImage?.match(/\.(mp4|mov)$/) ? (
                 <video
@@ -86,13 +89,13 @@ const EditPostPage = () => {
             // File Upload
             <Label
               htmlFor="dropzone-file"
-              className="flex flex-col items-center justify-center py-9 w-full border border-gray-300 border-dashed rounded-2xl cursor-pointer bg-gray-50"
+              className="flex flex-col items-center justify-center py-9 w-full border border-gray-700 border-dashed rounded-2xl cursor-pointer bg-black hover:border-gray-600 transition"
             >
               <CloudUpload className="w-8 h-8 text-gray-400 mb-3" />
               <span className="text-gray-400 text-xs">
                 PNG, JPG, or PDF, smaller than 15MB
               </span>
-              <h6 className="text-gray-900 text-sm font-medium">
+              <h6 className="text-gray-300 text-sm font-medium">
                 Drag and Drop your file here or
               </h6>
               <Input
@@ -116,7 +119,7 @@ const EditPostPage = () => {
         <Button
           type="submit"
           disabled={isUpdatingPost || singlePostLoading}
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition disabled:bg-blue-300"
+          className="w-full bg-white text-black py-2 rounded-md hover:bg-gray-200 transition disabled:bg-gray-500 disabled:text-gray-300"
         >
           {isUpdatingPost ? "Updating..." : "Update Post"}
         </Button>

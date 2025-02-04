@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Heart, MessageCircle, Bookmark, Grid, ListFilter } from "lucide-react";
-import { ProfilePosts_SkeletonLoading } from "./SkeletonLoading";
+import { ProfilePosts_SkeletonLoading } from "@/components/profile/SkeletonLoading";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 

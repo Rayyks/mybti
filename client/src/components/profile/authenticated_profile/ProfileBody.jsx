@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Link as LinkIcon } from "lucide-react";
-import { ProfileBody_SkeletonLoading } from "./SkeletonLoading";
+import { ProfileBody_SkeletonLoading } from "@/components/profile/SkeletonLoading";
 
 export const ProfileBody = ({ myProfile, isLoading }) => {
   if (isLoading) return <ProfileBody_SkeletonLoading />;
