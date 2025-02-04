@@ -4,6 +4,7 @@ import { Button } from "@/components/common";
 import { Heart, MessageCircle, Bookmark, Repeat2 } from "lucide-react";
 import { Link } from "react-router";
 import usePost from "@/hooks/usePost";
+import { formatTimeAgo } from "@/lib/FormatDate";
 
 export const PostListActions = ({ post }) => {
   const { showMore, contentPreview, maxContentPreview, handleShowMore } =
@@ -69,7 +70,7 @@ export const PostListActions = ({ post }) => {
       {/* Post Time */}
       <div className="px-2 pb-3">
         <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">
-          {post.date}
+          {formatTimeAgo(post.createdAt)}
         </p>
       </div>
     </div>

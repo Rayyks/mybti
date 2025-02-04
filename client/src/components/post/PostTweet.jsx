@@ -5,6 +5,7 @@ import { MorePostAction } from "@/components/post";
 import { ReportModal } from "@/components/report";
 import usePost from "@/hooks/usePost";
 import { useModal } from "@/context/modalContext";
+import { formatTimeAgo } from "@/lib/FormatDate";
 
 export const PostTweet = ({ post, safeUrl, index }) => {
   const { showMore, contentPreview, maxContentPreview, handleShowMore } =
@@ -37,10 +38,6 @@ export const PostTweet = ({ post, safeUrl, index }) => {
               </span>
             </Link>
             <span className="text-gray-300">· {post.author.mbti}</span>
-            <span className="text-gray-500">·</span>
-            <span className="text-gray-500">
-              {new Date(post.createdAt).toLocaleDateString()}
-            </span>
           </div>
           <p className="mt-1 text-white">
             {showMore
@@ -108,6 +105,12 @@ export const PostTweet = ({ post, safeUrl, index }) => {
         >
           View all {post.commentCount} comments
         </Link>
+      </div>
+      {/* Post Time */}
+      <div className="px-2 pb-3">
+        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">
+          {formatTimeAgo(post.createdAt)}
+        </p>
       </div>
     </div>
   );

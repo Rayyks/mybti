@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useGetAllPostsQuery,
   useGetSinglePostQuery,
@@ -13,26 +13,30 @@ import { truncateContent } from "@/pages/auth/contentPreview";
 
 const usePost = () => {
   const { postId } = useParams();
-  const [preview, setPreview] = useState("");
-
   const navigate = useNavigate();
+
+  const [preview, setPreview] = useState(null);
+  const [currentImage, setCurrentImage] = useState(null);
+  const [deletePostImage, setDeletePostImage] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     setValue,
+    watch,
   } = useForm();
 
   // =========================== ||TRUNCATE CONTENT|| ===========================
-  const [showMore, setShowMore] = useState(false);
   const contentPreview = (postContent) => truncateContent(postContent, 100);
   const maxContentPreview = (postContent) => truncateContent(postContent);
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
 
-  //  =========================== ||STATE QUERY HOOKS|| ===========================
+  // Fetch posts
   const { data: post, isLoading, isError, refetch } = useGetAllPostsQuery();
   const {
     data: singlePost,
@@ -40,37 +44,48 @@ const usePost = () => {
     isError: singlePostError,
     refetch: refetchSinglePost,
   } = useGetSinglePostQuery(postId);
-  const [createPost, { isLoading: isCreatingPost, isError: createPostError }] =
-    useCreatePostMutation();
-  const [updatePost, { isLoading: isUpdatingPost, isError: updatePostError }] =
-    useUpdatePostMutation();
-  const [deletePost, { isLoading: isDeletingPost, isError: deletePostError }] =
-    useDeletePostMutation();
 
-  // =========================== ||HANDLER FUNCTION|| ===========================
+  const [createPost] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation();
+  const [deletePost] = useDeletePostMutation();
+
+  useEffect(() => {
+    if (singlePost?.data?.image) {
+      setCurrentImage(singlePost.data.image);
+    }
+  }, [singlePost]);
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      const isVideo = file.type.match(/^video\//);
-      setPreview({ url: fileURL, isVideo });
-      setValue("image", file);
+      setPreview({ url: fileURL, isVideo: file.type.includes("video") });
+      setValue("image", file, { shouldValidate: true });
+      setCurrentImage(null);
+      setDeletePostImage(false);
     }
   };
 
-  // =========================== ||CREATE POST|| ===========================
+  // Remove current image
+  const handleRemoveImage = () => {
+    setCurrentImage(null);
+    setPreview(null);
+    setDeletePostImage(true);
+  };
+
+  // Create Post
   const handleCreatePost = async (data) => {
-    const { image, ...rest } = data;
-    const formData = new FormData();
-    Object.keys(rest).forEach((key) => {
-      formData.append(key, rest[key]);
-    });
-    if (image) {
-      formData.append("image", image);
-    }
     try {
-      await createPost(formData).unwrap();
-      toast.success("Post created successfully");
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      await toast.promise(createPost(formData).unwrap(), {
+        loading: "Creating Post...",
+        success: "Post Created Successfully!",
+        error: "Failed to Create Post!",
+      });
       refetch();
       reset();
       navigate("/");
@@ -79,24 +94,30 @@ const usePost = () => {
     }
   };
 
-  // =========================== ||UPDATE POST|| ===========================
+  // Update Post
   const handleUpdatePost = async (data) => {
-    const { image, ...rest } = data;
-    const formData = new FormData();
-    Object.keys(rest).forEach((key) => {
-      formData.append(key, rest[key]);
-    });
-    formData.append("postId", postId);
-    formData.append("image", image);
-
-    console.log(data.postId);
-
-    console.log(formData.get("postId"));
-    console.log(formData.get("image"));
-
     try {
-      await updatePost(formData).unwrap();
-      toast.success("Post updated successfully");
+      const formData = new FormData();
+      // Append other fields
+      Object.entries(data).forEach(([key, value]) => {
+        if (key !== "image") {
+          formData.append(key, value);
+        }
+      });
+      formData.append("postId", postId);
+      const imageFile = watch("image");
+      if (deletePostImage) {
+        formData.append("removeImage", "true");
+      } else if (imageFile instanceof File) {
+        formData.append("image", imageFile);
+      }
+
+      await toast.promise(updatePost(formData).unwrap(), {
+        loading: "Updating Post...",
+        success: "Post Updated Successfully!",
+        error: "Failed to Update Post!",
+      });
+
       refetch();
       reset();
       navigate("/");
@@ -105,58 +126,48 @@ const usePost = () => {
     }
   };
 
-  // =========================== ||DELETE POST|| ===========================
+  // Delete Post
   const handleDeletePost = async (id) => {
     try {
-      await deletePost(id).unwrap();
-      toast.success("Post deleted successfully");
+      await toast.promise(deletePost(id).unwrap(), {
+        loading: "Deleting Post...",
+        success: "Post Deleted Successfully!",
+        error: "Failed to Delete Post!",
+      });
 
-      // navigate("/");
+      navigate("/");
     } catch (error) {
       toast.error("Failed to delete post: " + error.message);
     }
   };
 
   return {
+    contentPreview,
+    maxContentPreview,
+    handleShowMore,
+    showMore,
     navigate,
-    // FORM STATE && HANDLERS
     register,
     handleSubmit,
     errors,
     preview,
     setPreview,
     setValue,
-    setPreview,
     handleFileChange,
-    // TRUNCATE CONTENT
-    showMore,
-    setShowMore,
-    contentPreview,
-    maxContentPreview,
-    handleShowMore,
-    // GET ALL POST
+    currentImage,
+    handleRemoveImage,
     post,
     isLoading,
     isError,
-    //  GET SINGLE POST
     singlePost: singlePost?.data,
     singlePostLoading,
     singlePostError,
     refetchSinglePost,
-    // CREATE POST
     createPost,
-    isCreatingPost,
-    createPostError,
     handleCreatePost,
-    // UPDATE POST
     updatePost,
-    isUpdatingPost,
-    updatePostError,
     handleUpdatePost,
-    // DELETE POST
     deletePost,
-    isDeletingPost,
-    deletePostError,
     handleDeletePost,
   };
 };

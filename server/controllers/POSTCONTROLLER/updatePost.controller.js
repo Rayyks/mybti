@@ -8,27 +8,23 @@ export const updatePost = async (req, res) => {
     const { postId, content, removeImage } = req.body;
     const userId = req.user.id;
 
-    console.log("Received update request for post:", postId);
+    console.log(`Updating post: ${postId} by user: ${userId}`);
 
-    // Find the existing post by ID and author
+    // Find post by ID and check ownership
     const existingPost = await Post.findOne({ _id: postId, author: userId });
     if (!existingPost) {
       return sendResponse(res, 404, "Post not found or unauthorized");
     }
 
-    // Prepare content and image values
-    const updatedContent = content || existingPost.content;
     let updatedImage = existingPost.image;
 
-    // Handle image removal
-    if (removeImage) {
-      if (existingPost.image) {
-        await deleteImageFromStorage(existingPost.image);
-      }
+    // Remove existing image if requested
+    if (removeImage && existingPost.image) {
+      await deleteImageFromStorage(existingPost.image);
       updatedImage = "";
     }
 
-    // Handle image replacement
+    // Handle new image upload
     if (req.file) {
       if (existingPost.image) {
         await deleteImageFromStorage(existingPost.image);
@@ -36,24 +32,27 @@ export const updatePost = async (req, res) => {
       updatedImage = `/uploads/${req.file.filename}`;
     }
 
-    // Update the post in the database
-    const updatedPost = await Post.findOneAndUpdate(
-      { _id: postId, author: userId },
-      { content: updatedContent, image: updatedImage, updatedAt: new Date() },
+    // Update post in database
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        content: content || existingPost.content,
+        image: updatedImage,
+        updatedAt: new Date(),
+      },
       { new: true }
     );
 
-    // Format the updated post for response
+    // Format response
     const formattedPost = {
       ...updatedPost.toObject(),
       createdAt: formatDate(updatedPost.createdAt),
       updatedAt: formatDate(updatedPost.updatedAt),
     };
 
-    // Send the response
-    sendResponse(res, 200, "Post updated successfully", formattedPost);
+    return sendResponse(res, 200, "Post updated successfully", formattedPost);
   } catch (error) {
     console.error("Error updating post:", error);
-    sendResponse(res, 500, "Server error");
+    return sendResponse(res, 500, "Server error");
   }
 };
