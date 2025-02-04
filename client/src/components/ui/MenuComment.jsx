@@ -10,8 +10,8 @@ export const MenuComment = ({
   commentId,
   showReplyMenu,
   showMenuComment,
+  showReportMenu,
   closeMenuComment,
-  openReportModal,
   openReportMenu,
   closeReportMenu,
   setShowReplyMenu,
@@ -102,11 +102,11 @@ export const MenuComment = ({
       </AnimatePresence>
 
       {/* Report Modal */}
-      {openReportModal && (
+      {showReportMenu && (
         <ReportModal
           reportType="comment"
           id={commentId}
-          openReportModal={openReportModal}
+          showReportMenu={showReportMenu}
           closeReportMenu={closeReportMenu}
         />
       )}

@@ -6,17 +6,7 @@ import {
   RepliesSection,
 } from "@/components/post/";
 
-export const CommentItem = ({
-  comment,
-  getSafeMediaUrl,
-  selectedComment,
-  showMenuComment,
-  openMenuComment,
-  closeMenuComment,
-  openReportModal,
-  openReportMenu,
-  closeReportMenu,
-}) => {
+export const CommentItem = ({ comment, getSafeMediaUrl, selectedComment }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
 
@@ -41,12 +31,6 @@ export const CommentItem = ({
             author={author}
             comment={comment}
             createdAt={createdAt}
-            openMenuComment={openMenuComment}
-            showMenuComment={showMenuComment}
-            closeMenuComment={closeMenuComment}
-            openReportModal={openReportModal}
-            openReportMenu={openReportMenu}
-            closeReportMenu={closeReportMenu}
           />
           <p className="mt-1 text-[15px] whitespace-pre-wrap break-words">
             {content}

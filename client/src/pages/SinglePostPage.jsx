@@ -7,17 +7,8 @@ import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 
 import { CommentItem } from "@/components/post";
 import MainTweet from "@/components/post/MainTweet";
-import { useModal } from "@/context/modalContext";
 
 const SinglePostPage = () => {
-  const {
-    showMenuComment,
-    openMenuComment,
-    closeMenuComment,
-    openReportModal,
-    openReportMenu,
-    closeReportMenu,
-  } = useModal();
   const { singlePost, singlePostLoading, singlePostError, navigate } =
     usePost();
   const [isLiked, setIsLiked] = useState(false);
@@ -72,12 +63,6 @@ const SinglePostPage = () => {
           singlePost={singlePost}
           getSafeMediaUrl={getSafeMediaUrl}
           selectedComment={selectedComment}
-          showMenuComment={showMenuComment}
-          openMenuComment={openMenuComment}
-          closeMenuComment={closeMenuComment}
-          openReportModal={openReportModal}
-          openReportMenu={openReportMenu}
-          closeReportMenu={closeReportMenu}
         />
       ))}
     </div>

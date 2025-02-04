@@ -7,6 +7,7 @@ import { MenuComment } from "@/components/ui";
 export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [showReplyMenu, setShowReplyMenu] = useState(false);
+  const [showReportMenu, setShowReportMenu] = useState(false);
   const { author, content, createdAt, likes, replies, replyTo } = reply;
 
   return (
@@ -52,6 +53,10 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
                   commentId={reply?._id}
                   showReplyMenu={showReplyMenu}
                   setShowReplyMenu={setShowReplyMenu}
+                  showReportMenu={showReportMenu}
+                  openReportMenu={() => setShowReportMenu(true)}
+                  closeReportMenu={() => setShowReportMenu(false)}
+                  closeMenuComment={() => setShowReplyMenu(false)}
                 />
               )}
             </div>
@@ -100,6 +105,7 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
                   reply={nestedReply}
                   getSafeMediaUrl={getSafeMediaUrl}
                   selectedComment={selectedComment}
+                  showReplyMenu={showReplyMenu}
                 />
               ))}
             </div>

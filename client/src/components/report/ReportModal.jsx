@@ -6,7 +6,7 @@ import { CircleAlert } from "lucide-react";
 export const ReportModal = ({
   reportType,
   id,
-  openReportModal,
+  showReportMenu,
   closeReportMenu,
 }) => {
   const {
@@ -50,7 +50,7 @@ export const ReportModal = ({
     }
   };
 
-  if (!openReportModal) return null;
+  if (!showReportMenu) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">

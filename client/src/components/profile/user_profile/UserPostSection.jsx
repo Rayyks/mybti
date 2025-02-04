@@ -2,23 +2,35 @@ import { Heart, MessageCircle, Bookmark } from "lucide-react";
 import { formatTimeAgo } from "@/lib/FormatDate";
 
 export const UserPostSection = ({ posts, activeTab, getSafeMediaUrl }) => {
+  const postWithImages = posts?.filter((post) => post.image);
+  const postWithoutImages = posts?.filter((post) => !post.image);
   return (
     <div className="mt-8">
       {activeTab === "posts" ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-          {posts?.map(
+          {postWithImages?.map(
             (post) =>
               post.image && (
                 <div
                   key={post._id}
-                  className="aspect-square relative group rounded-lg overflow-hidden bg-neutral-800"
+                  className="aspect-square relative group rounded-lg overflow-hidden"
                 >
-                  <img
-                    src={post.image}
-                    alt={post.content}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
+                  {post.image.match(/\.(mp4|webm|ogg)$/i) ? (
+                    <video
+                      src={getSafeMediaUrl(post.image)}
+                      controls
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                      poster={getSafeMediaUrl(post.image)}
+                    />
+                  ) : (
+                    <img
+                      src={getSafeMediaUrl(post.image)}
+                      alt={post.content}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  )}
                   {/* Overlay with interaction stats */}
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 sm:gap-6 text-white transition-all duration-200">
                     <div className="flex items-center gap-1 sm:gap-2 -translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -40,7 +52,7 @@ export const UserPostSection = ({ posts, activeTab, getSafeMediaUrl }) => {
         </div>
       ) : (
         <div className="space-y-4 sm:space-y-6">
-          {posts?.map((post) => (
+          {postWithoutImages?.map((post) => (
             <div
               key={post._id}
               className="border border-neutral-800 rounded-xl p-3 sm:p-4 md:p-6 hover:bg-neutral-900/50 transition-colors"
