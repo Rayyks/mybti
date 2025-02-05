@@ -15,7 +15,26 @@ export const userApi = createApi({
       }),
       providesTags: ["User"],
     }),
+    followUser: builder.mutation({
+      query: ({ userIdToFollow }) => ({
+        url: "/follow",
+        method: "POST",
+        data: { userIdToFollow },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    unFollowUser: builder.mutation({
+      query: ({ userIdToUnfollow }) => ({
+        url: "/unfollow",
+        method: "POST",
+        data: { userIdToUnfollow },
+      }),
+    }),
   }),
 });
 
-export const { useGetUserProfileQuery } = userApi;
+export const {
+  useGetUserProfileQuery,
+  useFollowUserMutation,
+  useUnFollowUserMutation,
+} = userApi;

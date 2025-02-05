@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePost from "@/hooks/usePost";
+import useUser from "@/hooks/useUser";
 
 export const MorePostAction = ({
   openReportMenu,
@@ -11,7 +12,8 @@ export const MorePostAction = ({
 }) => {
   const { myProfile } = useProfile();
   const { isDeletingPost, handleDeletePost } = usePost();
-  const isMyPost = myProfile?.data?.username === post?.author?.username;
+  const { isFollowing, handleFollowToggle } = useUser();
+  const isMyPost = myProfile?.user?.username === post?.author?.username;
 
   const handleReportClick = () => {
     openReportMenu();
@@ -60,11 +62,11 @@ export const MorePostAction = ({
             {!isMyPost && (
               <Button
                 onClick={() => {
-                  /* Add follow handler */
+                  handleFollowToggle(post.author.id);
                 }}
                 className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
               >
-                Follow User
+                {isFollowing ? "Unfollow User" : "Follow User"}
               </Button>
             )}
 

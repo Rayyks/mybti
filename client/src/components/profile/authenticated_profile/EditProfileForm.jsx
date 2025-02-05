@@ -21,7 +21,7 @@ export const EditProfileForm = ({ myProfile, isLoading }) => {
 
   useEffect(() => {
     if (myProfile) {
-      reset(myProfile.data);
+      reset(myProfile.user);
     }
   }, [myProfile, reset]);
 

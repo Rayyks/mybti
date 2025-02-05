@@ -20,7 +20,10 @@ export const getProfile = async (req, res) => {
         path: "savedPosts",
         select: "content createdAt author image",
         populate: { path: "author", select: "username" },
-      });
+      })
+      .populate("followers", "username profilePicture")
+      .populate("following", "username profilePicture")
+      .lean();
 
     if (!user) return sendResponse(res, 404, "User not found");
 
@@ -42,26 +45,12 @@ export const getProfile = async (req, res) => {
       })
     );
 
-    // Format the user data
-    const formattedUser = {
-      ...user.toObject(),
-      commentedPosts: user.commentedPosts.map((post) => ({
-        ...post.toObject(),
-        createdAt: formatDate(post.createdAt),
-      })),
-      savedPosts: user.savedPosts.map((post) => ({
-        ...post.toObject(),
-        createdAt: formatDate(post.createdAt),
-      })),
-      authoredPosts: postsWithCommentCount,
-      deletionScheduledAt: formatDate(user.deletionScheduledAt),
-      createdAt: formatDate(user.createdAt),
-      updatedAt: formatDate(user.updatedAt),
-    };
-
-    sendResponse(res, 200, "Profile fetched successfully", formattedUser);
+    // Send response with user details and posts
+    sendResponse(res, 200, "Profile fetched successfully", {
+      user,
+      posts: postsWithCommentCount,
+    });
   } catch (error) {
-    console.error(error);
-    sendResponse(res, 500, "Server error");
+    sendResponse(res, 500, "Error retrieving profile", error);
   }
 };

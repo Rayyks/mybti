@@ -24,6 +24,7 @@ const useProfile = () => {
     data: userProfile,
     isLoading: userProfileLoading,
     error: userProfileError,
+    refetch: refetchUserProfile,
   } = useGetUserProfileQuery({ username });
   const [
     updateProfile,
@@ -86,13 +87,14 @@ const useProfile = () => {
 
   return {
     // Profile Data
-    myProfile,
+    myProfile: myProfile?.data,
     userProfile,
     error,
     isLoading,
     userProfileLoading,
     userProfileError,
     refetchProfile: fetchProfile,
+    refetchUserProfile,
 
     // Profile Update
     isUpdatingProfile,

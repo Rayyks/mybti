@@ -69,11 +69,9 @@ app.use((req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/action", postActionRoutes);
-app.use(authMiddleware);
-// Routes that require authentication
-app.use("/api/report", reportRoutes);
 app.use("/api/user", userRoutes);
-// Authentication middleware
+app.use(authMiddleware);
+app.use("/api/report", reportRoutes);
 
 // TEST THE API
 app.get("/", (req, res) => {

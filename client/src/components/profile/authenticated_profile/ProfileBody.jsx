@@ -15,7 +15,7 @@ export const ProfileBody = ({ myProfile, isLoading }) => {
         </div>
         <div className="inline-block rounded-full py-3 px-5 bg-gray-100 hover:bg-indigo-100 transition-all duration-500">
           <span className="font-medium text-base text-gray-700">
-            {myProfile?.data?.profession || "Not specified"}
+            {myProfile?.user?.profession || "Not specified"}
           </span>
         </div>
       </div>
@@ -24,8 +24,8 @@ export const ProfileBody = ({ myProfile, isLoading }) => {
       <div className="mt-8 border-t border-gray-100 pt-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Interests</h2>
         <div className="flex flex-wrap gap-2">
-          {myProfile?.data?.interests.length > 0 ? (
-            myProfile?.data?.interests.map((interest) => (
+          {myProfile?.user?.interests?.length > 0 ? (
+            myProfile?.user?.interests.map((interest) => (
               <span
                 key={interest}
                 className="py-2 px-4 rounded-full bg-indigo-50 text-indigo-600 font-medium hover:bg-indigo-100 transition-colors duration-300"

@@ -1,8 +1,9 @@
-import React from "react";
+import { useState } from "react";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePostActions from "@/hooks/usePostActions";
 import { Smile } from "lucide-react";
+import EmojiPicker from "emoji-picker-react";
 
 export const CommentInput = ({
   getSafeMediaUrl,
@@ -21,6 +22,8 @@ export const CommentInput = ({
     handleReplyComment,
   } = usePostActions();
 
+  const [openEmoji, setOpenEmoji] = useState(false);
+
   const onSubmit = (data) => {
     if (selectedParentCommentId) {
       handleReplyComment(
@@ -37,7 +40,7 @@ export const CommentInput = ({
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="p-4 flex gap-4">
         <img
-          src={getSafeMediaUrl(myProfile?.data?.profilePicture)}
+          src={getSafeMediaUrl(myProfile?.user?.profilePicture)}
           alt="Your profile"
           className="w-12 h-12 rounded-full"
           loading="lazy"
@@ -57,10 +60,23 @@ export const CommentInput = ({
             <span className="text-red-500 text-sm">Content is required</span>
           )}
           <div className="flex justify-between items-center mt-4">
-            <div className="flex gap-1">
-              <Button className="rounded-full p-2 hover:bg-blue-500/10 text-primary-500">
+            <div className="flex gap-1 relative">
+              <Button
+                onClick={() => setOpenEmoji(!openEmoji)}
+                className="rounded-full p-2 hover:bg-blue-500/10 text-primary-500"
+              >
                 <Smile size={20} />
               </Button>
+
+              <div className="absolute bottom-full mb-2">
+                <EmojiPicker
+                  open={openEmoji}
+                  lazyLoadEmojis={true}
+                  skinTonesDisabled={true}
+                  theme="dark"
+                />
+              </div>
+
               {selectedParentCommentId && (
                 <Button
                   className="border-b-[1px] border-blue-600"

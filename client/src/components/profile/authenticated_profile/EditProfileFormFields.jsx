@@ -21,7 +21,7 @@ export const EditProfileFormFields = ({
             <Input
               type="text"
               name="username"
-              defaultValue={myProfile?.data?.username}
+              defaultValue={myProfile?.user?.username}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-black transition-all duration-300 bg-gray-50 hover:bg-white"
               placeholder="Enter your username"
               {...register("username", {
@@ -50,7 +50,7 @@ export const EditProfileFormFields = ({
             <Input
               type="email"
               name="email"
-              defaultValue={myProfile?.data?.email}
+              defaultValue={myProfile?.user?.email}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-black transition-all duration-300 bg-gray-50 hover:bg-white"
               placeholder="your@email.com"
               {...register("email", {
@@ -73,7 +73,7 @@ export const EditProfileFormFields = ({
             </Label>
             <textarea
               name="bio"
-              defaultValue={myProfile?.data?.bio}
+              defaultValue={myProfile?.user?.bio}
               rows={4}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-black transition-all duration-300 bg-gray-50 hover:bg-white resize-none"
               placeholder="Tell us about yourself..."
@@ -97,7 +97,7 @@ export const EditProfileFormFields = ({
             </Label>
             <select
               name="mbti"
-              defaultValue={myProfile?.data?.mbti}
+              defaultValue={myProfile?.user?.mbti}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-black transition-all duration-300 bg-gray-50 hover:bg-white appearance-none cursor-pointer"
               {...register("mbti", {
                 required: "MBTI Type is required",
@@ -136,7 +136,7 @@ export const EditProfileFormFields = ({
             <Input
               type="text"
               name="profession"
-              defaultValue={myProfile?.data?.profession}
+              defaultValue={myProfile?.user?.profession}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-black transition-all duration-300 bg-gray-50 hover:bg-white"
               placeholder="Enter your profession"
               {...register("profession")}
@@ -156,7 +156,7 @@ export const EditProfileFormFields = ({
               type="text"
               name="interests"
               defaultValue={
-                myProfile?.data?.interests?.map((i) => i.name).join(", ") || ""
+                myProfile?.user?.interests?.map((i) => i.name).join(", ") || ""
               }
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-black transition-all duration-300 bg-gray-50 hover:bg-white"
               placeholder="coding, reading, traveling..."

@@ -7,12 +7,8 @@ import { Button } from "@/components/common";
 export const ProfilePosts = ({ myProfile, isLoading, safeUrl }) => {
   const [activeTab, setActiveTab] = useState("posts");
 
-  const postsWithImages = myProfile?.data?.authoredPosts.filter(
-    (post) => post.image
-  );
-  const postsWithoutImages = myProfile?.data?.authoredPosts.filter(
-    (post) => !post.image
-  );
+  const postsWithImages = myProfile?.posts.filter((post) => post.image);
+  const postsWithoutImages = myProfile?.posts.filter((post) => !post.image);
 
   if (isLoading) return <ProfilePosts_SkeletonLoading />;
 
@@ -93,18 +89,18 @@ export const ProfilePosts = ({ myProfile, isLoading, safeUrl }) => {
               >
                 <div className="flex items-start gap-3 mb-4">
                   <img
-                    src={safeUrl(myProfile.data.profilePicture)}
-                    alt={myProfile.data.username}
+                    src={safeUrl(myProfile.user.profilePicture)}
+                    alt={myProfile.user.username}
                     className="w-10 h-10 rounded-full"
                     loading="lazy"
                   />
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold">
-                        {myProfile.data.username}
+                        {myProfile.user.username}
                       </span>
                       <span className="text-gray-500">
-                        {myProfile.data.username}
+                        {myProfile.user.username}
                       </span>
                       <span className="text-gray-500">·</span>
                       <span className="text-gray-500">

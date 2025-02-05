@@ -3,8 +3,8 @@ import { sendResponse } from "../../utils/responseUtils.js";
 
 export const unFollowUser = async (req, res) => {
   try {
-    const { userIdToUnfollow } = req.body; // User to unfollow
-    const followerId = req.user?.id; // The user who is unfollowing
+    const { userIdToUnfollow } = req.body;
+    const followerId = req.user?.id;
 
     // Validate input
     if (!userIdToUnfollow) {

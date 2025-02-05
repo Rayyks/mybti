@@ -9,13 +9,13 @@ export const getSinglePost = async (req, res) => {
 
     // Fetch the post along with the author
     const post = await Post.findById(postId)
-      .populate("author", "username profilePicture mbti")
+      .populate("author", "id username profilePicture mbti")
       .lean();
     if (!post) return sendResponse(res, 404, "Post not found");
 
     // Fetch all comments (including replies)
     const comments = await Comment.find({ post: postId })
-      .populate("author", "username profilePicture mbti")
+      .populate("author", "id username profilePicture mbti")
       .lean();
 
     // Nest replies under their parent comments

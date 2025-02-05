@@ -8,6 +8,8 @@ export const getUserProfileWithPosts = async (req, res) => {
     const { username } = req.params;
     const user = await User.findOne({ username })
       .select("-password -isDeleted -deletionScheduledAt -deletionReason")
+      .populate("followers", "username profilePicture")
+      .populate("following", "username profilePicture")
       .lean();
     if (!user) {
       return res.status(404).json({ message: "User not found" });
