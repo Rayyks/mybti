@@ -2,9 +2,8 @@ import { Button } from "@/components/common";
 import useUser from "@/hooks/useUser";
 
 export const UserProfileHeader = ({ profile, posts, getSafeMediaUrl }) => {
-  const { handleFollowToggle, isFollowing } = useUser();
-
-  const profileId = profile._id;
+  const profileId = profile?._id;
+  const { handleFollowToggle, isFollowing } = useUser(profileId); // Pass profileId to hook
 
   return (
     <div className="flex flex-col md:flex-row items-start gap-8 mb-12">
@@ -42,13 +41,13 @@ export const UserProfileHeader = ({ profile, posts, getSafeMediaUrl }) => {
           </div>
           <div className="flex flex-col items-center">
             <span className="font-bold text-lg">
-              {profile?.followers.length}
+              {profile?.followers?.length}
             </span>
             <span className="text-neutral-400">followers</span>
           </div>
           <div className="flex flex-col items-center">
             <span className="font-bold text-lg">
-              {profile?.following.length}
+              {profile?.following?.length}
             </span>
             <span className="text-neutral-400">following</span>
           </div>

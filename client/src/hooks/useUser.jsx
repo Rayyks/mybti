@@ -4,37 +4,41 @@ import {
   useUnFollowUserMutation,
 } from "@/redux/slices/userApiSlice";
 import toast from "react-hot-toast";
-import useDidIFollowThatMF from "@/lib/didIFollowThatMF";
 import useProfile from "./useProfile";
+import usePost from "./usePost";
 
-const useUser = () => {
-  const { refetchUserProfile } = useProfile();
-  const isFollowingInitial = useDidIFollowThatMF();
-  const [isFollowing, setIsFollowing] = useState(isFollowingInitial);
-
-  useEffect(() => {
-    setIsFollowing(isFollowingInitial);
-  }, [isFollowingInitial]);
-
+const useUser = (userId) => {
+  const { myProfile, refetchUserProfile } = useProfile();
+  const [isFollowing, setIsFollowing] = useState(false);
   const [followUser] = useFollowUserMutation();
   const [unFollowUser] = useUnFollowUserMutation();
 
-  const handleFollowToggle = async (profileId) => {
-    if (isFollowing) {
-      await unFollow(profileId);
-    } else {
-      await follow(profileId);
+  useEffect(() => {
+    if (userId && myProfile) {
+      const following = myProfile?.user?.following || [];
+      const isFollowingUser = following.some((user) => user._id === userId);
+      setIsFollowing(isFollowingUser);
     }
-    setIsFollowing(!isFollowing);
+  }, [userId, myProfile]);
+
+  const handleFollowToggle = async () => {
+    if (isFollowing) {
+      setIsFollowing(false);
+      await unFollow(userId);
+    } else {
+      setIsFollowing(true);
+      await follow(userId);
+    }
+    await refetchUserProfile();
   };
 
   const follow = async (userIdToFollow) => {
     try {
       await followUser({ userIdToFollow });
       toast.success("User followed successfully");
-      refetchUserProfile();
     } catch (error) {
       toast.error("Failed to follow user");
+      setIsFollowing(false);
     }
   };
 
@@ -42,9 +46,9 @@ const useUser = () => {
     try {
       await unFollowUser({ userIdToUnfollow });
       toast.success("User unfollowed successfully");
-      refetchUserProfile();
     } catch (error) {
       toast.error("Failed to unfollow user");
+      setIsFollowing(true);
     }
   };
 

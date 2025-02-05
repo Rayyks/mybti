@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
@@ -12,8 +12,14 @@ export const MorePostAction = ({
 }) => {
   const { myProfile } = useProfile();
   const { isDeletingPost, handleDeletePost } = usePost();
-  const { isFollowing, handleFollowToggle } = useUser();
+  const postAuthorId = post?.author?.id;
+  const { isFollowing, handleFollowToggle } = useUser(postAuthorId);
+
   const isMyPost = myProfile?.user?.username === post?.author?.username;
+
+  useEffect(() => {
+    console.log("isFollowing updated:", isFollowing);
+  }, [isFollowing]);
 
   const handleReportClick = () => {
     openReportMenu();
@@ -61,9 +67,7 @@ export const MorePostAction = ({
 
             {!isMyPost && (
               <Button
-                onClick={() => {
-                  handleFollowToggle(post.author.id);
-                }}
+                onClick={() => handleFollowToggle()}
                 className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
               >
                 {isFollowing ? "Unfollow User" : "Follow User"}

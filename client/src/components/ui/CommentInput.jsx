@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePostActions from "@/hooks/usePostActions";
 import { Smile } from "lucide-react";
-import EmojiPicker from "emoji-picker-react";
 
 export const CommentInput = ({
   getSafeMediaUrl,
@@ -21,8 +19,6 @@ export const CommentInput = ({
     handleCommentPost,
     handleReplyComment,
   } = usePostActions();
-
-  const [openEmoji, setOpenEmoji] = useState(false);
 
   const onSubmit = (data) => {
     if (selectedParentCommentId) {
@@ -61,21 +57,9 @@ export const CommentInput = ({
           )}
           <div className="flex justify-between items-center mt-4">
             <div className="flex gap-1 relative">
-              <Button
-                onClick={() => setOpenEmoji(!openEmoji)}
-                className="rounded-full p-2 hover:bg-blue-500/10 text-primary-500"
-              >
+              <Button className="rounded-full p-2 hover:bg-blue-500/10 text-primary-500">
                 <Smile size={20} />
               </Button>
-
-              <div className="absolute bottom-full mb-2">
-                <EmojiPicker
-                  open={openEmoji}
-                  lazyLoadEmojis={true}
-                  skinTonesDisabled={true}
-                  theme="dark"
-                />
-              </div>
 
               {selectedParentCommentId && (
                 <Button
