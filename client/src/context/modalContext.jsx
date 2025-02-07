@@ -2,8 +2,8 @@ import { createContext, useContext, useState, useMemo } from "react";
 
 export const ModalContext = createContext();
 
-const ModalContextProvider = ({ children }) => {
-  const [openMoreAction, setOpenMoreAction] = useState(null);
+export const ModalProvider = ({ children }) => {
+  const [openMoreAction, setOpenMoreAction] = useState();
   const [showMenuComment, setShowMenuComment] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
 
@@ -38,5 +38,3 @@ export const useModal = () => {
     throw new Error("useModal must be used within a ModalContextProvider");
   return context;
 };
-
-export default ModalContextProvider;

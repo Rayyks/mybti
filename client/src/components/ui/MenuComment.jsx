@@ -22,8 +22,8 @@ export const MenuComment = ({
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && myProfile?.data && author?.username) {
-      setIsOwnComment(myProfile?.data?.username === author.username);
+    if (!isLoading && myProfile?.user && author?.username) {
+      setIsOwnComment(myProfile?.user?.username === author.username);
       setIsReady(true);
     }
   }, [isLoading, myProfile, author?.username]);

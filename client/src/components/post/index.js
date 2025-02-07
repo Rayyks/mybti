@@ -3,6 +3,7 @@ export * from "@/components/post/MorePostAction";
 export * from "@/components/post/PostListActions";
 export * from "@/components/post/PostTweet";
 export * from "@/components/post/PostListHeader";
+export * from "@/components/post/MainTweet";
 export * from "@/components/post/comment/CommentItem";
 export * from "@/components/post/comment/ReplyItem";
 export * from "@/components/post/comment/CommentHeader";

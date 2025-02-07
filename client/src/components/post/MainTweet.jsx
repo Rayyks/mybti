@@ -1,14 +1,11 @@
-import {
-  MoreHorizontal,
-  MessageCircle,
-  Heart,
-  Upload,
-  Bookmark,
-} from "lucide-react";
+import { MoreHorizontal, Heart, Upload, Bookmark } from "lucide-react";
 import { CommentInput } from "@/components/ui";
 import { Button } from "@/components/common";
 import { useCheckProfile } from "@/lib/checkProfile";
 import { formatTimeAgo } from "@/lib/FormatDate";
+import { useModal } from "@/context/modalContext";
+import MorePostAction from "./MorePostAction";
+import { ReportModal } from "../report";
 
 export const MainTweet = ({
   getSafeMediaUrl,
@@ -19,6 +16,14 @@ export const MainTweet = ({
   selectedParentCommentId,
   setSelectedParentCommentId,
 }) => {
+  const {
+    openMoreAction,
+    openMoreActionMenu,
+    closeMoreActionMenu,
+    openReportModal,
+    openReportMenu,
+    closeReportMenu,
+  } = useModal();
   const { checkProfile } = useCheckProfile();
   return (
     <article className="border-b border-neutral-800">
@@ -42,15 +47,36 @@ export const MainTweet = ({
                 {singlePost?.author?.username}
               </span>
               {/* VERIF ICON HERE, BUT NANTI KITA IMPLEMENTASI KAN YA LEK YAAAAAAAAAAAAAA */}
+              FUCKING
             </div>
             <span className="text-neutral-400">
               · {singlePost?.author?.mbti}
             </span>
           </div>
         </div>
-        <Button className="h-fit rounded-full p-2 hover:bg-neutral-900 hover:text-primary-500">
+        <Button
+          className="h-fit rounded-full p-2 hover:bg-neutral-900 hover:text-primary-500"
+          onClick={openMoreActionMenu}
+        >
           <MoreHorizontal size={20} />
         </Button>
+        {openMoreAction && (
+          <MorePostAction
+            openMoreActionMenu={openMoreActionMenu}
+            closeMoreActionMenu={closeMoreActionMenu}
+            openReportMenu={openReportMenu}
+            post={singlePost}
+          />
+        )}
+
+        {openReportModal && (
+          <ReportModal
+            reportType={"post"}
+            id={singlePost._id}
+            openReportModal={openReportModal}
+            closeReportMenu={closeReportMenu}
+          />
+        )}
       </div>
 
       {/* Tweet Content */}

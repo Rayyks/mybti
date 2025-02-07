@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
@@ -12,14 +11,10 @@ export const MorePostAction = ({
 }) => {
   const { myProfile } = useProfile();
   const { isDeletingPost, handleDeletePost } = usePost();
-  const postAuthorId = post?.author?.id;
+  const postAuthorId = post?.author?.id || post?.author?._id;
   const { isFollowing, handleFollowToggle } = useUser(postAuthorId);
 
   const isMyPost = myProfile?.user?.username === post?.author?.username;
-
-  useEffect(() => {
-    console.log("isFollowing updated:", isFollowing);
-  }, [isFollowing]);
 
   const handleReportClick = () => {
     openReportMenu();
@@ -41,9 +36,9 @@ export const MorePostAction = ({
 
       {/* Modal */}
       <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white rounded-xl w-[90%] max-w-sm overflow-hidden">
+        <div className="bg-neutral-800 rounded-xl w-[90%] max-w-sm overflow-hidden">
           {/* Modal header */}
-          <div className="text-center py-4 border-b border-gray-200">
+          <div className="text-center text-white py-4 border-b-2 border-neutral-600">
             <h3 className="font-medium">Post options</h3>
           </div>
 
@@ -51,7 +46,7 @@ export const MorePostAction = ({
           <div className="flex flex-col">
             <Link
               to={`/p/${post._id}`}
-              className="flex w-full items-center justify-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
+              className="flex w-full items-center justify-center px-4 py-3 text-sm text-white hover:bg-neutral-950 active:bg-neutral-900 transition-colors border-b border-neutral-600"
             >
               View Post
             </Link>
@@ -59,7 +54,7 @@ export const MorePostAction = ({
             {isMyPost && (
               <Link
                 to={`/p/${post._id}/edit`}
-                className="flex w-full items-center justify-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
+                className="flex w-full items-center justify-center px-4 py-3 text-sm text-white hover:bg-neutral-950 active:bg-neutral-900 transition-colors border-b border-neutral-600"
               >
                 Edit Post
               </Link>
@@ -68,7 +63,7 @@ export const MorePostAction = ({
             {!isMyPost && (
               <Button
                 onClick={() => handleFollowToggle()}
-                className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
+                className="w-full px-4 py-3 text-sm text-white hover:bg-neutral-950 active:bg-neutral-900 transition-colors border-b border-neutral-600"
               >
                 {isFollowing ? "Unfollow User" : "Follow User"}
               </Button>
@@ -76,7 +71,7 @@ export const MorePostAction = ({
 
             <Button
               onClick={handleReportClick}
-              className="w-full px-4 py-3 text-sm text-yellow-600 font-semibold hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-200"
+              className="w-full px-4 py-3 text-sm text-yellow-600 font-semibold hover:bg-neutral-950 active:bg-neutral-900 transition-colors border-b border-neutral-600"
             >
               Report
             </Button>
@@ -84,7 +79,7 @@ export const MorePostAction = ({
               <Button
                 onClick={handleDeleteClick}
                 disabled={isDeletingPost}
-                className="w-full px-4 py-3 text-sm text-red-600 font-semibold hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                className="w-full px-4 py-3 text-sm text-red-600 font-semibold hover:bg-neutral-950 active:bg-neutral-900 transition-colors"
               >
                 Delete
               </Button>
@@ -95,7 +90,7 @@ export const MorePostAction = ({
           <div className="border-t border-gray-200">
             <Button
               onClick={closeMoreActionMenu}
-              className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+              className="w-full px-4 py-3 text-sm text-gray-700 hover:bg-neutral-950 active:bg-neutral-900 transition-colors"
             >
               Cancel
             </Button>

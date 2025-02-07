@@ -5,7 +5,6 @@ import {
 } from "@/redux/slices/userApiSlice";
 import toast from "react-hot-toast";
 import useProfile from "./useProfile";
-import usePost from "./usePost";
 
 const useUser = (userId) => {
   const { myProfile, refetchUserProfile } = useProfile();
