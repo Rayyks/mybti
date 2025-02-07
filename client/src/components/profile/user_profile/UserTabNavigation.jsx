@@ -2,40 +2,38 @@ import { Grid, ListFilter } from "lucide-react";
 
 export const UserTabNavigation = ({ activeTab, setActiveTab }) => {
   return (
-    <div className="border-t border-neutral-800">
-      <div className="flex gap-8">
-        <button
+    <nav className="border-t border-b border-neutral-800 mb-6">
+      <div className="flex gap-6">
+        <TabButton
+          active={activeTab === "posts"}
           onClick={() => setActiveTab("posts")}
-          className={`flex items-center gap-2 py-4 relative transition-colors ${
-            activeTab === "posts"
-              ? "text-white"
-              : "text-neutral-500 hover:text-neutral-300"
-          }`}
-        >
-          <Grid size={20} />
-          <span className="font-medium">Posts</span>
-          {activeTab === "posts" && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
-          )}
-        </button>
-
-        <button
+          icon={<Grid size={18} />}
+          label="Posts"
+        />
+        <TabButton
+          active={activeTab === "tweets"}
           onClick={() => setActiveTab("tweets")}
-          className={`flex items-center gap-2 py-4 relative transition-colors ${
-            activeTab === "tweets"
-              ? "text-white"
-              : "text-neutral-500 hover:text-neutral-300"
-          }`}
-        >
-          <ListFilter size={20} />
-          <span className="font-medium">Tweets</span>
-          {activeTab === "tweets" && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
-          )}
-        </button>
+          icon={<ListFilter size={18} />}
+          label="Tweets"
+        />
       </div>
-    </div>
+    </nav>
   );
 };
+
+const TabButton = ({ active, onClick, icon, label }) => (
+  <button
+    onClick={onClick}
+    className={`flex items-center gap-2 py-3 relative transition-colors ${
+      active ? "text-white" : "text-neutral-500 hover:text-neutral-300"
+    }`}
+  >
+    {icon}
+    <span className="font-medium text-sm">{label}</span>
+    {active && (
+      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+    )}
+  </button>
+);
 
 export default UserTabNavigation;

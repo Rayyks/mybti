@@ -4,21 +4,21 @@ import { sendResponse } from "../../utils/responseUtils.js";
 
 export const reportUser = async (req, res) => {
   try {
-    const { userIdToReport, reason } = req.body;
+    const { userId, reason } = req.body;
     const reporterId = req.user?.id;
 
     // Validate the input
-    if (!userIdToReport || !reason) {
+    if (!userId || !reason) {
       return sendResponse(res, 400, "User to report and reason are required.");
     }
 
     // Ensure the user is not reporting themselves
-    if (userIdToReport === reporterId) {
+    if (userId === reporterId) {
       return sendResponse(res, 400, "You cannot report yourself.");
     }
 
     // Check if the user exists
-    const userToReport = await User.findById(userIdToReport);
+    const userToReport = await User.findById(userId);
     if (!userToReport) {
       return sendResponse(res, 404, "User not found.");
     }
@@ -27,7 +27,7 @@ export const reportUser = async (req, res) => {
     const newReport = await Report.create({
       reportedBy: reporterId,
       targetType: "user",
-      targetId: userIdToReport,
+      targetId: userId,
       reason,
     });
 

@@ -4,22 +4,23 @@ import { formatTimeAgo } from "@/lib/FormatDate";
 export const UserPostSection = ({ posts, activeTab, getSafeMediaUrl }) => {
   const postWithImages = posts?.filter((post) => post.image);
   const postWithoutImages = posts?.filter((post) => !post.image);
+
   return (
-    <div className="mt-8">
+    <section className="mt-4">
       {activeTab === "posts" ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2">
           {postWithImages?.map(
             (post) =>
               post.image && (
                 <div
                   key={post._id}
-                  className="aspect-square relative group rounded-lg overflow-hidden"
+                  className="aspect-square relative group rounded-md overflow-hidden bg-neutral-900"
                 >
                   {post.image.match(/\.(mp4|webm|ogg)$/i) ? (
                     <video
                       src={getSafeMediaUrl(post.image)}
                       controls
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="w-full h-full object-cover"
                       loading="lazy"
                       poster={getSafeMediaUrl(post.image)}
                     />
@@ -31,85 +32,89 @@ export const UserPostSection = ({ posts, activeTab, getSafeMediaUrl }) => {
                       loading="lazy"
                     />
                   )}
-                  {/* Overlay with interaction stats */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 sm:gap-6 text-white transition-all duration-200">
-                    <div className="flex items-center gap-1 sm:gap-2 -translate-y-2 group-hover:translate-y-0 transition-transform">
-                      <Heart size={18} className="text-white" />
-                      <span className="font-semibold text-sm sm:text-base">
-                        {post.likes.length}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 sm:gap-2 translate-y-2 group-hover:translate-y-0 transition-transform">
-                      <MessageCircle size={18} className="text-white" />
-                      <span className="font-semibold text-sm sm:text-base">
-                        {post.commentCount || 0}
-                      </span>
-                    </div>
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 text-white transition-all duration-200">
+                    <PostStat
+                      icon={<Heart size={16} />}
+                      count={post.likes.length}
+                    />
+                    <PostStat
+                      icon={<MessageCircle size={16} />}
+                      count={post.commentCount || 0}
+                    />
                   </div>
                 </div>
               )
           )}
         </div>
       ) : (
-        <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-4">
           {postWithoutImages?.map((post) => (
-            <div
+            <TextPost
               key={post._id}
-              className="border border-neutral-800 rounded-xl p-3 sm:p-4 md:p-6 hover:bg-neutral-900/50 transition-colors"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
-                {/* Profile picture */}
-                <img
-                  src={getSafeMediaUrl(post.author.profilePicture)}
-                  alt={post.author.username}
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
-                  loading="lazy"
-                />
-
-                {/* Post content */}
-                <div className="flex-1 min-w-0">
-                  {/* User info and timestamp */}
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="font-bold">{post.author.username}</span>
-                    <span className="text-neutral-500 text-sm">
-                      {post.author.mbti}
-                    </span>
-                    <span className="text-neutral-500 text-sm hidden sm:inline">
-                      ·
-                    </span>
-                    <span className="text-neutral-500 text-sm">
-                      {formatTimeAgo(post.createdAt)}
-                    </span>
-                  </div>
-                  {/* Post text */}
-                  <p className="text-neutral-300 break-words">{post.content}</p>
-                  {/* Interaction buttons */}
-                  <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-3 sm:mt-4 text-neutral-400">
-                    <button className="flex items-center gap-1 sm:gap-2 hover:text-red-500 transition-colors">
-                      <Heart size={18} className="lg:size-6" />
-                      <span className="text-sm sm:text-base">
-                        {post.likes.length}
-                      </span>
-                    </button>
-                    <button className="flex items-center gap-1 sm:gap-2 hover:text-blue-500 transition-colors">
-                      <MessageCircle size={18} className="lg:size-6" />
-                      <span className="text-sm sm:text-base">
-                        {post.commentCount}
-                      </span>
-                    </button>
-                    <button className="flex items-center gap-1 sm:gap-2 hover:text-yellow-500 transition-colors">
-                      <Bookmark size={18} className="lg:size-6" />
-                      <span className="text-sm sm:text-base">999k</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+              post={post}
+              getSafeMediaUrl={getSafeMediaUrl}
+            />
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
-export default UserPostSection;
+const PostStat = ({ icon, count }) => (
+  <div className="flex items-center gap-1.5">
+    {icon}
+    <span className="font-semibold text-sm">{count}</span>
+  </div>
+);
+
+const TextPost = ({ post, getSafeMediaUrl }) => (
+  <article className="border border-neutral-800 rounded-xl p-4 hover:bg-neutral-900/50 transition-colors">
+    <div className="flex gap-3">
+      <img
+        src={getSafeMediaUrl(post.author.profilePicture)}
+        alt={post.author.username}
+        className="w-10 h-10 rounded-full flex-shrink-0"
+        loading="lazy"
+      />
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <span className="font-semibold text-sm">{post.author.username}</span>
+          <span className="text-neutral-500 text-xs">{post.author.mbti}</span>
+          <span className="text-neutral-500 text-xs">
+            · {formatTimeAgo(post.createdAt)}
+          </span>
+        </div>
+        <p className="text-sm text-neutral-300 break-words mb-3">
+          {post.content}
+        </p>
+        <div className="flex items-center gap-4">
+          <InteractionButton
+            icon={<Heart size={16} />}
+            count={post.likes.length}
+            color="red"
+          />
+          <InteractionButton
+            icon={<MessageCircle size={16} />}
+            count={post.commentCount}
+            color="blue"
+          />
+          <InteractionButton
+            icon={<Bookmark size={16} />}
+            count="999k"
+            color="yellow"
+          />
+        </div>
+      </div>
+    </div>
+  </article>
+);
+
+const InteractionButton = ({ icon, count, color }) => (
+  <button
+    className={`flex items-center gap-1.5 text-neutral-400 hover:text-${color}-500 transition-colors`}
+  >
+    {icon}
+    <span className="text-xs">{count}</span>
+  </button>
+);

@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePost from "@/hooks/usePost";
 import useUser from "@/hooks/useUser";
+import { AreYouSureModal } from "@/components/ui";
 
 export const MorePostAction = ({
   openReportMenu,
@@ -13,6 +15,7 @@ export const MorePostAction = ({
   const { isDeletingPost, handleDeletePost } = usePost();
   const postAuthorId = post?.author?.id || post?.author?._id;
   const { isFollowing, handleFollowToggle } = useUser(postAuthorId);
+  const [areYouSure, setAreYouSure] = useState(false);
 
   const isMyPost = myProfile?.user?.username === post?.author?.username;
 
@@ -77,13 +80,19 @@ export const MorePostAction = ({
             </Button>
             {isMyPost && (
               <Button
-                onClick={handleDeleteClick}
+                onClick={() => setAreYouSure(true)}
                 disabled={isDeletingPost}
                 className="w-full px-4 py-3 text-sm text-red-600 font-semibold hover:bg-neutral-950 active:bg-neutral-900 transition-colors"
               >
                 Delete
               </Button>
             )}
+            <AreYouSureModal
+              isOpen={areYouSure}
+              close={() => setAreYouSure(false)}
+              title="Are you sure you want to delete this post?"
+              action={handleDeleteClick}
+            />
           </div>
 
           {/* Cancel button */}

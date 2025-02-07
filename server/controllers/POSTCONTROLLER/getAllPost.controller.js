@@ -50,11 +50,25 @@ export const getAllPost = async (req, res) => {
       })
     );
 
+    // Sort posts based on engagement and recency
+    const sortedPosts = formattedPosts.sort((a, b) => {
+      const engagementA = a.likes.length + a.commentCount;
+      const engagementB = b.likes.length + b.commentCount;
+      const recencyA = new Date(a.createdAt).getTime();
+      const recencyB = new Date(b.createdAt).getTime();
+
+      // Combine engagement and recency scores
+      const scoreA = engagementA * 0.7 + recencyA * 0.3;
+      const scoreB = engagementB * 0.7 + recencyB * 0.3;
+
+      return scoreB - scoreA;
+    });
+
     sendResponse(
       res,
       200,
       true,
-      formattedPosts,
+      sortedPosts,
       null,
       "Posts retrieved successfully"
     );

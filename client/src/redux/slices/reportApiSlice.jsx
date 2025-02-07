@@ -16,10 +16,10 @@ export const reportApi = createApi({
       providesTags: ["Report"],
     }),
     reportUser: builder.mutation({
-      query: ({ userIdToReport, reason }) => ({
+      query: ({ userId, reason }) => ({
         url: "/user",
         method: "POST",
-        data: { userIdToReport, reason },
+        data: { userId, reason },
       }),
       invalidatesTags: ["Report"],
     }),
