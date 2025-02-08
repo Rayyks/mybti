@@ -7,9 +7,9 @@ export const ProfileActivity = ({ myProfile, isLoading }) => {
   const [activeTab, setActiveTab] = useState("liked");
 
   const activityData = {
-    liked: myProfile?.data?.likedPosts || [],
-    commented: myProfile?.data?.commentedPosts || [],
-    saved: myProfile?.data?.savedPosts || [],
+    liked: myProfile?.user?.likedPosts || [],
+    commented: myProfile?.user?.commentedPosts || [],
+    saved: myProfile?.user?.savedPosts || [],
   };
 
   if (isLoading) {
@@ -27,45 +27,51 @@ export const ProfileActivity = ({ myProfile, isLoading }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
+    <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-6 mt-8">
       <div className="flex items-center gap-2 mb-4">
-        <Activity className="w-5 h-5 text-gray-600" />
-        <h2 className="text-xl font-semibold text-gray-900">
+        <Activity className="w-5 h-5 text-indigo-400" />
+        <h2 className="text-xl font-semibold text-gray-100">
           Account Activity
         </h2>
       </div>
 
       <div className="w-full">
-        {/* Custom Tabs */}
         <div className="flex gap-2 mb-6">
-          <CustomTab
-            active={activeTab === "liked"}
+          <button
             onClick={() => setActiveTab("liked")}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "liked"
+                ? "bg-indigo-500/10 text-indigo-300"
+                : "text-gray-400 hover:text-gray-300"
+            }`}
           >
             Liked Posts
-          </CustomTab>
-          <CustomTab
-            active={activeTab === "commented"}
+          </button>
+          <button
             onClick={() => setActiveTab("commented")}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "commented"
+                ? "bg-indigo-500/10 text-indigo-300"
+                : "text-gray-400 hover:text-gray-300"
+            }`}
           >
             Commented Posts
-          </CustomTab>
-          <CustomTab
-            active={activeTab === "saved"}
+          </button>
+          <button
             onClick={() => setActiveTab("saved")}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "saved"
+                ? "bg-indigo-500/10 text-indigo-300"
+                : "text-gray-400 hover:text-gray-300"
+            }`}
           >
             Saved Posts
-          </CustomTab>
+          </button>
         </div>
 
-        {/* Tab Content */}
         <div className="min-h-[200px]">
           {activeTab === "liked" && (
-            <ActivityTab
-              icon={Heart}
-              label="Liked Posts"
-              count={activityData.liked.length}
-            >
+            <div className="space-y-4">
               {activityData.liked.length > 0 ? (
                 activityData.liked.map((post) => (
                   <PostPreview
@@ -77,15 +83,11 @@ export const ProfileActivity = ({ myProfile, isLoading }) => {
               ) : (
                 <p className="text-gray-500">No liked posts yet</p>
               )}
-            </ActivityTab>
+            </div>
           )}
 
           {activeTab === "commented" && (
-            <ActivityTab
-              icon={MessageSquare}
-              label="Commented Posts"
-              count={activityData.commented.length}
-            >
+            <div className="space-y-4">
               {activityData.commented.length > 0 ? (
                 activityData.commented.map((post) => (
                   <PostPreview
@@ -97,15 +99,11 @@ export const ProfileActivity = ({ myProfile, isLoading }) => {
               ) : (
                 <p className="text-gray-500">No commented posts yet</p>
               )}
-            </ActivityTab>
+            </div>
           )}
 
           {activeTab === "saved" && (
-            <ActivityTab
-              icon={Bookmark}
-              label="Saved Posts"
-              count={activityData.saved.length}
-            >
+            <div className="space-y-4">
               {activityData.saved.length > 0 ? (
                 activityData.saved.map((post) => (
                   <PostPreview key={post._id} post={post} />
@@ -113,7 +111,7 @@ export const ProfileActivity = ({ myProfile, isLoading }) => {
               ) : (
                 <p className="text-gray-500">No saved posts yet</p>
               )}
-            </ActivityTab>
+            </div>
           )}
         </div>
       </div>

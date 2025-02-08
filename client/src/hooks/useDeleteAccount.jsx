@@ -76,7 +76,7 @@ const useDeleteAccount = () => {
     isImmediate,
     setIsImmediate,
     isDeletionRequested: Boolean(
-      myProfile?.data?.deletionScheduledAt && myProfile?.data?.deletionReason
+      myProfile?.user?.deletionScheduledAt && myProfile?.user?.deletionReason
     ),
     isDeletingAccount,
     isCancellingDeletion,

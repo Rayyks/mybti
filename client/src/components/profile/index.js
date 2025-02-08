@@ -9,8 +9,8 @@ export * from "@/components/profile/authenticated_profile/EditProfileForm";
 export * from "@/components/profile/authenticated_profile/EditProfilePictureSection";
 export * from "@/components/profile/authenticated_profile/EditProfileFormFields";
 export * from "@/components/profile/authenticated_profile/YourReportListStatus";
-export * from "@/components/profile/authenticated_profile/AccountDeletionSection";
-export * from "@/components/profile/authenticated_profile/AccountDeletionModal";
+export * from "@/components/profile/authenticated_profile/deletion/AccountDeletionSection";
+export * from "@/components/profile/authenticated_profile/deletion/AccountDeletionModal";
 
 // USER PROFILE
 export * from "@/components/profile/user_profile/UserProfileHeader";

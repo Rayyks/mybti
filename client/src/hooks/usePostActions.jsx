@@ -1,14 +1,27 @@
+import { useState, useEffect } from "react";
 import {
   useCommentPostMutation,
   useReplyCommentMutation,
   useDeleteCommentMutation,
+  useSavePostMutation,
 } from "@/redux/slices/postActionApiSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import usePost from "./usePost";
+import useProfile from "./useProfile";
 
-const usePostActions = () => {
+const usePostActions = (postId) => {
   const { refetchSinglePost } = usePost();
+  const { myProfile } = useProfile();
+  const [isSaved, setIsSaved] = useState(false);
+  useEffect(() => {
+    if (myProfile && myProfile?.user?.savedPosts) {
+      const saved = myProfile?.user?.savedPosts.some(
+        (post) => post._id === postId
+      );
+      setIsSaved(saved);
+    }
+  }, [postId, myProfile]);
 
   const {
     register,
@@ -17,12 +30,10 @@ const usePostActions = () => {
     reset,
   } = useForm();
 
-  const [commentPost, { isLoading: commentPostLoading }] =
-    useCommentPostMutation();
-  const [replyComment, { isLoading: replyCommentLoading }] =
-    useReplyCommentMutation();
-  const [deleteComment, { isLoading: deleteCommentLoading }] =
-    useDeleteCommentMutation();
+  const [commentPost] = useCommentPostMutation();
+  const [replyComment] = useReplyCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const [savePost] = useSavePostMutation();
 
   // ======================================== || COMMENT POST || ========================================
   const handleCommentPost = async (postId, content) => {
@@ -76,17 +87,31 @@ const usePostActions = () => {
     }
   };
 
+  // ======================================== || SAVE POST || ========================================
+  const handleSavePost = async (postId) => {
+    try {
+      await toast.promise(savePost({ postId }).unwrap(), {
+        loading: "Saving post...",
+        success: "Post saved successfully",
+        error: "Failed to save post",
+      });
+      setIsSaved(!isSaved);
+      // refetchSinglePost();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   return {
     register,
     handleSubmit,
     errors,
     reset,
-    commentPostLoading,
     handleCommentPost,
-    replyCommentLoading,
     handleReplyComment,
-    deleteCommentLoading,
     handleDeleteComment,
+    handleSavePost,
+    isSaved,
   };
 };
 

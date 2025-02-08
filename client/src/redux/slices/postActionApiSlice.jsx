@@ -24,6 +24,14 @@ export const postActionApi = createApi({
       }),
       invalidatesTags: ["PostAction"],
     }),
+    savePost: builder.mutation({
+      query: ({ postId }) => ({
+        url: "/save/post",
+        method: "POST",
+        data: { postId },
+      }),
+      invalidatesTags: ["PostAction"],
+    }),
     deleteComment: builder.mutation({
       query: ({ commentId }) => ({
         url: `/comments/${commentId}`,
@@ -38,4 +46,5 @@ export const {
   useCommentPostMutation,
   useReplyCommentMutation,
   useDeleteCommentMutation,
+  useSavePostMutation,
 } = postActionApi;

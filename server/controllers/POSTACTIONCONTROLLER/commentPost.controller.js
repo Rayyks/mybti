@@ -34,6 +34,11 @@ export const createComment = async (req, res) => {
       replyTo: replyTo || null,
     });
 
+    // Update the user's commentedPosts field
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: { commentedPosts: postId },
+    });
+
     // If it's a reply, notify the parent comment author
     if (parentComment) {
       await Notification.create({

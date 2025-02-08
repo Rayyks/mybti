@@ -13,7 +13,7 @@ export const ProfileAction = () => {
       to: "/profile/edit",
       icon: <Edit size={18} />,
       label: "Edit Profile",
-      className: "bg-neutral-950 text-white hover:bg-neutral-800",
+      className: "bg-indigo-800 text-white hover:bg-indigo-950",
     },
     {
       to: "/profile/settings",

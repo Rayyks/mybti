@@ -12,31 +12,35 @@ import useProfile from "@/hooks/useProfile";
 const ProfilePage = () => {
   const { myProfile, error, isLoading } = useProfile();
 
-  if (error)
+  if (error) {
     return (
-      <div>
-        Something went wrong...{" "}
-        <span
-          className="text-2xl font-bold"
-          onClick={() => window.location.reload()}
-        >
-          Refresh The Page
-        </span>
+      <div className="min-h-screen bg-gray-950 text-gray-200 p-4">
+        <div className="text-center py-12">
+          <p className="text-xl">Something went wrong...</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-6 py-2 bg-black-600 hover:bg-indigo-700 rounded-lg transition-colors"
+          >
+            Refresh The Page
+          </button>
+        </div>
       </div>
     );
+  }
 
   return (
-    <section className="relative bg-black rounded-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10">
-        {/* Profile Info Card */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <ProfileHeader
-            myProfile={myProfile}
-            isLoading={isLoading}
-            safeUrl={getSafeMediaUrl}
-          />
-          <ProfileBody myProfile={myProfile} isLoading={isLoading} />
-          <ProfileAction />
+    <section className="w-full min-h-screen bg-black py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-neutral-950 border border-neutral-800 rounded-xl shadow-xl">
+          <div className="p-6">
+            <ProfileHeader
+              myProfile={myProfile}
+              isLoading={isLoading}
+              safeUrl={getSafeMediaUrl}
+            />
+            <ProfileBody myProfile={myProfile} isLoading={isLoading} />
+            <ProfileAction myProfile={myProfile} isLoading={isLoading} />
+          </div>
         </div>
 
         <ProfilePosts
@@ -44,7 +48,6 @@ const ProfilePage = () => {
           isLoading={isLoading}
           safeUrl={getSafeMediaUrl}
         />
-        {/* Profile Activity Card */}
         <ProfileActivity myProfile={myProfile} isLoading={isLoading} />
       </div>
     </section>

@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { Link as LinkIcon } from "lucide-react";
 import { ProfileBody_SkeletonLoading } from "@/components/profile/SkeletonLoading";
 
@@ -6,29 +5,27 @@ export const ProfileBody = ({ myProfile, isLoading }) => {
   if (isLoading) return <ProfileBody_SkeletonLoading />;
 
   return (
-    <Fragment>
-      {/* Professional Info */}
-      <div className="mt-8 border-t border-gray-100 pt-8">
-        <div className="flex items-center gap-2 mb-4">
-          <LinkIcon className="w-5 h-5 text-gray-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Profession</h2>
+    <div className="mt-12 space-y-8">
+      <div className="border-t border-neutral-800 pt-8">
+        <div className="flex items-center gap-2 mb-6">
+          <LinkIcon className="w-5 h-5 text-indigo-500" />
+          <h2 className="text-xl font-semibold text-gray-100">Profession</h2>
         </div>
-        <div className="inline-block rounded-full py-3 px-5 bg-gray-100 hover:bg-indigo-100 transition-all duration-500">
-          <span className="font-medium text-base text-gray-700">
+        <div className="inline-block rounded-xl py-3 px-5 bg-gray-800/50 hover:bg-gray-800 transition-all duration-300">
+          <span className="font-medium text-gray-300">
             {myProfile?.user?.profession || "Not specified"}
           </span>
         </div>
       </div>
 
-      {/* Interests */}
-      <div className="mt-8 border-t border-gray-100 pt-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Interests</h2>
-        <div className="flex flex-wrap gap-2">
+      <div className="border-t border-neutral-800 pt-8">
+        <h2 className="text-xl font-semibold text-gray-100 mb-6">Interests</h2>
+        <div className="flex flex-wrap gap-3">
           {myProfile?.user?.interests?.length > 0 ? (
             myProfile?.user?.interests.map((interest) => (
               <span
                 key={interest}
-                className="py-2 px-4 rounded-full bg-indigo-50 text-indigo-600 font-medium hover:bg-indigo-100 transition-colors duration-300"
+                className="py-2 px-4 rounded-xl bg-indigo-500/10 text-indigo-300 font-medium hover:bg-indigo-500/20 transition-colors duration-300"
               >
                 {interest}
               </span>
@@ -38,7 +35,7 @@ export const ProfileBody = ({ myProfile, isLoading }) => {
           )}
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

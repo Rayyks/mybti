@@ -28,8 +28,10 @@ export const EditProfileForm = ({ myProfile, isLoading }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white">
       {/* Header */}
-      <div className="border-b border-gray-200 p-8 bg-black text-white">
-        <h1 className="text-2xl font-bold text-center">Edit Profile</h1>
+      <div className="border-b border-gray-200 bg-black text-white py-8">
+        <h1 className="text-3xl font-bold text-center tracking-tight">
+          Edit Profile
+        </h1>
       </div>
 
       {/* Profile Picture Section */}
@@ -51,17 +53,24 @@ export const EditProfileForm = ({ myProfile, isLoading }) => {
         register={register}
         errors={errors}
       />
-      <div className="flex">
+
+      {/* Action Buttons */}
+      <div className="flex justify-center px-8 py-6 bg-gray-50 border-t border-gray-200">
         <Button
           type="submit"
-          className="w-[90%] mb-5 mx-auto py-2 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+          className="w-full max-w-md py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isUpdatingProfile}
         >
-          {isUpdatingProfile ? "Updating..." : "Update Profile"}
+          {isUpdatingProfile ? "Updating..." : "Save Changes"}
         </Button>
       </div>
+
       {errorUpdateProfile && (
-        <span className="text-red-500">{errorUpdateProfile.message}</span>
+        <div className="text-center py-4">
+          <span className="text-red-500 text-sm">
+            {errorUpdateProfile.message}
+          </span>
+        </div>
       )}
     </form>
   );
