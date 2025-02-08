@@ -21,6 +21,11 @@ export const getProfile = async (req, res) => {
         select: "content createdAt author image",
         populate: { path: "author", select: "username" },
       })
+      .populate({
+        path: "likedPosts", // Add likedPosts field
+        select: "content createdAt author image",
+        populate: { path: "author", select: "username" },
+      })
       .populate("followers", "username profilePicture")
       .populate("following", "username profilePicture")
       .lean();

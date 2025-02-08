@@ -6,16 +6,17 @@ import { formatTimeAgo } from "@/lib/FormatDate";
 import { useModal } from "@/context/modalContext";
 import MorePostAction from "./MorePostAction";
 import { ReportModal } from "../report";
+import usePostActions from "@/hooks/usePostActions";
 
 export const MainTweet = ({
   getSafeMediaUrl,
   singlePost,
-  isLiked,
-  isBookmarked,
-  setIsBookmarked,
   selectedParentCommentId,
   setSelectedParentCommentId,
 }) => {
+  const { handleSavePost, handleLikePost, isLiked, likeCount, isSaved } =
+    usePostActions(singlePost);
+
   const {
     openMoreAction,
     openMoreActionMenu,
@@ -25,6 +26,7 @@ export const MainTweet = ({
     closeReportMenu,
   } = useModal();
   const { checkProfile } = useCheckProfile();
+
   return (
     <article className="border-b border-neutral-800">
       {/* Tweet Header */}
@@ -46,12 +48,11 @@ export const MainTweet = ({
               >
                 {singlePost?.author?.username}
               </span>
-              {/* VERIF ICON HERE, BUT NANTI KITA IMPLEMENTASI KAN YA LEK YAAAAAAAAAAAAAA */}
-              FUCKING
+              {/* VERIF ICON HERE */}
+              <span className="text-neutral-400">
+                · {singlePost?.author?.mbti}
+              </span>
             </div>
-            <span className="text-neutral-400">
-              · {singlePost?.author?.mbti}
-            </span>
           </div>
         </div>
         <Button
@@ -104,7 +105,7 @@ export const MainTweet = ({
       {/* Tweet Stats */}
       <div className="px-4 py-3 border-y border-neutral-800 flex gap-4">
         <span className="hover:underline cursor-pointer">
-          <strong className="text-white">{singlePost?.likes.length}</strong>{" "}
+          <strong className="text-white">{likeCount}</strong>{" "}
           <span className="text-neutral-500">Likes</span>
         </span>
         <span className="hover:underline cursor-pointer">
@@ -116,7 +117,7 @@ export const MainTweet = ({
       {/* Tweet Actions */}
       <div className="px-4 py-2 flex justify-around border-b border-neutral-800">
         <Button
-          onClick={() => setIsLiked(!isLiked)}
+          onClick={handleLikePost} // Handling like post with the hook
           className={`rounded-full p-2 ${
             isLiked
               ? "text-pink-500"
@@ -126,17 +127,17 @@ export const MainTweet = ({
           <Heart size={20} fill={isLiked ? "currentColor" : "none"} />
         </Button>
         <Button
-          onClick={() => setIsBookmarked(!isBookmarked)}
-          className={`rounded-full p-2 ${
-            isBookmarked
-              ? "text-blue-500"
-              : "hover:bg-blue-500/10 hover:text-blue-500"
+          className={`p-2 transition-colors ${
+            isSaved
+              ? "text-blue-600 dark:text-blue-500"
+              : "text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500"
           }`}
+          onClick={() => handleSavePost(singlePost?._id)}
         >
-          <Bookmark size={20} fill={isBookmarked ? "currentColor" : "none"} />
-        </Button>
-        <Button className="rounded-full p-2 hover:bg-blue-500/10 hover:text-blue-500">
-          <Upload size={20} />
+          <Bookmark
+            className="w-6 h-6"
+            fill={isSaved ? "currentColor" : "none"}
+          />
         </Button>
       </div>
 

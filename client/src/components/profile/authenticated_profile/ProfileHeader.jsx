@@ -6,7 +6,7 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
   if (isLoading) return <ProfileHeader_SkeletonLoading />;
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
+    <div className="flex flex-col md:flex-row gap-8 w-full">
       <div className="flex-shrink-0">
         <div className="relative group">
           <div className="w-40 h-40 rounded-full border-4 border-neutral-500/30 overflow-hidden transition-transform duration-300 group-hover:scale-105">

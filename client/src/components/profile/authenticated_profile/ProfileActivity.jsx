@@ -75,7 +75,7 @@ export const ProfileActivity = ({ myProfile, isLoading }) => {
               {activityData.liked.length > 0 ? (
                 activityData.liked.map((post) => (
                   <PostPreview
-                    key={post.id}
+                    key={post._id}
                     post={post}
                     isLoading={isLoading}
                   />

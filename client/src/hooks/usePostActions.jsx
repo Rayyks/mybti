@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  useLikePostMutation,
   useCommentPostMutation,
   useReplyCommentMutation,
   useDeleteCommentMutation,
@@ -10,18 +11,34 @@ import toast from "react-hot-toast";
 import usePost from "./usePost";
 import useProfile from "./useProfile";
 
-const usePostActions = (postId) => {
+const usePostActions = (post) => {
   const { refetchSinglePost } = usePost();
   const { myProfile } = useProfile();
   const [isSaved, setIsSaved] = useState(false);
-  useEffect(() => {
-    if (myProfile && myProfile?.user?.savedPosts) {
-      const saved = myProfile?.user?.savedPosts.some(
-        (post) => post._id === postId
-      );
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(post?.likes?.length);
+
+  const checkIfPostIsSaved = () => {
+    if (myProfile?.user?.savedPosts) {
+      const saved = myProfile.user.savedPosts.some((p) => p._id === post?._id);
       setIsSaved(saved);
     }
-  }, [postId, myProfile]);
+  };
+
+  const checkIfPostIsLiked = () => {
+    if (myProfile?.user?.likedPosts) {
+      const liked = myProfile.user.likedPosts.some((p) => p._id === post?._id);
+      setIsLiked(liked);
+    }
+  };
+
+  useEffect(() => {
+    checkIfPostIsSaved();
+  }, [post?._id, myProfile]);
+
+  useEffect(() => {
+    checkIfPostIsLiked();
+  }, [post?._id, myProfile]);
 
   const {
     register,
@@ -30,12 +47,34 @@ const usePostActions = (postId) => {
     reset,
   } = useForm();
 
+  const [likePost] = useLikePostMutation();
   const [commentPost] = useCommentPostMutation();
   const [replyComment] = useReplyCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const [savePost] = useSavePostMutation();
 
-  // ======================================== || COMMENT POST || ========================================
+  const handleLikePost = async () => {
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+    setLikeCount((prevCount) =>
+      newLikedState ? prevCount + 1 : prevCount - 1
+    );
+
+    try {
+      const response = await likePost({ postId: post._id }).unwrap();
+      if (response?.likes) {
+        setLikeCount(response.likes.length);
+      }
+      refetchSinglePost();
+    } catch (error) {
+      toast.error(error.message);
+      setIsLiked(!newLikedState);
+      setLikeCount((prevCount) =>
+        newLikedState ? prevCount - 1 : prevCount + 1
+      );
+    }
+  };
+
   const handleCommentPost = async (postId, content) => {
     try {
       toast.promise(commentPost({ postId, content }).unwrap(), {
@@ -50,15 +89,10 @@ const usePostActions = (postId) => {
     }
   };
 
-  // ======================================== || REPLY COMMENT || ========================================
   const handleReplyComment = async (postId, parentCommentId, content) => {
     try {
       await toast.promise(
-        replyComment({
-          postId,
-          parentCommentId,
-          content,
-        }).unwrap(),
+        replyComment({ postId, parentCommentId, content }).unwrap(),
         {
           loading: "Posting reply...",
           success: "Reply posted successfully",
@@ -73,7 +107,6 @@ const usePostActions = (postId) => {
     }
   };
 
-  // ======================================== || DELETE COMMENT || ========================================
   const handleDeleteComment = async (commentId) => {
     try {
       await toast.promise(deleteComment({ commentId }).unwrap(), {
@@ -87,16 +120,10 @@ const usePostActions = (postId) => {
     }
   };
 
-  // ======================================== || SAVE POST || ========================================
   const handleSavePost = async (postId) => {
     try {
-      await toast.promise(savePost({ postId }).unwrap(), {
-        loading: "Saving post...",
-        success: "Post saved successfully",
-        error: "Failed to save post",
-      });
+      await savePost({ postId }).unwrap();
       setIsSaved(!isSaved);
-      // refetchSinglePost();
     } catch (error) {
       toast.error(error.message);
     }
@@ -107,11 +134,14 @@ const usePostActions = (postId) => {
     handleSubmit,
     errors,
     reset,
+    handleLikePost,
     handleCommentPost,
     handleReplyComment,
     handleDeleteComment,
     handleSavePost,
     isSaved,
+    isLiked,
+    likeCount,
   };
 };
 

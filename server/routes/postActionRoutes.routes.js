@@ -1,6 +1,7 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import {
+  likePost,
   createComment,
   deleteComment,
   likeComment,
@@ -10,6 +11,9 @@ import {
 import { checkBlacklist } from "../middlewares/blacklistMiddleware.js";
 
 const router = express.Router();
+
+// like a post
+router.put("/like", authMiddleware, checkBlacklist, likePost);
 
 // Create a new comment or reply
 router.post("/comments", authMiddleware, checkBlacklist, createComment);

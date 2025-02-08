@@ -8,6 +8,14 @@ export const postActionApi = createApi({
   }),
   tagTypes: ["PostAction"],
   endpoints: (builder) => ({
+    likePost: builder.mutation({
+      query: ({ postId }) => ({
+        url: `/like`,
+        method: "PUT",
+        data: { postId },
+      }),
+      invalidatesTags: ["PostAction"],
+    }),
     commentPost: builder.mutation({
       query: ({ postId, content }) => ({
         url: "/comments",
@@ -43,6 +51,7 @@ export const postActionApi = createApi({
 });
 
 export const {
+  useLikePostMutation,
   useCommentPostMutation,
   useReplyCommentMutation,
   useDeleteCommentMutation,
