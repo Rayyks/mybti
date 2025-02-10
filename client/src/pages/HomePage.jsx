@@ -47,7 +47,7 @@ const DashboardPage = () => {
                       )}
                     </div>
                     {/* Post Actions */}
-                    <PostListActions post={post} />
+                    <PostListActions post={post} isLoading={isLoading} />
                   </>
                 ) : (
                   <PostTweet

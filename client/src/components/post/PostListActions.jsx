@@ -6,7 +6,7 @@ import usePost from "@/hooks/usePost";
 import { formatTimeAgo } from "@/lib/FormatDate";
 import usePostActions from "@/hooks/usePostActions";
 
-export const PostListActions = ({ post }) => {
+export const PostListActions = ({ post, isLoading }) => {
   const { showMore, contentPreview, maxContentPreview, handleShowMore } =
     usePost();
   const { isSaved, handleSavePost, isLiked, handleLikePost, likeCount } =
@@ -24,10 +24,14 @@ export const PostListActions = ({ post }) => {
             }`}
             onClick={handleLikePost}
           >
-            <Heart
-              className="w-6 h-6"
-              fill={isLiked ? "currentColor" : "none"}
-            />
+            {isLoading ? (
+              <Heart className="w-6 h-6" fill="none" />
+            ) : (
+              <Heart
+                className="w-6 h-6"
+                fill={isLiked ? "currentColor" : "none"}
+              />
+            )}
           </Button>
 
           <Link to={`/p/${post._id}`}>
