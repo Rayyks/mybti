@@ -26,30 +26,31 @@ Welcome to **Be Yourself**, a revolutionary social media platform designed to fo
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: [Your frontend framework]
-- **Backend**: [Your backend framework]
-- **Database**: [Your database choice]
-- **Authentication**: [Your auth system]
+- **Frontend**: React, Redux, React-Router, Framer-motion, TailwindCss, React-Hook-Form & many more
+- **Backend**: Node.js, Express & many more
+- **Database**: MongoDB
+- **Authentication**: JWT & Cookies (masi pemula saya puh jadi ga implementasi auth ke complex state, maafin ya sepuh sepuh programmer, saya kan hanya manusia biasa yang masih belajar untuk memahami lebih dalam apa itu arti hidup eh arti programming itu apa jadi mohon jangan di hujani omongan ya, soalnya saya sukanya di hujani duit. Terima kasih wassalamualaikum. 😁🙏)
 
 ## 🚦 Getting Started
 
 ### Prerequisites
 
-- Node.js (version X.X.X)
-- [Any other prerequisites]
+- Node.js 23.7.0
+- PC / LAPTOP 😁
+- INTERNET 🌐
 
 ### Installation
 
 1. **Clone the repository**
 
 ```bash
-git clone [repository URL]
+git clone https://github.com/Rayyks/mybti.git
 ```
 
-2. **Install dependencies**
+2. **Install dependencies **
 
 ```bash
-npm install
+npm install or pnpm install
 ```
 
 3. **Set up environment variables**
@@ -61,7 +62,7 @@ cp .env.example .env
 4. **Start the development server**
 
 ```bash
-npm run dev
+npm run dev or pnpm run dev
 ```
 
 ## 📜 Community Guidelines
@@ -95,7 +96,7 @@ Have questions or want to get involved? Reach out to us at [Your contact informa
 - A huge thank you to all contributors who share our vision of authentic social media.
 - Special thanks to [any specific acknowledgments] for their support and inspiration.
 
-_Note: This project is created for learning purposes and to practice web development skills._
+_Note: INI PROJECT HANYA UNTUK SENANG SENANG DOANG, JADI SORRY YA KALO CODE SAYA TIDAK SE CLEAN , SE RAPIH, SEMPURNA, PERFORMANCE FOCUS, DLL. IM JUST HUMAN BEING AND IM TRYING MY BEST TO BE THE BEST 😁._
 
 ## Join the Movement 🌈
 
