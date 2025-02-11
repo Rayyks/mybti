@@ -24,9 +24,10 @@ export const CommentInput = ({
     if (selectedParentCommentId) {
       handleReplyComment(
         singlePost?._id,
-        selectedParentCommentId,
+        selectedParentCommentId.commentId,
         data.content
       );
+      setSelectedParentCommentId(null);
     } else {
       handleCommentPost(singlePost?._id, data.content);
     }
@@ -46,7 +47,7 @@ export const CommentInput = ({
             {...register("content", { required: true })}
             placeholder={
               selectedParentCommentId
-                ? "Post your reply!"
+                ? `Reply to ${selectedParentCommentId.username}`
                 : "Post your comment!"
             }
             className="w-full bg-transparent resize-none outline-none text-lg placeholder:text-neutral-500"

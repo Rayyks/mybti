@@ -7,14 +7,13 @@ import {
 } from "@/components/post/";
 
 export const CommentItem = ({ comment, getSafeMediaUrl, selectedComment }) => {
-  const [isLiked, setIsLiked] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
 
   const { author, content, createdAt, likes, replies = [] } = comment;
   const totalReplies = countReplies(replies);
 
-  const handleLikeClick = () => setIsLiked(!isLiked);
-  const handleReplyClick = () => selectedComment(comment?._id);
+  const handleReplyClick = () =>
+    selectedComment(comment?._id, author?.username);
   const handleToggleReplies = () => setShowReplies(!showReplies);
 
   return (
@@ -38,8 +37,6 @@ export const CommentItem = ({ comment, getSafeMediaUrl, selectedComment }) => {
           <CommentActions
             handleReplyClick={handleReplyClick}
             totalReplies={totalReplies}
-            handleLikeClick={handleLikeClick}
-            isLiked={isLiked}
             likes={likes}
           />
           <RepliesSection

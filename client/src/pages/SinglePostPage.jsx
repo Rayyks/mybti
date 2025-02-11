@@ -15,8 +15,8 @@ const SinglePostPage = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const [selectedParentCommentId, setSelectedParentCommentId] = useState(null);
-  const selectedComment = (commentId) => {
-    setSelectedParentCommentId(commentId);
+  const selectedComment = (commentId, username) => {
+    setSelectedParentCommentId({ commentId, username });
   };
 
   const goBack = () => {

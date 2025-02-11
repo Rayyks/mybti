@@ -32,6 +32,22 @@ export const postActionApi = createApi({
       }),
       invalidatesTags: ["PostAction"],
     }),
+    likeComment: builder.mutation({
+      query: ({ commentId }) => ({
+        url: "/comments/like",
+        method: "POST",
+        data: { commentId },
+      }),
+      invalidatesTags: ["PostAction"],
+    }),
+    unlikeComment: builder.mutation({
+      query: ({ commentId }) => ({
+        url: "/comments/unlike",
+        method: "POST",
+        data: { commentId },
+      }),
+      invalidatesTags: ["PostAction"],
+    }),
     savePost: builder.mutation({
       query: ({ postId }) => ({
         url: "/save/post",
@@ -55,5 +71,7 @@ export const {
   useCommentPostMutation,
   useReplyCommentMutation,
   useDeleteCommentMutation,
+  useLikeCommentMutation,
+  useUnlikeCommentMutation,
   useSavePostMutation,
 } = postActionApi;

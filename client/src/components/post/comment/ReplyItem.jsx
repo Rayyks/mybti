@@ -73,7 +73,7 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
               variant="ghost"
               size="sm"
               className="group flex items-center gap-2 text-neutral-500 hover:text-blue-500"
-              onClick={() => selectedComment(reply?._id)}
+              onClick={() => selectedComment(reply?._id, author?.username)}
             >
               <MessageCircle size={16} />
               <span className="text-xs">Reply</span>

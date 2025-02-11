@@ -62,6 +62,7 @@ const userSchema = new mongoose.Schema(
     commentedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+    likedComments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     isDeleted: {
       type: Boolean,
       default: false,

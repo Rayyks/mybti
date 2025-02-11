@@ -22,8 +22,13 @@ export const getProfile = async (req, res) => {
         populate: { path: "author", select: "username" },
       })
       .populate({
-        path: "likedPosts", // Add likedPosts field
+        path: "likedPosts",
         select: "content createdAt author image",
+        populate: { path: "author", select: "username" },
+      })
+      .populate({
+        path: "likedComments",
+        select: "content createdAt author",
         populate: { path: "author", select: "username" },
       })
       .populate("followers", "username profilePicture")
@@ -50,10 +55,19 @@ export const getProfile = async (req, res) => {
       })
     );
 
-    // Send response with user details and posts
+    // Fetch liked comments details
+    const likedComments = await Comment.find({
+      _id: { $in: user.likedComments },
+    })
+      .select("content createdAt author")
+      .populate({ path: "author", select: "username" })
+      .lean();
+
+    // Send response with user details, posts, and liked comments
     sendResponse(res, 200, "Profile fetched successfully", {
       user,
       posts: postsWithCommentCount,
+      likedComments,
     });
   } catch (error) {
     sendResponse(res, 500, "Error retrieving profile", error);

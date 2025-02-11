@@ -67,6 +67,16 @@ export const ProfileActivity = ({ myProfile, isLoading }) => {
           >
             Saved Posts
           </button>
+          <button
+            onClick={() => setActiveTab("likedComments")}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "likedComments"
+                ? "bg-indigo-500/10 text-indigo-300"
+                : "text-gray-400 hover:text-gray-300"
+            }`}
+          >
+            Liked Comments
+          </button>
         </div>
 
         <div className="min-h-[200px]">
