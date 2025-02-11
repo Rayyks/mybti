@@ -39,10 +39,6 @@ export const PostListActions = ({ post, isLoading }) => {
               <MessageCircle className="w-6 h-6" />
             </Button>
           </Link>
-
-          <Button className="p-2 text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors">
-            <Repeat2 className="w-6 h-6" />
-          </Button>
         </div>
 
         <Button

@@ -6,8 +6,9 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
   if (isLoading) return <ProfileHeader_SkeletonLoading />;
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 w-full">
-      <div className="flex-shrink-0">
+    <div className="flex flex-col gap-8 w-full max-w-full">
+      {/* Profile Picture Container */}
+      <div className="flex-shrink-0 mx-auto">
         <div className="relative group">
           <div className="w-40 h-40 rounded-full border-4 border-neutral-500/30 overflow-hidden transition-transform duration-300 group-hover:scale-105">
             <img
@@ -20,25 +21,28 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
         </div>
       </div>
 
-      <div className="flex-1 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-6">
-          <div className="space-y-3">
-            <h1 className="text-3xl font-bold text-gray-100">
+      {/* Profile Info Container */}
+      <div className="flex-1 space-y-6 min-w-0">
+        <div className="flex flex-col gap-6 w-full">
+          {/* User Info Section */}
+          <div className="space-y-3 text-center">
+            <h1 className="text-3xl font-bold text-gray-100 break-words">
               {myProfile?.user?.username}
             </h1>
             <div className="space-y-2 text-gray-400">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <span>{myProfile?.user?.email}</span>
+              <div className="flex items-center justify-center gap-2">
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                <span className="break-all">{myProfile?.user?.email}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Drama className="w-4 h-4" />
+              <div className="flex items-center justify-center gap-2">
+                <Drama className="w-4 h-4 flex-shrink-0" />
                 <span>{myProfile?.user?.mbti}</span>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-6 bg-neutral-700/50 p-6 rounded-xl backdrop-blur-sm">
+          {/* Followers/Following Stats */}
+          <div className="flex gap-6 bg-neutral-700/50 p-6 rounded-xl backdrop-blur-sm w-full max-w-full justify-center">
             <div className="text-center">
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5 text-indigo-500" />
@@ -60,7 +64,8 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
           </div>
         </div>
 
-        <p className="text-gray-400">
+        {/* Bio Section */}
+        <p className="text-gray-400 break-words text-center">
           {myProfile?.user?.bio || "No bio available"}
         </p>
       </div>

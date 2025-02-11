@@ -11,6 +11,7 @@ import postRoutes from "./routes/postRoutes.routes.js";
 import postActionRoutes from "./routes/postActionRoutes.routes.js";
 import reportRoutes from "./routes/reportRoutes.routes.js";
 import userRoutes from "./routes/userRoutes.routes.js";
+import searchRoutes from "./routes/searchRoutes.routes.js";
 
 // Initialize the app
 const app = express();
@@ -70,6 +71,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/action", postActionRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/search", searchRoutes);
 app.use(authMiddleware);
 app.use("/api/report", reportRoutes);
 

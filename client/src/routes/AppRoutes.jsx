@@ -20,6 +20,7 @@ import { CreatePostModal } from "@/components/post";
 import PublicRoutes from "@/routes/PublicRoutes";
 import PrivateRoutes from "@/routes/PrivateRoutes";
 import TermsAndConditions from "@/pages/terms/Terms&Conditions";
+import SearchPage from "@/pages/SearchPage";
 
 const AppRoutes = () => {
   return (
@@ -38,7 +39,7 @@ const AppRoutes = () => {
             path="search"
             element={
               <PrivateRoutes>
-                <>SEARCH</>
+                <SearchPage />
               </PrivateRoutes>
             }
           />

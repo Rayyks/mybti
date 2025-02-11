@@ -6,6 +6,7 @@ import { accountApi } from "@/redux/slices/accountApiSlice";
 import { postApi } from "@/redux/slices/postApiSlice";
 import { userApi } from "@/redux/slices/userApiSlice";
 import { postActionApi } from "@/redux/slices/postActionApiSlice";
+import { searchApi } from "@/redux/slices/searchApiSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     [postApi.reducerPath]: postApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [postActionApi.reducerPath]: postActionApi.reducer,
+    [searchApi.reducerPath]: searchApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -25,7 +27,8 @@ const store = configureStore({
       accountApi.middleware,
       postApi.middleware,
       userApi.middleware,
-      postActionApi.middleware
+      postActionApi.middleware,
+      searchApi.middleware
     ),
 });
 
