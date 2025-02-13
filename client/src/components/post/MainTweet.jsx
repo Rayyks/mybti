@@ -13,6 +13,7 @@ export const MainTweet = ({
   singlePost,
   selectedParentCommentId,
   setSelectedParentCommentId,
+  isDeleted,
 }) => {
   const { handleSavePost, handleLikePost, isLiked, likeCount, isSaved } =
     usePostActions(singlePost);
@@ -33,20 +34,28 @@ export const MainTweet = ({
       <div className="flex justify-between p-4">
         <div className="flex gap-3">
           <img
-            src={getSafeMediaUrl(singlePost?.author?.profilePicture)}
+            src={
+              isDeleted
+                ? "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+                : getSafeMediaUrl(singlePost?.author?.profilePicture)
+            }
             alt="Profile"
             className="w-12 h-12 rounded-full cursor-pointer"
             loading="lazy"
-            onClick={() => checkProfile(singlePost?.author?.username)}
+            onClick={() =>
+              isDeleted ? null : checkProfile(singlePost?.author?.username)
+            }
           />
 
           <div>
             <div className="flex items-center gap-2">
               <span
                 className="font-bold hover:underline cursor-pointer"
-                onClick={() => checkProfile(singlePost?.author?.username)}
+                onClick={() =>
+                  isDeleted ? null : checkProfile(singlePost?.author?.username)
+                }
               >
-                {singlePost?.author?.username}
+                {isDeleted ? "[ACCOUNT DELETED]" : singlePost?.author?.username}
               </span>
               {/* VERIF ICON HERE */}
               <span className="text-neutral-400">

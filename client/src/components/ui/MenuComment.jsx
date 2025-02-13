@@ -4,6 +4,7 @@ import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePostActions from "@/hooks/usePostActions";
 import { ReportModal } from "@/components/report";
+import useUser from "@/hooks/useUser";
 
 export const MenuComment = ({
   author,
@@ -15,6 +16,8 @@ export const MenuComment = ({
   openReportMenu,
   closeReportMenu,
   setShowReplyMenu,
+  isFollowing,
+  handleFollowToggle,
 }) => {
   const { myProfile, isLoading } = useProfile();
   const { handleDeleteComment } = usePostActions();
@@ -67,11 +70,11 @@ export const MenuComment = ({
               </Button>
             ) : (
               <>
-                <Button className="w-full px-4 py-2 text-left hover:bg-neutral-900">
-                  Follow @{author.username}
-                </Button>
-                <Button className="w-full px-4 py-2 text-left hover:bg-neutral-900">
-                  Mute @{author.username}
+                <Button
+                  className="w-full px-4 py-2 text-left hover:bg-neutral-900"
+                  onClick={handleFollowToggle}
+                >
+                  {isFollowing ? "Unfollow" : "Follow"} @{author.username}
                 </Button>
                 <Button className="w-full px-4 py-2 text-left hover:bg-neutral-900">
                   Block @{author.username}

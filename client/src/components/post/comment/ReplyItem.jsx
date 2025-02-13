@@ -3,12 +3,16 @@ import { Heart, MessageCircle, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/common";
 import { formatTimeAgo } from "@/lib/FormatDate";
 import { MenuComment } from "@/components/ui";
+import useUser from "@/hooks/useUser";
+import { isDeleted } from "@/lib/isDeleted";
+import { useCheckProfile } from "@/lib/checkProfile";
 
 export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
-  const [isLiked, setIsLiked] = useState(false);
   const [showReplyMenu, setShowReplyMenu] = useState(false);
   const [showReportMenu, setShowReportMenu] = useState(false);
   const { author, content, createdAt, likes, replies, replyTo } = reply;
+  const { isFollowing, handleFollowToggle } = useUser(author?._id);
+  const { checkProfile } = useCheckProfile();
 
   return (
     <div className="mt-2 first:mt-0">
@@ -19,17 +23,29 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
           <div className="flex items-center justify-between gap-2 relative">
             {/* Avatar */}
             <img
-              src={getSafeMediaUrl(author?.profilePicture)}
+              src={
+                isDeleted(author)
+                  ? "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+                  : getSafeMediaUrl(author?.profilePicture)
+              }
               alt={author?.username}
-              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+              className="w-8 h-8 rounded-full object-cover flex-shrink-0 hover:ring-2 ring-blue-500 transition-all ease-linear cursor-pointer"
               loading="lazy"
+              onClick={() => {
+                isDeleted(author) ? null : checkProfile(author?.username);
+              }}
             />
             <div className="absolute left-10 flex gap-2 min-w-0">
-              <span className="font-bold hover:underline truncate">
-                {author?.username}
+              <span
+                className="font-bold hover:underline truncate cursor-pointer"
+                onClick={() => {
+                  isDeleted(author) ? null : checkProfile(author?.username);
+                }}
+              >
+                {isDeleted(author) ? "[Account Deleted]" : author?.username}
               </span>
               <span className="text-neutral-500">replied to</span>
-              <span>{replyTo}</span>
+              <span>{isDeleted(author) ? replyTo : "[Account Deleted]"}</span>
               <span className="text-neutral-500">·</span>
               <time className="text-neutral-500">
                 {formatTimeAgo(createdAt)}
@@ -49,6 +65,8 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
               </Button>
               {showReplyMenu && (
                 <MenuComment
+                  isFollowing={isFollowing}
+                  handleFollowToggle={handleFollowToggle}
                   author={author}
                   commentId={reply?._id}
                   showReplyMenu={showReplyMenu}
@@ -77,22 +95,6 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
             >
               <MessageCircle size={16} />
               <span className="text-xs">Reply</span>
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsLiked(!isLiked)}
-              className="group flex items-center gap-2 text-neutral-500 hover:text-pink-500"
-            >
-              <Heart
-                size={16}
-                className={isLiked ? "fill-pink-500 text-pink-500" : ""}
-              />
-              {likes?.length > 0 && (
-                <span className={`text-xs ${isLiked ? "text-pink-500" : ""}`}>
-                  {likes.length}
-                </span>
-              )}
             </Button>
           </div>
 

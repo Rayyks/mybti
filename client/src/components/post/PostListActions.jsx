@@ -5,12 +5,14 @@ import { Link } from "react-router";
 import usePost from "@/hooks/usePost";
 import { formatTimeAgo } from "@/lib/FormatDate";
 import usePostActions from "@/hooks/usePostActions";
+import { useCheckProfile } from "@/lib/checkProfile";
 
-export const PostListActions = ({ post, isLoading }) => {
+export const PostListActions = ({ post, isLoading, isDeleted }) => {
   const { showMore, contentPreview, maxContentPreview, handleShowMore } =
     usePost();
   const { isSaved, handleSavePost, isLiked, handleLikePost, likeCount } =
     usePostActions(post);
+  const { checkProfile } = useCheckProfile();
 
   return (
     <div className="px-3 sm:px-4 pt-2">
@@ -69,12 +71,14 @@ export const PostListActions = ({ post, isLoading }) => {
 
       <div className="mt-1 px-2 pb-3">
         <p className="text-sm">
-          <Link
-            to={`/profile/${post.author.username}`}
+          <Button
+            onClick={() =>
+              isDeleted ? null : checkProfile(post.author.username)
+            }
             className="font-medium text-gray-900 dark:text-gray-100 hover:underline mr-2"
           >
-            {post.author.username}
-          </Link>
+            {isDeleted ? "[ACCOUNT DELETED]" : post.author.username}
+          </Button>
           <span className="text-gray-800 dark:text-gray-200">
             {showMore
               ? maxContentPreview(post.content)

@@ -12,7 +12,7 @@ import usePost from "./usePost";
 import useProfile from "./useProfile";
 
 const usePostActions = (post) => {
-  const { refetchSinglePost } = usePost();
+  const { refetchSinglePost, refetch } = usePost();
   const { myProfile } = useProfile();
   const [isSaved, setIsSaved] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -77,12 +77,9 @@ const usePostActions = (post) => {
 
   const handleCommentPost = async (postId, content) => {
     try {
-      toast.promise(commentPost({ postId, content }).unwrap(), {
-        loading: "Posting comment...",
-        success: "Comment posted successfully",
-        error: "Failed to post comment",
-      });
+      await commentPost({ postId, content }).unwrap();
       refetchSinglePost();
+      refetch();
       reset();
     } catch (error) {
       toast.error(error.message);
@@ -91,15 +88,9 @@ const usePostActions = (post) => {
 
   const handleReplyComment = async (postId, parentCommentId, content) => {
     try {
-      await toast.promise(
-        replyComment({ postId, parentCommentId, content }).unwrap(),
-        {
-          loading: "Posting reply...",
-          success: "Reply posted successfully",
-          error: "Failed to post reply",
-        }
-      );
+      await replyComment({ postId, parentCommentId, content }).unwrap();
       refetchSinglePost();
+      refetch();
       reset();
     } catch (error) {
       console.log(error);
@@ -115,6 +106,7 @@ const usePostActions = (post) => {
         error: "Failed to delete comment",
       });
       await refetchSinglePost();
+      refetch();
     } catch (error) {
       toast.error(error.message);
     }

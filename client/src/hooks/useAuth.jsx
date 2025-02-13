@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router";
 import toast from "react-hot-toast";
 import { Login, Logout, Register } from "@/redux/thunks/auth";
 import { profileApi } from "@/redux/slices/profileApiSlice";
+import usePost from "./usePost";
 
 const useAuth = () => {
   const { loading, error, isAuthenticated } = useSelector(

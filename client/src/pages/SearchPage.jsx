@@ -46,16 +46,12 @@ const SearchPage = () => {
                 className="w-full pl-4 pr-10 py-2 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none transition-colors"
               />
 
-              {errors.username && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.username.message}
-                </p>
-              )}
               <Search
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
                 size={20}
               />
             </div>
+
             <Button
               type="submit"
               className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -68,6 +64,11 @@ const SearchPage = () => {
               )}
             </Button>
           </div>
+          {errors.username && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.username.message}
+            </p>
+          )}
         </form>
 
         {/* Search Results */}

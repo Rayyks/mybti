@@ -159,6 +159,7 @@ const usePost = () => {
     post,
     isLoading,
     isError,
+    refetch,
     singlePost: singlePost?.data,
     singlePostLoading,
     singlePostError,

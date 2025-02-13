@@ -4,9 +4,9 @@ import { Button } from "@/components/common";
 import usePost from "@/hooks/usePost";
 import { SinglePostPage_SkeletonLoader } from "@/components/post/SkeletonLoading";
 import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
-
 import { CommentItem } from "@/components/post";
 import MainTweet from "@/components/post/MainTweet";
+import { isDeleted } from "@/lib/isDeleted";
 
 const SinglePostPage = () => {
   const { singlePost, singlePostLoading, singlePostError, navigate } =
@@ -46,6 +46,7 @@ const SinglePostPage = () => {
 
       {/* Main Tweet */}
       <MainTweet
+        isDeleted={isDeleted(singlePost.author)}
         getSafeMediaUrl={getSafeMediaUrl}
         singlePost={singlePost}
         isLiked={isLiked}
@@ -58,6 +59,7 @@ const SinglePostPage = () => {
       {/* Show replies here */}
       {singlePost?.comments.map((comment) => (
         <CommentItem
+          isDeleted={isDeleted(comment.author)}
           key={comment._id}
           comment={comment}
           singlePost={singlePost}

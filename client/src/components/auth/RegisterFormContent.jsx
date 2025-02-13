@@ -37,9 +37,9 @@ const RegisterFormContent = ({
                 message: "Username must be at least 4 characters",
               },
               pattern: {
-                value: /^[a-zA-Z0-9_]+$/,
+                value: /^[a-zA-Z0-9_@#$]+$/,
                 message:
-                  "Username must contain only alphabets, numbers, and underscores",
+                  "Username must contain only alphabets, numbers, underscores, @, #, and $",
               },
             })}
           />

@@ -4,14 +4,26 @@ import { MenuComment } from "@/components/ui";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 
-export const CommentHeader = ({ author, comment, createdAt }) => {
+export const CommentHeader = ({
+  author,
+  comment,
+  createdAt,
+  isDeleted,
+  checkProfile,
+  isFollowing,
+  handleFollowToggle,
+}) => {
   const [showMenuComment, setShowMenuComment] = useState(false);
   const [showReportMenu, setShowReportMenu] = useState(false);
+
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex items-center gap-2 min-w-0">
-        <span className="font-bold hover:underline truncate">
-          {author?.username}
+        <span
+          className="font-bold hover:underline truncate cursor-pointer"
+          onClick={() => (isDeleted ? null : checkProfile(author.username))}
+        >
+          {isDeleted ? "[Account Deleted]" : author?.username}
         </span>
         <span className="text-neutral-500">·</span>
         <time className="text-neutral-500">{formatTimeAgo(createdAt)}</time>
@@ -26,19 +38,23 @@ export const CommentHeader = ({ author, comment, createdAt }) => {
           }}
           className="rounded-full p-1.5 hover:bg-blue-500/10 hover:text-blue-500"
         >
-          <MoreHorizontal size={16} />
+          {isDeleted ? null : <MoreHorizontal size={16} />}
         </Button>
-        {showMenuComment && (
-          <MenuComment
-            author={author}
-            commentId={comment?._id}
-            closeMenuComment={() => setShowMenuComment(false)}
-            openReportMenu={() => setShowReportMenu(true)}
-            closeReportMenu={() => setShowReportMenu(false)}
-            showMenuComment={showMenuComment}
-            showReportMenu={showReportMenu}
-          />
-        )}
+        {isDeleted
+          ? null
+          : showMenuComment && (
+              <MenuComment
+                isFollowing={isFollowing}
+                handleFollowToggle={handleFollowToggle}
+                author={author}
+                commentId={comment?._id}
+                closeMenuComment={() => setShowMenuComment(false)}
+                openReportMenu={() => setShowReportMenu(true)}
+                closeReportMenu={() => setShowReportMenu(false)}
+                showMenuComment={showMenuComment}
+                showReportMenu={showReportMenu}
+              />
+            )}
       </div>
     </div>
   );

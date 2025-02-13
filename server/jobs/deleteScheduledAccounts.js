@@ -1,19 +1,25 @@
 import cron from "node-cron";
 import User from "../models/User.js";
+import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
 
 // Run this job every day at midnight
 cron.schedule("0 0 * * *", async () => {
   try {
     const now = new Date();
-
-    // Find users scheduled for deletion
     const usersToDelete = await User.find({
       deletionScheduledAt: { $lte: now },
     });
-
     for (const user of usersToDelete) {
-      await User.findByIdAndDelete(user._id);
-      console.log(`Deleted account for user ${user._id}`);
+      const userId = user._id;
+      await Comment.updateMany({ author: userId }, { isDeleted: true });
+      await Post.updateMany({ author: userId }, { isDeleted: true });
+      user.isDeleted = true;
+      user.deletionScheduledAt = null;
+      await user.save();
+      console.log(
+        `Soft-deleted user account, posts, and comments for user ${userId}`
+      );
     }
   } catch (error) {
     console.error("Error running deletion job:", error);

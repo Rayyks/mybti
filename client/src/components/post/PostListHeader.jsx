@@ -5,7 +5,7 @@ import ReportModal from "@/components/report/ReportModal";
 import { useModal } from "@/context/modalContext";
 import { useCheckProfile } from "@/lib/checkProfile";
 
-export const PostListHeader = ({ post, safeUrl, index }) => {
+export const PostListHeader = ({ post, safeUrl, index, isDeleted }) => {
   const {
     openMoreAction,
     openReportModal,
@@ -15,24 +15,33 @@ export const PostListHeader = ({ post, safeUrl, index }) => {
     closeMoreActionMenu,
   } = useModal();
   const { checkProfile } = useCheckProfile();
+
   return (
     <div className="flex items-center justify-between px-3 sm:px-4 h-14 border-b border-gray-200 dark:border-neutral-700">
       <div className="flex items-center space-x-3">
         <div className="w-8 h-8 rounded-full ring-2 ring-gray-200 dark:ring-neutral-700">
           <img
-            src={safeUrl(post.author.profilePicture)}
+            src={
+              isDeleted
+                ? "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+                : safeUrl(post.author.profilePicture)
+            }
             alt={post.username}
             className="w-full h-full rounded-full object-cover cursor-pointer"
             loading="lazy"
-            onClick={() => checkProfile(post.author.username)}
+            onClick={() =>
+              isDeleted ? null : checkProfile(post.author.username)
+            }
           />
         </div>
         <div className="flex items-center gap-2">
           <span
-            onClick={() => checkProfile(post.author.username)}
+            onClick={() =>
+              isDeleted ? null : checkProfile(post.author.username)
+            }
             className="font-medium text-sm text-gray-900 dark:text-gray-100 hover:underline cursor-pointer"
           >
-            {post.author.username}
+            {isDeleted ? "[ACCOUNT DELETED]" : post.author.username}
           </span>
           <span className="text-gray-300">· {post.author.mbti}</span>
         </div>

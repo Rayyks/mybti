@@ -21,6 +21,15 @@ export const loginUser = async (req, res) => {
       );
     }
 
+    // Check if the account is marked as deleted
+    if (user.isDeleted) {
+      return sendResponse(
+        res,
+        403,
+        "Your account has been deleted and cannot be accessed. Please contact support if this is a mistake. https://example.com/contact"
+      );
+    }
+
     // Verify the password
     const isPasswordValid = await comparePassword(password, user.password);
     if (!isPasswordValid) {
