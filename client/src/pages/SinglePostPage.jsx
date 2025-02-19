@@ -59,7 +59,7 @@ const SinglePostPage = () => {
       {/* Show replies here */}
       {singlePost?.comments.map((comment) => (
         <CommentItem
-          isDeleted={isDeleted(comment.author)}
+          isDeleted={isDeleted}
           key={comment._id}
           comment={comment}
           singlePost={singlePost}

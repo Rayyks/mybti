@@ -70,7 +70,13 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
             </div>
           </div>
           {showFollowerModal && (
-            <SeeFollowersModal closeFollowerModal={closeFollowerModal} />
+            <SeeFollowersModal
+              closeFollowerModal={closeFollowerModal}
+              myFollowers={myProfile?.user.followers}
+              myFollowing={myProfile?.user.following}
+              isLoading={isLoading}
+              safeUrl={safeUrl}
+            />
           )}
         </div>
 

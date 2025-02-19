@@ -35,7 +35,7 @@ export const UserProfileHeader = ({ profile, posts, getSafeMediaUrl }) => {
 
             <div className="flex gap-3">
               <Button
-                onClick={() => handleFollowToggle(profile?._id)}
+                onClick={() => handleFollowToggle()}
                 className="px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-neutral-200 transition-colors"
               >
                 {isFollowing ? "Following" : "Follow"}

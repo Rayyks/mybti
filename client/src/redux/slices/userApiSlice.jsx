@@ -29,6 +29,15 @@ export const userApi = createApi({
         method: "POST",
         data: { userIdToUnfollow },
       }),
+      invalidatesTags: ["User"],
+    }),
+    removeFollower: builder.mutation({
+      query: ({ followerId }) => ({
+        url: "/remove-follower",
+        method: "POST",
+        data: { followerId },
+      }),
+      invalidatesTags: ["User"],
     }),
   }),
 });
@@ -37,4 +46,5 @@ export const {
   useGetUserProfileQuery,
   useFollowUserMutation,
   useUnFollowUserMutation,
+  useRemoveFollowerMutation,
 } = userApi;

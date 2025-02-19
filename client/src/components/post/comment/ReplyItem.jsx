@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Heart, MessageCircle, MoreHorizontal } from "lucide-react";
+import { MessageCircle, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/common";
 import { formatTimeAgo } from "@/lib/FormatDate";
 import { MenuComment } from "@/components/ui";
 import useUser from "@/hooks/useUser";
-import { isDeleted } from "@/lib/isDeleted";
 import { useCheckProfile } from "@/lib/checkProfile";
+import { isDeleted } from "@/lib/isDeleted";
 
 export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
   const [showReplyMenu, setShowReplyMenu] = useState(false);
@@ -45,7 +45,7 @@ export const ReplyItem = ({ reply, getSafeMediaUrl, selectedComment }) => {
                 {isDeleted(author) ? "[Account Deleted]" : author?.username}
               </span>
               <span className="text-neutral-500">replied to</span>
-              <span>{isDeleted(author) ? replyTo : "[Account Deleted]"}</span>
+              <span>{isDeleted(author) ? "[Account Deleted]" : replyTo}</span>
               <span className="text-neutral-500">·</span>
               <time className="text-neutral-500">
                 {formatTimeAgo(createdAt)}

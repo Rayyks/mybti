@@ -1,31 +1,25 @@
-import React, { useRef, useEffect } from "react";
-import { X, UserPlus, Check, Loader2 } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useState, useRef, useEffect } from "react";
+import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FollowerList } from "./FollowerList";
+import { FollowingList } from "./FollowingList";
+import useProfile from "@/hooks/useProfile";
 
 export const SeeFollowersModal = ({
-  followers = [
-    {
-      id: 1,
-      username: "johndoe",
-      name: "John Doe",
-      avatar: "/api/placeholder/40/40",
-      isFollowing: false,
-      isLoading: false,
-    },
-    {
-      id: 2,
-      username: "janedoe",
-      name: "Jane Doe",
-      avatar: "/api/placeholder/40/40",
-      isFollowing: true,
-      isLoading: false,
-    },
-  ],
   closeFollowerModal,
+  myFollowers,
+  myFollowing,
+  isLoading,
+  safeUrl,
 }) => {
+  const [activeTab, setActiveTab] = useState("followers");
   const modalRef = useRef(null);
-  const navigate = useNavigate();
+  const { refetchProfile } = useProfile();
+
+  const onClose = () => {
+    closeFollowerModal();
+    refetchProfile();
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,10 +31,6 @@ export const SeeFollowersModal = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [closeFollowerModal]);
-
-  const handleFollow = (userId) => {
-    console.log("Following user:", userId);
-  };
 
   return (
     <AnimatePresence>
@@ -60,111 +50,80 @@ export const SeeFollowersModal = ({
         >
           {/* Header */}
           <motion.div
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="p-4 border-b border-gray-200"
           >
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">Followers</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Connections
+              </h2>
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={closeFollowerModal}
                 className="p-2 rounded-full hover:bg-gray-100 transition-colors"
               >
                 <X className="w-5 h-5 text-gray-600" />
               </motion.button>
             </div>
-          </motion.div>
 
-          {/* Followers List */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="divide-y divide-gray-100 max-h-[60vh] overflow-y-auto"
-          >
-            {followers.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="p-8 text-center text-gray-500"
+            {/* Tabs */}
+            <div className="flex border border-gray-200 rounded-lg overflow-hidden">
+              <button
+                onClick={() => setActiveTab("followers")}
+                className={`flex-1 py-2 px-4 text-sm font-medium ${
+                  activeTab === "followers"
+                    ? "bg-gray-100 text-gray-900"
+                    : "bg-white text-gray-600 hover:bg-gray-50"
+                }`}
               >
-                No followers yet
-              </motion.div>
-            ) : (
-              followers.map((follower, index) => (
-                <motion.div
-                  key={follower.id}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.1 + 0.3 }}
-                  className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center space-x-3">
-                    <motion.img
-                      whileHover={{ scale: 1.1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 17,
-                      }}
-                      src={follower.avatar}
-                      alt={follower.name}
-                      className="w-10 h-10 rounded-full object-cover bg-gray-100"
-                    />
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        {follower.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        @{follower.username}
-                      </p>
-                    </div>
-                  </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleFollow(follower.id)}
-                    disabled={follower.isLoading}
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                      follower.isFollowing
-                        ? "border border-gray-300 text-gray-700 hover:bg-gray-100"
-                        : "bg-gray-900 text-white hover:bg-gray-800"
-                    }`}
-                  >
-                    {follower.isLoading ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : follower.isFollowing ? (
-                      <div className="flex items-center space-x-1">
-                        <Check className="w-4 h-4" />
-                        <span>Following</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-1">
-                        <UserPlus className="w-4 h-4" />
-                        <span>Follow</span>
-                      </div>
-                    )}
-                  </motion.button>
-                </motion.div>
-              ))
-            )}
+                Followers ({myFollowers?.length || 0})
+              </button>
+              <button
+                onClick={() => setActiveTab("following")}
+                className={`flex-1 py-2 px-4 text-sm font-medium ${
+                  activeTab === "following"
+                    ? "bg-gray-100 text-gray-900"
+                    : "bg-white text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                Following ({myFollowing?.length || 0})
+              </button>
+            </div>
           </motion.div>
+
+          {/* Tab Content */}
+          <AnimatePresence mode="wait">
+            {activeTab === "followers" ? (
+              <FollowerList
+                key="followers"
+                users={myFollowers}
+                isLoading={isLoading}
+                safeUrl={safeUrl}
+                emptyMessage="No followers yet"
+              />
+            ) : (
+              <FollowingList
+                key="following"
+                users={myFollowing}
+                isLoading={isLoading}
+                safeUrl={safeUrl}
+                emptyMessage="Not following anyone yet"
+              />
+            )}
+          </AnimatePresence>
 
           {/* Footer */}
           <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="p-4 border-t border-gray-200"
           >
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={closeFollowerModal}
+              onClick={onClose}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
             >
               Close

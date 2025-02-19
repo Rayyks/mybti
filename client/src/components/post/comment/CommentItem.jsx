@@ -30,21 +30,23 @@ export const CommentItem = ({
       <article className="px-4 py-3 flex gap-3 hover:bg-neutral-900/40 transition-colors">
         <img
           src={
-            isDeleted
+            isDeleted(author)
               ? "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
               : getSafeMediaUrl(author?.profilePicture)
           }
           alt={author?.username}
           className="w-10 h-10 rounded-full object-cover flex-shrink-0 cursor-pointer hover:ring-2 ring-blue-500 transition-all ease-linear"
           loading="lazy"
-          onClick={() => (isDeleted ? null : checkProfile(author.username))}
+          onClick={() =>
+            isDeleted(author) ? null : checkProfile(author.username)
+          }
         />
         <div className="flex-1 min-w-0">
           <CommentHeader
             isFollowing={isFollowing}
             handleFollowToggle={handleFollowToggle}
             checkProfile={checkProfile}
-            isDeleted={isDeleted}
+            isDeleted={isDeleted(author)}
             author={author}
             comment={comment}
             createdAt={createdAt}
@@ -58,7 +60,6 @@ export const CommentItem = ({
             likes={likes}
           />
           <RepliesSection
-            isDeleted={isDeleted}
             replies={replies}
             showReplies={showReplies}
             handleToggleReplies={handleToggleReplies}

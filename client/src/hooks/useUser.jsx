@@ -2,56 +2,76 @@ import { useState, useEffect } from "react";
 import {
   useFollowUserMutation,
   useUnFollowUserMutation,
+  useRemoveFollowerMutation,
 } from "@/redux/slices/userApiSlice";
 import toast from "react-hot-toast";
 import useProfile from "./useProfile";
 
 const useUser = (userId) => {
-  const { myProfile, refetchUserProfile } = useProfile();
+  const { myProfile, refetchUserProfile, refetchProfile } = useProfile();
   const [isFollowing, setIsFollowing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [followUser] = useFollowUserMutation();
   const [unFollowUser] = useUnFollowUserMutation();
+  const [removeFollower] = useRemoveFollowerMutation();
 
   useEffect(() => {
     if (userId && myProfile) {
       const following = myProfile?.user?.following || [];
-      const isFollowingUser = following.some((user) => user._id === userId);
-      setIsFollowing(isFollowingUser);
+      setIsFollowing(following.some((user) => user._id === userId));
     }
   }, [userId, myProfile]);
 
   const handleFollowToggle = async () => {
-    if (isFollowing) {
-      setIsFollowing(false);
-      await unFollow(userId);
-    } else {
-      setIsFollowing(true);
-      await follow(userId);
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      if (isFollowing) {
+        await unFollow(userId);
+        setIsFollowing(false);
+      } else {
+        await follow(userId);
+        setIsFollowing(true);
+      }
+      await refetchUserProfile();
+    } catch (error) {
+      toast.error("Failed to update follow status");
+    } finally {
+      setLoading(false);
     }
-    await refetchUserProfile();
   };
 
   const follow = async (userIdToFollow) => {
     try {
-      await followUser({ userIdToFollow });
+      await followUser({ userIdToFollow }).unwrap();
     } catch (error) {
-      toast.error("Failed to follow user");
-      setIsFollowing(false);
+      console.error("Failed to follow user");
     }
   };
 
   const unFollow = async (userIdToUnfollow) => {
     try {
-      await unFollowUser({ userIdToUnfollow });
+      await unFollowUser({ userIdToUnfollow }).unwrap();
     } catch (error) {
-      toast.error("Failed to unfollow user");
-      setIsFollowing(true);
+      console.error("Failed to unFollow user");
+    }
+  };
+
+  const handleRemoveFollower = async (followerId) => {
+    try {
+      await removeFollower({ followerId }).unwrap();
+      await refetchProfile();
+    } catch (error) {
+      console.error("Failed to remove follower");
     }
   };
 
   return {
     handleFollowToggle,
+    handleRemoveFollower,
     isFollowing,
+    isLoading: loading,
   };
 };
 

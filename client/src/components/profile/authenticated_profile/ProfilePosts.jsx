@@ -7,10 +7,8 @@ import { formatTimeAgo } from "@/lib/FormatDate";
 
 export const ProfilePosts = ({ myProfile, isLoading, safeUrl }) => {
   const [activeTab, setActiveTab] = useState("posts");
-
   const postsWithImages = myProfile?.posts.filter((post) => post.image);
   const postsWithoutImages = myProfile?.posts.filter((post) => !post.image);
-
   if (isLoading) return <ProfilePosts_SkeletonLoading />;
 
   return (
