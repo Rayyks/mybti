@@ -83,7 +83,7 @@ const usePost = () => {
 
       await toast.promise(createPost(formData).unwrap(), {
         loading: "Creating Post...",
-        success: "Post Created Successfully!",
+        success: "Post Created!",
         error: "Failed to Create Post!",
       });
       refetch();
@@ -114,7 +114,7 @@ const usePost = () => {
 
       await toast.promise(updatePost(formData).unwrap(), {
         loading: "Updating Post...",
-        success: "Post Updated Successfully!",
+        success: "Post Updated!",
         error: "Failed to Update Post!",
       });
 
@@ -131,7 +131,7 @@ const usePost = () => {
     try {
       await toast.promise(deletePost(id).unwrap(), {
         loading: "Deleting Post...",
-        success: "Post Deleted Successfully!",
+        success: "Post Deleted!",
         error: "Failed to Delete Post!",
       });
 

@@ -34,7 +34,6 @@ const useUser = (userId) => {
   const follow = async (userIdToFollow) => {
     try {
       await followUser({ userIdToFollow });
-      toast.success("User followed successfully");
     } catch (error) {
       toast.error("Failed to follow user");
       setIsFollowing(false);
@@ -44,7 +43,6 @@ const useUser = (userId) => {
   const unFollow = async (userIdToUnfollow) => {
     try {
       await unFollowUser({ userIdToUnfollow });
-      toast.success("User unfollowed successfully");
     } catch (error) {
       toast.error("Failed to unfollow user");
       setIsFollowing(true);

@@ -1,8 +1,12 @@
 import React from "react";
 import { Mail, Drama, Users, UserPlus } from "lucide-react";
 import { ProfileHeader_SkeletonLoading } from "@/components/profile/SkeletonLoading";
+import { useModal } from "@/context/modalContext";
+import { SeeFollowersModal } from "@/components/ui";
 
 export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
+  const { showFollowerModal, openFollowerModal, closeFollowerModal } =
+    useModal();
   if (isLoading) return <ProfileHeader_SkeletonLoading />;
 
   return (
@@ -42,7 +46,10 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
           </div>
 
           {/* Followers/Following Stats */}
-          <div className="flex gap-6 bg-neutral-700/50 p-6 rounded-xl backdrop-blur-sm w-full max-w-full justify-center">
+          <div
+            className="flex gap-6 bg-neutral-700/50 p-6 rounded-xl backdrop-blur-sm w-full max-w-full justify-center cursor-pointer"
+            onClick={openFollowerModal}
+          >
             <div className="text-center">
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5 text-indigo-500" />
@@ -62,6 +69,9 @@ export const ProfileHeader = ({ myProfile, isLoading, safeUrl }) => {
               <span className="text-sm text-gray-300">Following</span>
             </div>
           </div>
+          {showFollowerModal && (
+            <SeeFollowersModal closeFollowerModal={closeFollowerModal} />
+          )}
         </div>
 
         {/* Bio Section */}

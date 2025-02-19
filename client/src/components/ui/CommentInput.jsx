@@ -47,7 +47,7 @@ export const CommentInput = ({
             {...register("content", { required: true })}
             placeholder={
               selectedParentCommentId
-                ? `Reply to ${selectedParentCommentId.username}`
+                ? `Reply to @${selectedParentCommentId.username}`
                 : "Post your comment!"
             }
             className="w-full bg-transparent resize-none outline-none text-lg placeholder:text-neutral-500"

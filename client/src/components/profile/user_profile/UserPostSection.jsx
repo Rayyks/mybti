@@ -1,120 +1,111 @@
 import { Heart, MessageCircle, Bookmark } from "lucide-react";
 import { formatTimeAgo } from "@/lib/FormatDate";
+import { Button } from "@/components/common";
+import { Link } from "react-router";
 
-export const UserPostSection = ({ posts, activeTab, getSafeMediaUrl }) => {
+export const PostsGrid = ({ posts, activeTab, getSafeMediaUrl }) => {
   const postWithImages = posts?.filter((post) => post.image);
   const postWithoutImages = posts?.filter((post) => !post.image);
 
+  if (activeTab === "posts") {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+        {postWithImages?.map((post) => (
+          <PostCard
+            key={post._id}
+            post={post}
+            getSafeMediaUrl={getSafeMediaUrl}
+          />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <section className="mt-4">
-      {activeTab === "posts" ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2">
-          {postWithImages?.map(
-            (post) =>
-              post.image && (
-                <div
-                  key={post._id}
-                  className="aspect-square relative group rounded-md overflow-hidden bg-neutral-900"
-                >
-                  {post.image.match(/\.(mp4|webm|ogg)$/i) ? (
-                    <video
-                      src={getSafeMediaUrl(post.image)}
-                      controls
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      poster={getSafeMediaUrl(post.image)}
-                    />
-                  ) : (
-                    <img
-                      src={getSafeMediaUrl(post.image)}
-                      alt={post.content}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 text-white transition-all duration-200">
-                    <PostStat
-                      icon={<Heart size={16} />}
-                      count={post.likes.length}
-                    />
-                    <PostStat
-                      icon={<MessageCircle size={16} />}
-                      count={post.commentCount || 0}
-                    />
-                  </div>
-                </div>
-              )
-          )}
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {postWithoutImages?.map((post) => (
-            <TextPost
-              key={post._id}
-              post={post}
-              getSafeMediaUrl={getSafeMediaUrl}
-            />
-          ))}
-        </div>
-      )}
-    </section>
+    <div className="space-y-6 mt-8">
+      {postWithoutImages?.map((post) => (
+        <TweetCard
+          key={post._id}
+          post={post}
+          getSafeMediaUrl={getSafeMediaUrl}
+        />
+      ))}
+    </div>
   );
 };
+
+const PostCard = ({ post, getSafeMediaUrl }) => (
+  <div className="group relative aspect-square overflow-hidden bg-neutral-900 rounded-lg">
+    <Link to={`/p/${post._id}`}>
+      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
+      <img
+        src={getSafeMediaUrl(post.image)}
+        alt={post.content}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+      />
+      <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <PostStat
+              icon={<Heart className="w-4 h-4" />}
+              count={post.likes.length}
+            />
+            <PostStat
+              icon={<MessageCircle className="w-4 h-4" />}
+              count={post.commentCount}
+            />
+          </div>
+        </div>
+      </div>
+    </Link>
+  </div>
+);
+
+const TweetCard = ({ post, getSafeMediaUrl }) => (
+  <div className="bg-neutral-900 bg-opacity-50 rounded-lg hover:bg-neutral-900 transition-colors duration-200">
+    <div className="p-6">
+      <div className="flex gap-4">
+        <img
+          src={getSafeMediaUrl(post.author.profilePicture)}
+          alt={post.author.username}
+          className="w-12 h-12 rounded-full"
+        />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="font-semibold">{post.author.username}</span>
+            <span className="text-neutral-500 text-sm">·</span>
+            <span className="text-neutral-500 text-sm">
+              {formatTimeAgo(post.createdAt)}
+            </span>
+          </div>
+          <p className="text-neutral-300 mb-4">{post.content}</p>
+          <div className="flex items-center gap-6">
+            <InteractionButton
+              icon={<Heart className="w-4 h-4" />}
+              count={post.likes.length}
+            />
+            <InteractionButton
+              icon={<MessageCircle className="w-4 h-4" />}
+              count={post.commentCount}
+            />
+            <InteractionButton icon={<Bookmark className="w-4 h-4" />} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const PostStat = ({ icon, count }) => (
   <div className="flex items-center gap-1.5">
     {icon}
-    <span className="font-semibold text-sm">{count}</span>
+    <span className="text-sm font-medium">{count}</span>
   </div>
 );
 
-const TextPost = ({ post, getSafeMediaUrl }) => (
-  <article className="border border-neutral-800 rounded-xl p-4 hover:bg-neutral-900/50 transition-colors">
-    <div className="flex gap-3">
-      <img
-        src={getSafeMediaUrl(post.author.profilePicture)}
-        alt={post.author.username}
-        className="w-10 h-10 rounded-full flex-shrink-0"
-        loading="lazy"
-      />
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-2">
-          <span className="font-semibold text-sm">{post.author.username}</span>
-          <span className="text-neutral-500 text-xs">{post.author.mbti}</span>
-          <span className="text-neutral-500 text-xs">
-            · {formatTimeAgo(post.createdAt)}
-          </span>
-        </div>
-        <p className="text-sm text-neutral-300 break-words mb-3">
-          {post.content}
-        </p>
-        <div className="flex items-center gap-4">
-          <InteractionButton
-            icon={<Heart size={16} />}
-            count={post.likes.length}
-            color="red"
-          />
-          <InteractionButton
-            icon={<MessageCircle size={16} />}
-            count={post.commentCount}
-            color="blue"
-          />
-          <InteractionButton
-            icon={<Bookmark size={16} />}
-            count="999k"
-            color="yellow"
-          />
-        </div>
-      </div>
-    </div>
-  </article>
-);
-
-const InteractionButton = ({ icon, count, color }) => (
-  <button
-    className={`flex items-center gap-1.5 text-neutral-400 hover:text-${color}-500 transition-colors`}
-  >
+const InteractionButton = ({ icon, count }) => (
+  <Button className="flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
     {icon}
-    <span className="text-xs">{count}</span>
-  </button>
+    {count && <span className="text-sm">{count}</span>}
+  </Button>
 );

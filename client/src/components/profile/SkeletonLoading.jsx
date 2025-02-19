@@ -1,57 +1,65 @@
 import { Fragment } from "react";
 import { Grid, ListFilter } from "lucide-react";
 
+import React from "react";
+
 export const ProfileHeader_SkeletonLoading = () => {
   return (
-    <div className="flex flex-col md:flex-row gap-6 animate-pulse">
+    <div className="flex flex-col gap-8 w-full max-w-full animate-pulse">
       {/* Profile Picture Skeleton */}
-      <div className="flex-shrink-0">
-        <div className="w-40 h-40 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-200" />
+      <div className="flex-shrink-0 mx-auto">
+        <div className="w-40 h-40 rounded-full border-4 border-neutral-500/30 overflow-hidden bg-neutral-700/50" />
       </div>
 
-      <div className="flex-1">
-        <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-4">
-          <div className="space-y-3 w-full sm:w-72">
+      {/* Profile Info Container */}
+      <div className="flex-1 space-y-6 min-w-0">
+        <div className="flex flex-col gap-6 w-full">
+          {/* User Info Section */}
+          <div className="space-y-3 text-center">
             {/* Username Skeleton */}
-            <div className="h-9 bg-gray-200 rounded-lg w-48" />
+            <div className="h-9 bg-neutral-700/50 rounded-lg w-48 mx-auto" />
 
-            {/* Email Skeleton */}
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-gray-200 rounded" />
-              <div className="h-5 bg-gray-200 rounded w-40" />
-            </div>
+            <div className="space-y-2">
+              {/* Email Skeleton */}
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 bg-neutral-700/50 rounded-full" />
+                <div className="h-5 bg-neutral-700/50 rounded w-40" />
+              </div>
 
-            {/* MBTI Skeleton */}
-            <div className="flex items-center gap-2">
-              <div className="h-5 bg-gray-200 rounded w-16" />
-              <div className="h-5 bg-gray-200 rounded w-12" />
+              {/* MBTI Skeleton */}
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 bg-neutral-700/50 rounded-full" />
+                <div className="h-5 bg-neutral-700/50 rounded w-16" />
+              </div>
             </div>
           </div>
 
           {/* Stats Skeleton */}
-          <div className="flex gap-6 bg-neutral-950 p-4 rounded-lg">
+          <div className="flex gap-6 bg-neutral-700/50 p-6 rounded-xl backdrop-blur-sm w-full max-w-full justify-center">
+            {/* Followers */}
             <div className="text-center">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-gray-700 rounded" />
-                <div className="h-8 bg-gray-700 rounded w-16" />
+                <div className="w-5 h-5 bg-neutral-600 rounded" />
+                <div className="h-8 bg-neutral-600 rounded w-16" />
               </div>
-              <div className="h-4 bg-gray-700 rounded w-14 mt-1" />
+              <div className="h-4 bg-neutral-600 rounded w-14 mt-1" />
             </div>
-            <div className="text-center border-l border-gray-700 pl-6">
+
+            {/* Following */}
+            <div className="text-center border-l border-neutral-700 pl-6">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-gray-700 rounded" />
-                <div className="h-8 bg-gray-700 rounded w-16" />
+                <div className="w-5 h-5 bg-neutral-600 rounded" />
+                <div className="h-8 bg-neutral-600 rounded w-16" />
               </div>
-              <div className="h-4 bg-gray-700 rounded w-14 mt-1" />
+              <div className="h-4 bg-neutral-600 rounded w-14 mt-1" />
             </div>
           </div>
         </div>
 
         {/* Bio Skeleton */}
-        <div className="mt-6 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-full" />
-          <div className="h-4 bg-gray-200 rounded w-5/6" />
-          <div className="h-4 bg-gray-200 rounded w-4/6" />
+        <div className="space-y-2 text-center">
+          <div className="h-4 bg-neutral-700/50 rounded w-3/4 mx-auto" />
+          <div className="h-4 bg-neutral-700/50 rounded w-1/2 mx-auto" />
         </div>
       </div>
     </div>

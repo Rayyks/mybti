@@ -63,9 +63,23 @@ export const getProfile = async (req, res) => {
       .populate({ path: "author", select: "username" })
       .lean();
 
+    // Add isFollowing field to followers
+    const followersWithIsFollowing = await Promise.all(
+      user.followers.map(async (follower) => {
+        const isFollowing = await User.exists({
+          _id: follower._id,
+          following: userId,
+        });
+        return {
+          ...follower,
+          isFollowing: !!isFollowing,
+        };
+      })
+    );
+
     // Send response with user details, posts, and liked comments
     sendResponse(res, 200, "Profile fetched successfully", {
-      user,
+      user: { ...user, followers: followersWithIsFollowing },
       posts: postsWithCommentCount,
       likedComments,
     });

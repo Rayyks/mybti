@@ -3,28 +3,39 @@ import { createContext, useContext, useState, useMemo } from "react";
 export const ModalContext = createContext();
 
 export const ModalProvider = ({ children }) => {
-  const [openMoreAction, setOpenMoreAction] = useState();
+  const [openMoreAction, setOpenMoreAction] = useState(false);
+  const [openMoreAction_Postlist, setOpenMoreAction_Postlist] = useState(null);
   const [showMenuComment, setShowMenuComment] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
-
-  const toggleState = (setter, value) => () => {
-    setter(value);
-  };
+  const [showFollowerModal, setShowFollowerModal] = useState(false);
 
   const value = useMemo(
     () => ({
       openMoreAction,
       openReportModal,
       showMenuComment,
-      setOpenMoreAction,
-      openMenuComment: toggleState(setShowMenuComment, true),
-      closeMenuComment: toggleState(setShowMenuComment, false),
-      openReportMenu: toggleState(setOpenReportModal, true),
-      closeReportMenu: toggleState(setOpenReportModal, false),
-      openMoreActionMenu: setOpenMoreAction,
-      closeMoreActionMenu: toggleState(setOpenMoreAction, null),
+      showFollowerModal,
+      openMoreAction_Postlist,
+      openMoreActionMenu: () => setOpenMoreAction(true),
+      closeMoreActionMenu: () => {
+        if (openMoreAction_Postlist !== null) setOpenMoreAction_Postlist(null);
+        else setOpenMoreAction(false);
+      },
+      openMoreActionMenu_Postlist: (index) => setOpenMoreAction_Postlist(index),
+      openMenuComment: () => setShowMenuComment(true),
+      closeMenuComment: () => setShowMenuComment(false),
+      openReportMenu: () => setOpenReportModal(true),
+      closeReportMenu: () => setOpenReportModal(false),
+      openFollowerModal: () => setShowFollowerModal(true),
+      closeFollowerModal: () => setShowFollowerModal(false),
     }),
-    [openMoreAction, openReportModal, showMenuComment]
+    [
+      openMoreAction,
+      openReportModal,
+      showMenuComment,
+      showFollowerModal,
+      openMoreAction_Postlist,
+    ]
   );
 
   return (

@@ -44,10 +44,10 @@ const useDeleteAccount = () => {
         dispatch(resetAuthState());
         await dispatch(profileApi.util.resetApiState());
         navigate("/login");
-        toast.success("Your account has been deleted successfully.");
+        toast.success("Your account has been deleted!.");
       }
       refetchProfile();
-      toast.success("Account deletion requested successfully.");
+      toast.success("Account deletion requested!.");
       console.log("Requesting account deletion with reason:", finalReason);
     } catch (error) {
       toast.error("Failed to request account deletion.");
@@ -61,7 +61,7 @@ const useDeleteAccount = () => {
     try {
       await cancelDeletion().unwrap();
       refetchProfile();
-      toast.success("Account deletion request cancelled successfully.");
+      toast.success("Account deletion request cancelled!.");
     } catch (error) {
       toast.error("Failed to cancel account deletion request.");
       console.error("Error cancelling account deletion request:", error);

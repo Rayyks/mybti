@@ -43,7 +43,7 @@ const useReport = () => {
     try {
       await mutationMap[type]({ [`${type}Id`]: id, reason });
       toast.success(
-        `${type.charAt(0).toUpperCase() + type.slice(1)} reported successfully`
+        `${type.charAt(0).toUpperCase() + type.slice(1)} reported!`
       );
     } catch (error) {
       toast.error(error.message);

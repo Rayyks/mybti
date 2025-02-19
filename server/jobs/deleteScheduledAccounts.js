@@ -17,6 +17,17 @@ cron.schedule("0 0 * * *", async () => {
       user.isDeleted = true;
       user.deletionScheduledAt = null;
       await user.save();
+
+      // Remove user from followers and following lists
+      await User.updateMany(
+        { followers: userId },
+        { $pull: { followers: userId } }
+      );
+      await User.updateMany(
+        { following: userId },
+        { $pull: { following: userId } }
+      );
+
       console.log(
         `Soft-deleted user account, posts, and comments for user ${userId}`
       );

@@ -1,12 +1,12 @@
-import { useState } from "react";
 import useProfile from "@/hooks/useProfile";
-import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
+import { useState } from "react";
 import { UserProfile_SkeletonLoading } from "@/components/profile/SkeletonLoading";
 import {
-  UserPostSection,
+  PostsGrid,
   UserProfileHeader,
-  UserTabNavigation,
+  ProfileTabs,
 } from "@/components/profile";
+import { getSafeMediaUrl } from "@/lib/getSafeMediaUrl";
 
 const UsersProfilePage = () => {
   const [activeTab, setActiveTab] = useState("posts");
@@ -15,23 +15,26 @@ const UsersProfilePage = () => {
   const posts = userProfile?.posts;
 
   if (userProfileLoading) return <UserProfile_SkeletonLoading />;
-  if (userProfileError)
+  if (userProfileError) {
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
-        <p className="text-red-500">Failed to load profile</p>
+        <div className="w-full max-w-md p-6 text-center bg-red-900 bg-opacity-20 border border-red-500 border-opacity-50 rounded-lg">
+          <p className="text-red-400">Failed to load profile</p>
+        </div>
       </div>
     );
+  }
 
   return (
-    <div className="min-h-screen w-full bg-black text-white">
-      <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 md:px-8">
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <UserProfileHeader
           profile={profile}
           posts={posts}
           getSafeMediaUrl={getSafeMediaUrl}
         />
-        <UserTabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-        <UserPostSection
+        <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <PostsGrid
           posts={posts}
           activeTab={activeTab}
           getSafeMediaUrl={getSafeMediaUrl}

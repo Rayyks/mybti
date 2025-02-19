@@ -18,6 +18,16 @@ export const deleteAccount = async (req, res) => {
       await Post.updateMany({ author: userId }, { isDeleted: true });
       await Comment.updateMany({ author: userId }, { isDeleted: true });
 
+      // Remove user from followers and following lists
+      await User.updateMany(
+        { followers: userId },
+        { $pull: { followers: userId } }
+      );
+      await User.updateMany(
+        { following: userId },
+        { $pull: { following: userId } }
+      );
+
       return sendResponse(
         res,
         200,

@@ -70,7 +70,7 @@ export const MainTweet = ({
         >
           <MoreHorizontal size={20} />
         </Button>
-        {openMoreAction && (
+        {openMoreAction === true && (
           <MorePostAction
             openMoreActionMenu={openMoreActionMenu}
             closeMoreActionMenu={closeMoreActionMenu}

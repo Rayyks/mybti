@@ -7,11 +7,11 @@ import { useCheckProfile } from "@/lib/checkProfile";
 
 export const PostListHeader = ({ post, safeUrl, index, isDeleted }) => {
   const {
-    openMoreAction,
     openReportModal,
     openReportMenu,
     closeReportMenu,
-    openMoreActionMenu,
+    openMoreAction_Postlist,
+    openMoreActionMenu_Postlist,
     closeMoreActionMenu,
   } = useModal();
   const { checkProfile } = useCheckProfile();
@@ -47,17 +47,20 @@ export const PostListHeader = ({ post, safeUrl, index, isDeleted }) => {
         </div>
       </div>
       <Button
-        className={`text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 ${
-          openMoreAction === index ? "hidden" : ""
+        className={`ml-auto text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 ${
+          openMoreAction_Postlist === index ? "hidden" : ""
         }`}
         onClick={() =>
-          openMoreActionMenu(openMoreAction === index ? null : index)
+          openMoreActionMenu_Postlist(
+            openMoreAction_Postlist === index ? null : index
+          )
         }
       >
         <MoreHorizontal className="w-5 h-5" />
       </Button>
-      {openMoreAction === index && (
+      {openMoreAction_Postlist === index && (
         <MorePostAction
+          openMoreAction_Postlist={openMoreAction_Postlist}
           openReportMenu={openReportMenu}
           closeMoreActionMenu={closeMoreActionMenu}
           post={post}

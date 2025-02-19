@@ -7,6 +7,7 @@ import {
   useSavePostMutation,
 } from "@/redux/slices/postActionApiSlice";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router";
 import toast from "react-hot-toast";
 import usePost from "./usePost";
 import useProfile from "./useProfile";
@@ -14,6 +15,7 @@ import useProfile from "./useProfile";
 const usePostActions = (post) => {
   const { refetchSinglePost, refetch } = usePost();
   const { myProfile } = useProfile();
+  const location = useLocation();
   const [isSaved, setIsSaved] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post?.likes?.length);
@@ -66,6 +68,9 @@ const usePostActions = (post) => {
         setLikeCount(response.likes.length);
       }
       refetchSinglePost();
+      if (location.pathname === "/") {
+        refetch();
+      }
     } catch (error) {
       toast.error(error.message);
       setIsLiked(!newLikedState);
@@ -102,7 +107,7 @@ const usePostActions = (post) => {
     try {
       await toast.promise(deleteComment({ commentId }).unwrap(), {
         loading: "Deleting comment...",
-        success: "Comment deleted successfully",
+        success: "Comment deleted",
         error: "Failed to delete comment",
       });
       await refetchSinglePost();

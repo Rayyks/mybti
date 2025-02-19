@@ -58,6 +58,7 @@ const DashboardPage = () => {
                     </>
                   ) : (
                     <PostTweet
+                      isLoading={isLoading}
                       isDeleted={isDeleted(post.author)}
                       post={post}
                       safeUrl={getSafeMediaUrl}

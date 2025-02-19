@@ -29,10 +29,7 @@ export const PostListActions = ({ post, isLoading, isDeleted }) => {
             {isLoading ? (
               <Heart className="w-6 h-6" fill="none" />
             ) : (
-              <Heart
-                className="w-6 h-6"
-                fill={isLiked ? "currentColor" : "none"}
-              />
+              <Heart className="w-6 h-6" fill={isLiked ? "red" : "none"} />
             )}
           </Button>
 

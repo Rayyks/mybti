@@ -1,9 +1,9 @@
-import { useRef, useEffect } from "react";
-import { ErrorInput, Input, Label } from "@/components/ui";
-import { Button } from "@/components/common";
-import { X, CloudUpload } from "lucide-react";
+import React, { useRef, useEffect } from "react";
+import { X, CloudUpload, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import usePost from "@/hooks/usePost";
+import { Input, Label } from "@/components/ui";
+import { Button } from "@/components/common";
 
 export const CreatePostModal = () => {
   const modalRef = useRef(null);
@@ -20,9 +20,7 @@ export const CreatePostModal = () => {
     createPostError,
   } = usePost();
 
-  const onClose = () => {
-    navigate("/");
-  };
+  const onClose = () => navigate("/");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -32,107 +30,134 @@ export const CreatePostModal = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [modalRef]);
 
   return (
-    <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm p-4 flex items-center justify-center overflow-y-auto z-[1000]">
       <div
         ref={modalRef}
-        className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative"
+        className="w-full max-w-2xl bg-neutral-900 rounded-xl shadow-2xl"
       >
-        <div className="flex items-center">
-          <h3 className="text-black text-xl font-bold flex-1">
-            Create a new post
-          </h3>
-          <X
-            className="w-6 h-6 text-gray-800 cursor-pointer"
-            onClick={onClose}
-          />
+        {/* Header */}
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold text-white">
+              Create a new post
+            </h2>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors group"
+            >
+              <X className="w-5 h-5 text-white group-hover:text-black" />
+            </button>
+          </div>
         </div>
 
-        <form
-          onSubmit={handleSubmit(handleCreatePost)}
-          className="space-y-4 mt-8"
-        >
-          <div>
-            <Label className="text-gray-800 text-sm mb-2 block">Tweet</Label>
-            <textarea
-              placeholder="Write about the product"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-blue-600 focus:bg-transparent rounded-lg"
-              rows="3"
-              {...register("content", { required: "Tweet is required" })}
-            ></textarea>
-            <ErrorInput error={errors.content} />
-          </div>
-
-          <div className="w-full flex-col justify-start items-start gap-2.5 flex">
-            {preview ? (
-              <>
-                <X
-                  className="w-6 h-6 text-gray-800 cursor-pointer"
-                  onClick={() => setPreview("")}
-                />
-                {preview.isVideo ? (
-                  <video
-                    className="w-full rounded-lg"
-                    src={preview.url}
-                    controls
-                    loop
-                  />
-                ) : (
-                  <img
-                    className="w-full rounded-lg"
-                    src={preview.url}
-                    alt="Post preview"
-                  />
-                )}
-              </>
-            ) : (
-              <Label
-                htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center py-9 w-full border border-gray-300 border-dashed rounded-2xl cursor-pointer bg-gray-50"
-              >
-                <div className="mb-3 flex items-center justify-center">
-                  <CloudUpload className="w-8 h-8 text-gray-400" />
-                </div>
-                <span className="text-center text-gray-400 text-xs font-normal leading-4 mb-1">
-                  PNG, JPG or PDF, smaller than 15MB
-                </span>
-                <h6 className="text-center text-gray-900 text-sm font-medium leading-5">
-                  Drag and Drop your file here or
-                </h6>
-                <Input
-                  id="dropzone-file"
-                  type="file"
-                  className="hidden"
-                  {...register("image")}
-                  onChange={handleFileChange}
-                />
+        {/* Content */}
+        <div className="p-6">
+          <form onSubmit={handleSubmit(handleCreatePost)} className="space-y-6">
+            <div className="space-y-2">
+              <Label className="block text-sm font-medium text-gray-300">
+                What's on your mind?
               </Label>
+              <textarea
+                placeholder="Share your thoughts..."
+                className="w-full min-h-[120px] px-4 py-3 rounded-lg border border-gray-200 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 bg-black hover:bg-neutral-950 text-white placeholder:transition-colors resize-none"
+                {...register("content", { required: "Content is required" })}
+              />
+              {errors.content && (
+                <p className="text-sm text-red-600">{errors.content.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              {preview ? (
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setPreview("")}
+                    className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-900/70 hover:bg-gray-900 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                  {preview.isVideo ? (
+                    <video
+                      className="w-full rounded-lg border border-gray-200"
+                      src={preview.url}
+                      controls
+                      loop
+                    />
+                  ) : (
+                    <img
+                      className="w-full h-auto max-h-[400px] object-cover rounded-lg border border-gray-200"
+                      src={preview.url}
+                      alt="Post preview"
+                    />
+                  )}
+                </div>
+              ) : (
+                <Label
+                  htmlFor="dropzone-file"
+                  className="group relative flex flex-col items-center justify-center h-48 w-full border-2 border-dashed border-gray-300 rounded-lg bg-black hover:bg-neutral-900 transition-colors cursor-pointer"
+                >
+                  <div className="space-y-2 text-center px-4">
+                    <CloudUpload className="mx-auto h-12 w-12 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                    <div className="flex flex-col space-y-1">
+                      <span className="text-sm font-medium text-gray-300">
+                        Drop your file here or click to upload
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        PNG, JPG or PDF (max. 15MB)
+                      </span>
+                    </div>
+                  </div>
+                  <Input
+                    id="dropzone-file"
+                    type="file"
+                    className="hidden"
+                    {...register("image")}
+                    onChange={handleFileChange}
+                  />
+                </Label>
+              )}
+              {errors.image && (
+                <p className="text-sm text-red-600">{errors.image.message}</p>
+              )}
+            </div>
+
+            {createPostError && (
+              <div className="p-4 rounded-lg bg-red-50 text-red-900 text-sm">
+                {createPostError.message ||
+                  "An error occurred while creating post"}
+              </div>
             )}
-            <ErrorInput error={errors.image} />
-          </div>
 
-          {createPostError && (
-            <p>
-              {createPostError.message ||
-                "An error occurred while creating post"}
-            </p>
-          )}
-
-          <div className="flex !mt-5">
-            <Button
-              type="submit"
-              disabled={isCreatingPost}
-              className="w-full px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-neutral-600 hover:bg-neutral-800"
-            >
-              {isCreatingPost ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
-        </form>
+            <div className="flex justify-end pt-4 space-x-4 border-t border-gray-200">
+              <Button
+                type="button"
+                onClick={onClose}
+                className="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-200 hover:text-black hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isCreatingPost}
+                className="px-6 py-2.5 rounded-lg bg-blue-500 text-white hover:bg-blue-800 transition-colors disabled:opacity-70 disabled:cursor-not-allowed inline-flex items-center"
+              >
+                {isCreatingPost ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Post"
+                )}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

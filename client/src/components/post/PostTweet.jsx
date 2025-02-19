@@ -7,19 +7,22 @@ import usePost from "@/hooks/usePost";
 import { useModal } from "@/context/modalContext";
 import { formatTimeAgo } from "@/lib/FormatDate";
 import { useCheckProfile } from "@/lib/checkProfile";
+import usePostActions from "@/hooks/usePostActions";
 
 export const PostTweet = ({ post, safeUrl, index }) => {
   const { showMore, contentPreview, maxContentPreview, handleShowMore } =
     usePost();
   const {
-    openMoreAction,
     openReportModal,
     openReportMenu,
     closeReportMenu,
-    openMoreActionMenu,
+    openMoreAction_Postlist,
+    openMoreActionMenu_Postlist,
     closeMoreActionMenu,
   } = useModal();
   const { checkProfile } = useCheckProfile();
+  const { isLiked, isSaved, handleLikePost, handleSavePost, likeCount } =
+    usePostActions(post);
 
   return (
     <div key={post._id} className="border border-gray-200 rounded-lg p-4">
@@ -63,9 +66,14 @@ export const PostTweet = ({ post, safeUrl, index }) => {
 
           {/* Action buttons */}
           <div className="flex items-center gap-6 text-gray-500 mt-4">
-            <Button className="flex items-center gap-1 hover:text-red-500">
-              <Heart size={20} />
-              <span>{post.likes.length}</span>
+            <Button
+              className={`flex items-center gap-1 hover:text-red-500 ${
+                isLiked ? "text-pink-600" : "text-gray-500 hover:text-pink-500"
+              }}`}
+              onClick={handleLikePost}
+            >
+              <Heart size={20} fill={isLiked ? "red" : "none"} />
+              <span>{likeCount}</span>
             </Button>
             <Link
               to={`/p/${post._id}`}
@@ -76,15 +84,24 @@ export const PostTweet = ({ post, safeUrl, index }) => {
                 <span>{post.commentCount}</span>
               </Button>
             </Link>
-            <Button className="flex items-center gap-1 hover:text-yellow-500">
-              <Bookmark size={20} />
+            <Button
+              className={`flex items-center gap-1 hover:text-yellow-500 ${
+                isSaved
+                  ? "text-yellow-500"
+                  : "text-gray-500 hover:text-yellow-500"
+              }`}
+              onClick={() => handleSavePost(post._id)}
+            >
+              <Bookmark size={20} fill={isSaved ? "currentColor" : "none"} />
             </Button>
             <Button
               className={`ml-auto text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 ${
-                openMoreAction === index ? "hidden" : ""
+                openMoreAction_Postlist === index ? "hidden" : ""
               }`}
               onClick={() =>
-                openMoreActionMenu(openMoreAction === index ? null : index)
+                openMoreActionMenu_Postlist(
+                  openMoreAction_Postlist === index ? null : index
+                )
               }
             >
               <MoreHorizontal className="w-5 h-5" />
@@ -94,8 +111,9 @@ export const PostTweet = ({ post, safeUrl, index }) => {
       </div>
 
       {/* More actions popup */}
-      {openMoreAction === index && (
+      {openMoreAction_Postlist === index && (
         <MorePostAction
+          openMoreAction_Postlist={openMoreAction_Postlist}
           openReportMenu={openReportMenu}
           closeMoreActionMenu={closeMoreActionMenu}
           post={post}

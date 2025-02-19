@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 import { Button } from "@/components/common";
 import useProfile from "@/hooks/useProfile";
 import usePost from "@/hooks/usePost";
@@ -8,16 +8,7 @@ import { AreYouSureModal } from "@/components/ui";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckLocation } from "@/lib/checkLocation";
 import usePostActions from "@/hooks/usePostActions";
-import {
-  Eye,
-  Edit3,
-  UserPlus,
-  UserMinus,
-  Flag,
-  Trash2,
-  X,
-  ExternalLink,
-} from "lucide-react";
+import { Eye, Edit3, UserPlus, UserMinus, Flag, Trash2, X } from "lucide-react";
 
 const ModalButton = ({ onClick, icon: Icon, label, variant = "default" }) => {
   const variants = {
@@ -125,6 +116,7 @@ export const MorePostAction = ({
   openReportMenu,
   closeMoreActionMenu,
   post,
+  openMoreAction_Postlist,
 }) => {
   const { myProfile } = useProfile();
   const { isDeletingPost, handleDeletePost } = usePost();
@@ -132,7 +124,6 @@ export const MorePostAction = ({
   const postAuthorId = post?.author?.id || post?.author?._id;
   const { isFollowing, handleFollowToggle } = useUser(postAuthorId);
   const [areYouSure, setAreYouSure] = useState(false);
-  const location = useLocation();
 
   const isMyPost = myProfile?.user?.username === post?.author?.username;
 
@@ -171,6 +162,7 @@ export const MorePostAction = ({
         isDeletingPost={isDeletingPost}
         areYouSure={areYouSure}
         setAreYouSure={setAreYouSure}
+        openMoreAction_Postlist={openMoreAction_Postlist}
       />
     </AnimatePresence>
   );

@@ -8,10 +8,12 @@ export const PostPreview = ({ post }) => (
       <div className="p-4">
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-            <img
-              src={getSafeMediaUrl(post?.image)}
-              className="w-full h-full object-cover"
-            />
+            {post?.image && (
+              <img
+                src={getSafeMediaUrl(post?.image)}
+                className="w-full h-full object-cover"
+              />
+            )}
           </div>
           <div className="flex-1">
             <h4 className="font-medium text-white mb-1">{post?.content}</h4>
