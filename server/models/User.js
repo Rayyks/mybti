@@ -59,6 +59,7 @@ const userSchema = new mongoose.Schema(
     ],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    lastFollowTime: { type: Date, default: null },
     commentedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],

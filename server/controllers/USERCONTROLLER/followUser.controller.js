@@ -1,6 +1,4 @@
-import User from "../../models/User.js";
-import Notification from "../../models/Notification.js";
-import { sendResponse } from "../../utils/responseUtils.js";
+const followCooldowns = new Map();
 
 export const followUser = async (req, res) => {
   try {
@@ -15,6 +13,24 @@ export const followUser = async (req, res) => {
       return sendResponse(res, 400, "You cannot follow yourself.");
     }
 
+    const follower = await User.findById(followerId);
+    if (!follower) {
+      return sendResponse(res, 404, "Follower not found.");
+    }
+
+    // Check cooldown (e.g., 10 seconds)
+    const cooldownDuration = 10000;
+    if (
+      follower.lastFollowTime &&
+      Date.now() - follower.lastFollowTime < cooldownDuration
+    ) {
+      return sendResponse(
+        res,
+        429,
+        "You're following too fast. Try again later."
+      );
+    }
+
     const userToFollow = await User.findById(userIdToFollow);
     if (!userToFollow) {
       return sendResponse(res, 404, "User not found.");
@@ -24,11 +40,12 @@ export const followUser = async (req, res) => {
       return sendResponse(res, 400, "You are already following this user.");
     }
 
+    // Update followers and following lists
     userToFollow.followers.push(followerId);
     await userToFollow.save();
 
-    const follower = await User.findById(followerId);
     follower.following.push(userIdToFollow);
+    follower.lastFollowTime = new Date(); // Update last follow time
     await follower.save();
 
     // Create notification

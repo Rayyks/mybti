@@ -59,6 +59,33 @@ const createUsersAndPosts = async () => {
 
     console.log("Posts created:", createdPosts);
 
+    // Follow and unfollow users
+    await createdUsers[0].updateOne({
+      $push: { following: createdUsers[1]._id },
+    });
+    await createdUsers[1].updateOne({
+      $push: { followers: createdUsers[0]._id },
+    });
+
+    await createdUsers[1].updateOne({
+      $push: { following: createdUsers[2]._id },
+    });
+    await createdUsers[2].updateOne({
+      $push: { followers: createdUsers[1]._id },
+    });
+
+    console.log("Users followed each other");
+
+    // Remove a follower
+    await createdUsers[1].updateOne({
+      $pull: { followers: createdUsers[0]._id },
+    });
+    await createdUsers[0].updateOne({
+      $pull: { following: createdUsers[1]._id },
+    });
+
+    console.log("Follower removed");
+
     // Close the database connection
     mongoose.connection.close();
   } catch (error) {
